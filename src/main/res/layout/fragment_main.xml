@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView2"
         android:layout_gravity="center"
-        android:src="@drawable/AnswerPhoneIcon" />
+        android:src="@drawable/ic_answerphone_full" />
 
 </FrameLayout>
