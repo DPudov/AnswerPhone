@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_main) {
             fTransaction.replace(R.id.container, mainFragment);
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_settings) {
             fTransaction.replace(R.id.container, settingsFragment);
         } else if (id == R.id.nav_share) {
             fTransaction.replace(R.id.container, shareFragment);
