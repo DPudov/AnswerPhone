@@ -1,5 +1,6 @@
 package com.dpudov.answerphone;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,11 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.dpudov.answerphone.fragments.MainFragment;
+import com.dpudov.answerphone.fragments.SendFragment;
+import com.dpudov.answerphone.fragments.SettingsFragment;
+import com.dpudov.answerphone.fragments.ShareFragment;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ShareFragment shareFragment;
+    SettingsFragment settingsFragment;
+    SendFragment sendFragment;
+    MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mainFragment = new MainFragment();
+
+        sendFragment = new SendFragment();
+
+        settingsFragment = new SettingsFragment();
+
+        shareFragment = new ShareFragment();
     }
 
     @Override
@@ -83,16 +100,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        }  else if (id == R.id.nav_manage) {
-
+            fTransaction.replace(R.id.container, mainFragment);
+        } else if (id == R.id.nav_manage) {
+            fTransaction.replace(R.id.container, settingsFragment);
         } else if (id == R.id.nav_share) {
-
+            fTransaction.replace(R.id.container, shareFragment);
         } else if (id == R.id.nav_send) {
+            fTransaction.replace(R.id.container, sendFragment);
 
         }
+        fTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
