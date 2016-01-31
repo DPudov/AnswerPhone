@@ -12,4 +12,35 @@
         android:textSize="25sp"
         android:textColor="#000000" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="402dp"
+        android:layout_gravity="center"
+        android:id="@+id/settingsLin"
+        android:weightSum="1">
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/switch1Text"
+            android:id="@+id/switch1"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:layout_weight="0.04" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.04"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:elegantTextHeight="true"
+            android:hint="Впиши сюда текст сообщения"
+            android:focusableInTouchMode="false" />
+    </LinearLayout>
+
 </FrameLayout>

@@ -13,12 +13,4 @@
     tools:showIn="@layout/app_bar_main"
     android:id = "@+id/container">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello"
-        android:textSize="30sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="center" />
 </FrameLayout>

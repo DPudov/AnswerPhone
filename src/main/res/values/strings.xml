@@ -16,4 +16,5 @@
     <string name="mainFragment">Главная</string>
     <string name="settFrag">Настройки</string>
     <string name="sendFrag">Отправить сообщение</string>
+    <string name="switch1Text">Включить рассылку сообщений</string>
 </resources>
