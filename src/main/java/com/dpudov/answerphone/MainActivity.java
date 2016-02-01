@@ -13,13 +13,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
 import com.dpudov.answerphone.fragments.ShareFragment;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.dialogs.VKShareDialog;
+
+import static com.vk.sdk.VKScope.ADS;
+import static com.vk.sdk.VKScope.FRIENDS;
+import static com.vk.sdk.VKScope.GROUPS;
+import static com.vk.sdk.VKScope.MESSAGES;
+import static com.vk.sdk.VKScope.NOTIFICATIONS;
+import static com.vk.sdk.VKScope.STATUS;
+import static com.vk.sdk.VKScope.WALL;
+import static com.vk.sdk.VKSdk.login;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,10 +42,36 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        VKSdk.login(this, VKScope.NOTIFICATIONS, VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL, VKScope.ADS, VKScope.GROUPS, VKScope.STATUS);
+        setContentView(R.layout.fragment_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Button button = (Button) findViewById(R.id.button);
+        final TextView textView2 = (TextView) findViewById(R.id.textView2);
+        login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new VKShareDialog()
+                        .setText("Я только что кликнул по ")
+                        .setAttachmentLink("Отправлено из VkApiDemoApp", "https://interosite.ru")
+                        .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                            @Override
+                            public void onVkShareComplete(int postId) {
+                                textView2.setText("Send"); //контент отправлен
+                            }
+
+                            @Override
+                            public void onVkShareCancel() {
+                                textView2.setText("Cancel");//отмена
+                            }
+
+                            @Override
+                            public void onVkShareError(VKError error) {
+                                textView2.setText("Error");
+                            }
+                        }).show(getFragmentManager(), "VK_SHARE_DIALOG");
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -17,4 +17,7 @@
     <string name="settFrag">Настройки</string>
     <string name="sendFrag">Отправить сообщение</string>
     <string name="switch1Text">Включить рассылку сообщений</string>
+    <string name="shareVK_head">Поделиться ВКонтакте</string>
+    <string name="edt1_text_hint">Впиши сюда текст сообщения</string>
+    <string name="shareButton_text">Поделиться</string>
 </resources>

@@ -8,6 +8,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/vk_share" />
+        android:text="@string/shareVK_head"
+        android:textColor="#000000"
+        android:textSize="25sp" />
 
+    <Button
+        android:id="@+id/shareButton"
+        android:layout_width="227dp"
+        android:layout_height="wrap_content"
+        android:text="@string/shareButton_text"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:textColor="#283da6"
+        android:background="#ffffff"
+        android:nestedScrollingEnabled="false" />
 </FrameLayout>

@@ -20,6 +20,20 @@
         android:id="@+id/settingsLin"
         android:weightSum="1">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_weight="0.05"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:elegantTextHeight="true"
+            android:hint="@string/edt1_text_hint"
+            android:focusableInTouchMode="false"
+            android:enabled="true"
+            android:editable="true" />
+
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,18 +43,6 @@
             android:textSize="20sp"
             android:layout_weight="0.04" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.04"
-            android:inputType="text"
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:elegantTextHeight="true"
-            android:hint="Впиши сюда текст сообщения"
-            android:focusableInTouchMode="false" />
     </LinearLayout>
 
 </FrameLayout>
