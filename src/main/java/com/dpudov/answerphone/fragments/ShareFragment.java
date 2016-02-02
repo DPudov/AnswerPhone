@@ -77,7 +77,7 @@ public class ShareFragment extends android.app.Fragment {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT).show();
                 new VKShareDialogBuilder()
-                        .setText(getString(R.string.ShareDialogText))
+                        .setText("ПРИВЕТ, <User>. Отправлено с помощью AnswerPhone for VK.(Наша группа vk/Версия приложения: debug.)")
                         .setAttachmentLink("DPudov", "dimapudov99@gmail.com")
                         .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                             @Override
