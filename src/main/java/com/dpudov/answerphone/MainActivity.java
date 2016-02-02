@@ -23,7 +23,6 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKShareDialog;
 import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.dpudov.answerphone.R.id.container;
@@ -50,10 +49,10 @@ public class MainActivity extends AppCompatActivity
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     AppCompatActivity appCompatActivity;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,26 +62,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (VKSdk.isLoggedIn()) {
-                    new VKShareDialogBuilder()
-
-                            .setAttachmentLink("", "www.google.com")
-                            .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-                                @Override
-                                public void onVkShareComplete(int postId) {
-                                    Toast.makeText(appCompatActivity, "Спасибо, что поделились ссылкой ", Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onVkShareCancel() {
-                                    Toast.makeText(appCompatActivity, "Отменено", Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onVkShareError(VKError error) {
-                                    Toast.makeText(appCompatActivity, "Ошибка ВК", Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .show(appCompatActivity.getSupportFragmentManager(), "VK_SHARE_DIALOG");
+                    new VKShareDialogBuilder().show(appCompatActivity.getSupportFragmentManager(), "VK_SHARE_DIALOG");
                 }
             }
         });
