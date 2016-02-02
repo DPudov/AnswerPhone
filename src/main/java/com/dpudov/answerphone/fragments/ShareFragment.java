@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
@@ -75,7 +76,7 @@ public class ShareFragment extends android.app.Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT).show();
-                new VKShareDialog()
+                new VKShareDialogBuilder()
                         .setText(getString(R.string.ShareDialogText))
                         .setAttachmentLink("DPudov", "dimapudov99@gmail.com")
                         .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
