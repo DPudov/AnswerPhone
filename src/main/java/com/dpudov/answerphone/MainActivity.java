@@ -11,14 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
-import com.dpudov.answerphone.fragments.ShareFragment;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -45,7 +42,6 @@ import static com.vk.sdk.VKSdk.login;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     SendFragment sendFragment;
-    ShareFragment shareFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     AppCompatActivity appCompatActivity;
@@ -58,13 +54,6 @@ public class MainActivity extends AppCompatActivity
         login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vkontaktePublish();
-            }
-        });
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -78,7 +67,6 @@ public class MainActivity extends AppCompatActivity
 
         settingsFragment = new SettingsFragment();
 
-        shareFragment = new ShareFragment();
 
         sendFragment = new SendFragment();
     }
