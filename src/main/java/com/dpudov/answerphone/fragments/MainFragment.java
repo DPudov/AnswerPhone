@@ -1,5 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -74,6 +75,10 @@ public class MainFragment extends android.app.Fragment {
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Override
     public void onDetach() {
