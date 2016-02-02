@@ -21,6 +21,7 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
@@ -145,7 +146,9 @@ public class MainActivity extends AppCompatActivity
 
     public final void vkontaktePublish() {
         VKSdk.wakeUpSession(this);
-        new VKShareDialog()
+        new VKShareDialogBuilder()
+                .setText("ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016")
+                .setAttachmentLink("DPudov", "https://vk.com/answerphone_dev")
                 .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                     @Override
                     public void onVkShareComplete(int postId) {
@@ -161,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                     public void onVkShareError(VKError error) {
 
                     }
-                }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+                }).show(getFragmentManager(), "VK_SHARE_DIALOG");
     }
 }
 
