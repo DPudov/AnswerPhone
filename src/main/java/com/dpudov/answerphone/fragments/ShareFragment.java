@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.dialogs.VKShareDialog;
 import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
@@ -75,25 +76,29 @@ public class ShareFragment extends android.app.Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT).show();
-               new VKShareDialogBuilder()
-                       .setText("HI FROM ANSWERPHONE")
-                       .setAttachmentLink("DPudov", "www.dimapudov99.hol.es")
-                       .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
-                           @Override
-                           public void onVkShareComplete(int postId) {
-                               Toast.makeText(getApplicationContext(),"Запись опубликована",Toast.LENGTH_SHORT).show();
-                           }
+                try {
+                    VKShareDialogBuilder vkShareDialogBuilder = new VKShareDialogBuilder();
+                    vkShareDialogBuilder.setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D");
+                    vkShareDialogBuilder.setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                        @Override
+                        public void onVkShareComplete(int postId) {
+                            Toast.makeText(getApplicationContext(), "JACKPOT!!!", Toast.LENGTH_SHORT).show();
+                        }
 
-                           @Override
-                           public void onVkShareCancel() {
-                               Toast.makeText(getApplicationContext(),"Запись не опубликована",Toast.LENGTH_SHORT).show();
-                           }
+                        @Override
+                        public void onVkShareCancel() {
+                            Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
+                        }
 
-                           @Override
-                           public void onVkShareError(VKError error) {
-                               Toast.makeText(getApplicationContext(),"BIG BADA BOOOOOM",Toast.LENGTH_SHORT).show();
-                           }
-                       }).show(getFragmentManager(), "VK_SHARE_DIALOG");
+                        @Override
+                        public void onVkShareError(VKError error) {
+                            Toast.makeText(getApplicationContext(), "Err", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    vkShareDialogBuilder.show(getFragmentManager(), "VK_SHARE_DIALOG");
+                } catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "err", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         // Inflate the layout for this fragment
