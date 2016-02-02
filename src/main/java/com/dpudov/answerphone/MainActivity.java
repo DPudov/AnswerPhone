@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     AppCompatActivity appCompatActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    vkontaktePublish();
+                vkontaktePublish();
             }
         });
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
@@ -153,25 +154,26 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public final void vkontaktePublish() {
-       VKSdk.wakeUpSession(this);
-            new VKShareDialog()
-                    .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-                        @Override
-                        public void onVkShareComplete(int postId) {
+        VKSdk.wakeUpSession(this);
+        new VKShareDialog()
+                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                    @Override
+                    public void onVkShareComplete(int postId) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onVkShareCancel() {
+                    @Override
+                    public void onVkShareCancel() {
 
-                        }
+                    }
 
-                        @Override
-                        public void onVkShareError(VKError error) {
+                    @Override
+                    public void onVkShareError(VKError error) {
 
-                        }
-                    }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
-        }
+                    }
+                }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
     }
 }
+
