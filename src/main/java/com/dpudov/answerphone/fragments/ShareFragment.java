@@ -96,7 +96,8 @@ public class ShareFragment extends android.app.Fragment {
                                 Toast toastError = Toast.makeText(getApplicationContext(), "Сорри, но тут произошла ошибка. Возможно, ты потерял интернет :(", Toast.LENGTH_LONG);
                                 toastError.show();
                             }
-                        }).show(getFragmentManager(), "VK_SHARE_DIALOG");
+                        })
+                        .show(getFragmentManager(), "VK_SHARE_DIALOG");
             }
         });
         // Inflate the layout for this fragment
@@ -109,7 +110,6 @@ public class ShareFragment extends android.app.Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
 
 
     @Override
