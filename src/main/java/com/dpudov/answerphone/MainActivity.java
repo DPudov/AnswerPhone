@@ -24,6 +24,7 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
@@ -60,7 +61,7 @@ AppCompatActivity appCompatActivity;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new VKShareDialog()
+                new VKShareDialogBuilder()
 
                         .setAttachmentLink("", "www.google.com")
                         .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
