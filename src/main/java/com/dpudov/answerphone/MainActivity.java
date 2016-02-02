@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     ShareFragment shareFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
-    FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-
+        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         if (id == nav_main) {
             fTransaction.replace(container, mainFragment);
         } else if (id == nav_settings) {
