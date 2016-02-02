@@ -75,8 +75,9 @@ public class ShareFragment extends android.app.Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Toast toast1 = Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT);
+                Toast toast1 = Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT);
                 toast1.show();
+
                 try {
                     VKShareDialogBuilder vkShareDialogBuilder = new VKShareDialogBuilder();
                     vkShareDialogBuilder.setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D");
@@ -98,8 +99,10 @@ public class ShareFragment extends android.app.Fragment {
                             Toast toast4 = Toast.makeText(getApplicationContext(), "Err", Toast.LENGTH_SHORT);
                             toast4.show();
                         }
+
+
                     });
-                    vkShareDialogBuilder.show(getFragmentManager(), "VK_SHARE_DIALOG");
+                    vkShareDialogBuilder.show(getFragmentManager(),"vk_share_dialog");
                 } catch (Exception e) {
                     Toast toast5 = Toast.makeText(getApplicationContext(), "err", Toast.LENGTH_SHORT);
                     toast5.show();
