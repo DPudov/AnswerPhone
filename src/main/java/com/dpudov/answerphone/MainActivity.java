@@ -23,7 +23,7 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKShareDialogBuilder;
+import com.vk.sdk.dialogs.VKShareDialog;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
@@ -61,9 +61,7 @@ public class MainActivity extends AppCompatActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (VKSdk.isLoggedIn()) {
-                    new VKShareDialogBuilder().show(appCompatActivity.getSupportFragmentManager(), "VK_SHARE_DIALOG");
-                }
+                    vkontaktePublish();
             }
         });
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
@@ -154,5 +152,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public final void vkontaktePublish() {
+       VKSdk.wakeUpSession(this);
+            new VKShareDialog()
+                    .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                        @Override
+                        public void onVkShareComplete(int postId) {
+
+                        }
+
+                        @Override
+                        public void onVkShareCancel() {
+
+                        }
+
+                        @Override
+                        public void onVkShareError(VKError error) {
+
+                        }
+                    }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+        }
     }
 }
