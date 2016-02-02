@@ -72,9 +72,9 @@ public class ShareFragment extends android.app.Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
-                VKShareDialogBuilder vkShareDialogBuilder = new VKShareDialogBuilder();
-                vkShareDialogBuilder.setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D");
-                vkShareDialogBuilder.setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                new VKShareDialogBuilder()
+                .setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D")
+                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                     @Override
                     public void onVkShareComplete(int postId) {
 
@@ -90,8 +90,8 @@ public class ShareFragment extends android.app.Fragment {
                     }
 
 
-                });
-                vkShareDialogBuilder.show(getFragmentManager(),"VK_SHARE_DIALOG");
+                })
+                .show(getFragmentManager(),"VK_SHARE_DIALOG");
             }
         });
         // Inflate the layout for this fragment
