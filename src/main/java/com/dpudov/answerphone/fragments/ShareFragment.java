@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.dpudov.answerphone.R;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKShareDialog;
-import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,26 +69,6 @@ public class ShareFragment extends android.app.Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
-                new VKShareDialogBuilder()
-                .setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D")
-                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-                    @Override
-                    public void onVkShareComplete(int postId) {
-
-                    }
-
-                    @Override
-                    public void onVkShareCancel() {
-
-                    }
-
-                    @Override
-                    public void onVkShareError(VKError error) {
-                    }
-
-
-                })
-                .show(getFragmentManager(),"VK_SHARE_DIALOG");
             }
         });
         // Inflate the layout for this fragment

@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.MainFragment;
@@ -21,6 +23,8 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.dialogs.VKShareDialog;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
@@ -53,6 +57,32 @@ public class MainActivity extends AppCompatActivity
         login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Button button = (Button)findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new VKShareDialogBuilder()
+                        .setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D")
+                        .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                            @Override
+                            public void onVkShareComplete(int postId) {
+
+                            }
+
+                            @Override
+                            public void onVkShareCancel() {
+
+                            }
+
+                            @Override
+                            public void onVkShareError(VKError error) {
+                            }
+
+
+                        })
+                        .show(getFragmentManager(),"VK_SHARE_DIALOG");
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

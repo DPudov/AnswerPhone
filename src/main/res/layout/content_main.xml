@@ -13,4 +13,10 @@
     tools:showIn="@layout/app_bar_main"
     android:id = "@+id/container">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_gravity="right|center_vertical" />
 </FrameLayout>
