@@ -69,6 +69,7 @@ public class ShareFragment extends android.app.Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
+
             }
         });
         // Inflate the layout for this fragment
@@ -88,6 +89,7 @@ public class ShareFragment extends android.app.Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

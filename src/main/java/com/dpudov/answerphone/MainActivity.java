@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == nav_settings) {
             fTransaction.replace(container, settingsFragment);
         } else if (id == nav_share) {
-            fTransaction.replace(container, shareFragment);
+            vkontaktePublish();
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
 
