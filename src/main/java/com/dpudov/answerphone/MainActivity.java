@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity
     ShareFragment shareFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
-AppCompatActivity appCompatActivity;
+    AppCompatActivity appCompatActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,30 +58,32 @@ AppCompatActivity appCompatActivity;
         login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button button = (Button)findViewById(R.id.button);
+        Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new VKShareDialogBuilder()
+                if (VKSdk.isLoggedIn()) {
+                    new VKShareDialogBuilder()
 
-                        .setAttachmentLink("", "www.google.com")
-                        .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-                            @Override
-                            public void onVkShareComplete(int postId) {
-                                Toast.makeText(appCompatActivity, "Спасибо, что поделились ссылкой ", Toast.LENGTH_LONG).show();
-                            }
+                            .setAttachmentLink("", "www.google.com")
+                            .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                                @Override
+                                public void onVkShareComplete(int postId) {
+                                    Toast.makeText(appCompatActivity, "Спасибо, что поделились ссылкой ", Toast.LENGTH_LONG).show();
+                                }
 
-                            @Override
-                            public void onVkShareCancel() {
-                                Toast.makeText(appCompatActivity, "Отменено", Toast.LENGTH_LONG).show();
-                            }
+                                @Override
+                                public void onVkShareCancel() {
+                                    Toast.makeText(appCompatActivity, "Отменено", Toast.LENGTH_LONG).show();
+                                }
 
-                            @Override
-                            public void onVkShareError(VKError error) {
-                                Toast.makeText(appCompatActivity, "Ошибка ВК", Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .show(appCompatActivity.getSupportFragmentManager(), "VK_SHARE_DIALOG");
+                                @Override
+                                public void onVkShareError(VKError error) {
+                                    Toast.makeText(appCompatActivity, "Ошибка ВК", Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .show(appCompatActivity.getSupportFragmentManager(), "VK_SHARE_DIALOG");
+                }
             }
         });
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
@@ -106,7 +109,7 @@ AppCompatActivity appCompatActivity;
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
 // Пользователь успешно авторизовался
             }
 
