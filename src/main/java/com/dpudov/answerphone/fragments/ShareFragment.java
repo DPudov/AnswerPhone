@@ -91,7 +91,7 @@ public class ShareFragment extends android.app.Fragment {
 
 
                 });
-                vkShareDialogBuilder.show(getFragmentManager(),"vk_share_dialog");
+                vkShareDialogBuilder.show(getFragmentManager(),"VK_SHARE_DIALOG");
             }
         });
         // Inflate the layout for this fragment
