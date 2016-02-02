@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,6 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-import static android.support.v4.view.GravityCompat.START;
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
 import static com.dpudov.answerphone.R.id.nav_main;
@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
-        if (drawer.isDrawerOpen(START)) {
-            drawer.closeDrawer(START);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity
         fTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
-        drawer.closeDrawer(START);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

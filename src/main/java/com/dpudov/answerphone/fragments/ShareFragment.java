@@ -1,6 +1,5 @@
 package com.dpudov.answerphone.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,9 +74,9 @@ public class ShareFragment extends android.app.Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT).show();
                 new VKShareDialog()
-                        .setText("ANSWERPHONE - ЭТО ДАЖЕ ЛУЧШЕ ЧЕМ МЕМАС" +
-                                "@send by AnswerPhone for VK Android.")
+                        .setText(getString(R.string.ShareDialogText))
                         .setAttachmentLink("DPudov", "dimapudov99@gmail.com")
                         .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                             @Override
@@ -111,10 +110,7 @@ public class ShareFragment extends android.app.Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
+
 
     @Override
     public void onDetach() {
