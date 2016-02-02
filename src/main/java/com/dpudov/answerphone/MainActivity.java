@@ -24,7 +24,6 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
-import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     ShareFragment shareFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
-
+AppCompatActivity appCompatActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,26 +60,26 @@ public class MainActivity extends AppCompatActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new VKShareDialogBuilder()
-                        .setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D")
+                new VKShareDialog()
+
+                        .setAttachmentLink("", "www.google.com")
                         .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                             @Override
                             public void onVkShareComplete(int postId) {
-
+                                Toast.makeText(appCompatActivity, "Спасибо, что поделились ссылкой ", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onVkShareCancel() {
-
+                                Toast.makeText(appCompatActivity, "Отменено", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onVkShareError(VKError error) {
+                                Toast.makeText(appCompatActivity, "Ошибка ВК", Toast.LENGTH_LONG).show();
                             }
-
-
                         })
-                        .show(getFragmentManager(),"VK_SHARE_DIALOG");
+                        .show(appCompatActivity.getSupportFragmentManager(), "VK_SHARE_DIALOG");
             }
         });
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
