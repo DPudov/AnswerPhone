@@ -13,13 +13,10 @@
         android:textSize="25sp" />
 
     <Button
-        android:id="@+id/shareButton"
-        android:layout_width="227dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/shareButton_text"
-        android:layout_gravity="center"
-        android:textSize="30sp"
-        android:textColor="#283da6"
-        android:background="#ffffff"
-        android:nestedScrollingEnabled="false" />
+        android:id="@+id/shareButton"
+        android:layout_gravity="center" />
+
 </FrameLayout>

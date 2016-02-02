@@ -20,4 +20,9 @@
     <string name="shareVK_head">Поделиться ВКонтакте</string>
     <string name="edt1_text_hint">Впиши сюда текст сообщения</string>
     <string name="shareButton_text">Поделиться</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_main_fragment"></string>
+    <string name="icon_name">Иконка нашего приложения</string>
+    <string name="mainfrag_congratulate">Поздравляю с успешной авторизацией!)</string>
 </resources>

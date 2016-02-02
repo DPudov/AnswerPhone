@@ -1,28 +1,35 @@
 package com.dpudov.answerphone;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
 import com.dpudov.answerphone.fragments.ShareFragment;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKShareDialog;
 
+import static android.support.v4.view.GravityCompat.START;
+import static com.dpudov.answerphone.R.id.container;
+import static com.dpudov.answerphone.R.id.drawer_layout;
+import static com.dpudov.answerphone.R.id.nav_main;
+import static com.dpudov.answerphone.R.id.nav_send;
+import static com.dpudov.answerphone.R.id.nav_settings;
+import static com.dpudov.answerphone.R.id.nav_share;
+import static com.dpudov.answerphone.R.id.nav_view;
+import static com.dpudov.answerphone.R.menu.main;
 import static com.vk.sdk.VKScope.ADS;
 import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.GROUPS;
@@ -34,77 +41,60 @@ import static com.vk.sdk.VKSdk.login;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    ShareFragment shareFragment;
-    SettingsFragment settingsFragment;
     SendFragment sendFragment;
+    ShareFragment shareFragment;
     MainFragment mainFragment;
-
+    SettingsFragment settingsFragment;
+    FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_main);
+        setContentView(R.layout.activity_main);
+        login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button button = (Button) findViewById(R.id.button);
-        final TextView textView2 = (TextView) findViewById(R.id.textView2);
-        login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new VKShareDialog()
-                        .setText("Я только что кликнул по ")
-                        .setAttachmentLink("Отправлено из VkApiDemoApp", "https://interosite.ru")
-                        .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-                            @Override
-                            public void onVkShareComplete(int postId) {
-                                textView2.setText("Send"); //контент отправлен
-                            }
-
-                            @Override
-                            public void onVkShareCancel() {
-                                textView2.setText("Cancel");//отмена
-                            }
-
-                            @Override
-                            public void onVkShareError(VKError error) {
-                                textView2.setText("Error");
-                            }
-                        }).show(getFragmentManager(), "VK_SHARE_DIALOG");
-            }
-        });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mainFragment = new MainFragment();
 
-        sendFragment = new SendFragment();
-
         settingsFragment = new SettingsFragment();
 
         shareFragment = new ShareFragment();
+
+        sendFragment = new SendFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+// Пользователь успешно авторизовался
+            }
+
+            @Override
+            public void onError(VKError error) {
+                Toast.makeText(getApplicationContext(), "Invalid", Toast.LENGTH_LONG).show();
+// Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+            }
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
+        if (drawer.isDrawerOpen(START)) {
+            drawer.closeDrawer(START);
         } else {
             super.onBackPressed();
         }
@@ -113,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(main, menu);
         return true;
     }
 
@@ -134,22 +124,22 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
 
-        if (id == R.id.nav_main) {
-            fTransaction.replace(R.id.container, mainFragment);
-        } else if (id == R.id.nav_settings) {
-            fTransaction.replace(R.id.container, settingsFragment);
-        } else if (id == R.id.nav_share) {
-            fTransaction.replace(R.id.container, shareFragment);
-        } else if (id == R.id.nav_send) {
-            fTransaction.replace(R.id.container, sendFragment);
+
+        if (id == nav_main) {
+            fTransaction.replace(container, mainFragment);
+        } else if (id == nav_settings) {
+            fTransaction.replace(container, settingsFragment);
+        } else if (id == nav_share) {
+            fTransaction.replace(container, shareFragment);
+        } else if (id == nav_send) {
+            fTransaction.replace(container, sendFragment);
 
         }
         fTransaction.commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
+        drawer.closeDrawer(START);
         return true;
     }
 }

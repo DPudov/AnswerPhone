@@ -75,7 +75,6 @@ public class MainFragment extends android.app.Fragment {
     }
 
 
-
     @Override
     public void onDetach() {
         super.onDetach();
