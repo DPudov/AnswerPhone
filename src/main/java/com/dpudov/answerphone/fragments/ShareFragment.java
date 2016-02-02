@@ -75,29 +75,34 @@ public class ShareFragment extends android.app.Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT).show();
+                final Toast toast1 = Toast.makeText(getApplicationContext(), "Я точно видело клик", Toast.LENGTH_SHORT);
+                toast1.show();
                 try {
                     VKShareDialogBuilder vkShareDialogBuilder = new VKShareDialogBuilder();
                     vkShareDialogBuilder.setText("HI HI HI FROM ANSWERPHONE. ЕСЛИ ОТПРАВИТСЯ, ТО ЭТО НЕВЕРОЯТНО :D");
                     vkShareDialogBuilder.setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                         @Override
                         public void onVkShareComplete(int postId) {
-                            Toast.makeText(getApplicationContext(), "JACKPOT!!!", Toast.LENGTH_SHORT).show();
+                            Toast toast2 = Toast.makeText(getApplicationContext(), "JACKPOT!!!", Toast.LENGTH_SHORT);
+                            toast2.show();
                         }
 
                         @Override
                         public void onVkShareCancel() {
-                            Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
+                            Toast toast3 = Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT);
+                            toast3.show();
                         }
 
                         @Override
                         public void onVkShareError(VKError error) {
-                            Toast.makeText(getApplicationContext(), "Err", Toast.LENGTH_SHORT).show();
+                            Toast toast4 = Toast.makeText(getApplicationContext(), "Err", Toast.LENGTH_SHORT);
+                            toast4.show();
                         }
                     });
                     vkShareDialogBuilder.show(getFragmentManager(), "VK_SHARE_DIALOG");
-                } catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "err", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast toast5 = Toast.makeText(getApplicationContext(), "err", Toast.LENGTH_SHORT);
+                    toast5.show();
                 }
             }
         });
