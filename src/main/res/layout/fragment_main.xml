@@ -5,20 +5,6 @@
     tools:context="com.dpudov.answerphone.fragments.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/mainFragment"
-        android:textSize="25sp"
-        android:textColor="#000000" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="122dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/mainfrag_congratulate"
-        android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal|bottom" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -27,5 +13,13 @@
         android:layout_gravity="center"
         android:src="@drawable/ic_answerphone_full"
         android:contentDescription="@string/icon_name" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/mainFragment"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        android:layout_gravity="left|top" />
 
 </FrameLayout>

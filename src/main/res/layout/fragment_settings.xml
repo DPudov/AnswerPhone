@@ -8,6 +8,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/settFrag" />
+        android:text="@string/settFrag"
+        android:textColor="#000000"
+        android:textSize="25sp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="407dp"
+        android:layout_gravity="center">
+
+        <Switch
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:text="@string/enableMessages"
+            android:id="@+id/switch1"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp"
+            android:shadowColor="#977d7d" />
+    </LinearLayout>
 
 </FrameLayout>

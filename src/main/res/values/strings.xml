@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">AnswerPhone</string>
     <integer name="com_vk_sdk_AppId">5230534</integer>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_open">Открыть "шторку"</string>
+    <string name="navigation_drawer_close">Закрыть "шторку"</string>
     <string name="hello">Рад приветствовать тебя в этом бесполезном приложении!)</string>
     <string name="answerHead">AnswerPhone for VK</string>
     <string name="mainHeadItem">Главная</string>
@@ -11,8 +10,6 @@
     <string name="extendDrawerItem">Дополнительно</string>
     <string name="showHeadItem">Поделиться</string>
     <string name="messageHeadItem">Отправить сообщение</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="mainFragment">Главная</string>
     <string name="settFrag">Настройки</string>
     <string name="sendFrag">Отправить сообщение</string>
@@ -20,11 +17,9 @@
     <string name="shareVK_head">Поделиться ВКонтакте</string>
     <string name="edt1_text_hint">Впиши сюда текст сообщения</string>
     <string name="shareButton_text">Поделиться</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_main_fragment"></string>
     <string name="icon_name">Иконка нашего приложения</string>
-    <string name="mainfrag_congratulate">Поздравляю с успешной авторизацией!)</string>
-    <string name="ShareDialogText">ANSWERPHONE - ЭТО ДАЖЕ ЛУЧШЕ ЧЕМ МЕМАС</string>
-    <string name="ShareDialogText2">\@send by AnswerPhone for VK Android.</string>
+    <string name="FuncSoon">Функция появится позже. Следите за обновлениями</string>
+    <string name="enableMessages">Включить рассылку сообщений</string>
+    <string name="messageTextDefault">Я занят.</string>
+    <string name="postScriptum">Отправлено с помощью AnswerPhone for VK be DPudov</string>
 </resources>
