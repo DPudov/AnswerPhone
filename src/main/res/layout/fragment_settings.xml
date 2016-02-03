@@ -16,19 +16,20 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="407dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:weightSum="1">
 
         <Switch
-            android:layout_width="374dp"
-            android:layout_height="wrap_content"
+            android:layout_width="227dp"
+            android:layout_height="55dp"
             android:text="@string/enableMessages"
             android:id="@+id/switchMessage"
-            android:layout_gravity="center_horizontal"
             android:textSize="18sp"
             android:shadowColor="#977d7d"
             android:textOn="Вкл"
             android:textOff="Выкл"
-            android:showText="true"/>
+            android:showText="true"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 

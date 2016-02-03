@@ -19,7 +19,7 @@
     <string name="shareButton_text">Поделиться</string>
     <string name="icon_name">Иконка нашего приложения</string>
     <string name="FuncSoon">Функция появится позже. Следите за обновлениями</string>
-    <string name="enableMessages">Включить рассылку сообщений</string>
+    <string name="enableMessages">Включить рассылку</string>
     <string name="messageTextDefault">Я занят.</string>
     <string name="postScriptum">Отправлено с помощью AnswerPhone for VK be DPudov</string>
     <string name="loginError">Произошла ошибка ВК. Попробуйте позже</string>
