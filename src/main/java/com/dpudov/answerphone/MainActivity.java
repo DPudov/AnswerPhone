@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity
     SendFragment sendFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
-    AppCompatActivity appCompatActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.loginSuccess, Toast.LENGTH_SHORT).show();
                 FragmentTransaction fTrans = getFragmentManager().beginTransaction();
                 fTrans.replace(container, mainFragment);
                 fTrans.commit();
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onError(VKError error) {
-                Toast.makeText(getApplicationContext(), "Invalid", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.loginError, Toast.LENGTH_LONG).show();
 // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
             }
         })) {

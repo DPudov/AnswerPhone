@@ -6,8 +6,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,8 +71,21 @@ public class SettingsFragment extends android.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
+        switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(getActivity(), "On", Toast.LENGTH_LONG).show();
+                    VKRequest requestMessage = new VKRequest("message.send", VKParameters.from(VKApiConst.USER_ID));
+                    sendMessage(requestMessage);
+                }
+                else
+                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_LONG).show();
+            }
+        });// Inflate the layout for this fragment
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -72,6 +93,29 @@ public class SettingsFragment extends android.app.Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void sendMessage(VKRequest requestMessage) {
+        requestMessage.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                Toast.makeText(getActivity(), "Ошибка приложения", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                Toast.makeText(getActivity(), "Вроде работает", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                super.attemptFailed(request, attemptNumber, totalAttempts);
+                Toast.makeText(getActivity(), "Ошибка ВК", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
