@@ -83,7 +83,7 @@ request.executeWithListener(new VKRequest.VKRequestListener() {
     @Override
     public void onComplete(VKResponse response) {
         super.onComplete(response);
-        Toast.makeText(getActivity(),"ALL IS OKAY YEAAH", Toast.LENGTH_SHORT);
+        Toast.makeText(getActivity(),"ALL IS OKAY YEAAH", Toast.LENGTH_SHORT).show();
     }
 });
                 } else
