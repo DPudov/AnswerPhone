@@ -11,11 +11,10 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +33,7 @@ public class SettingsFragment extends android.app.Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private VKApi vkApi;
     private OnFragmentInteractionListener mListener;
 
     public SettingsFragment() {
@@ -78,10 +77,9 @@ public class SettingsFragment extends android.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_LONG).show();
-                    VKRequest requestMessage = new VKRequest("message.send", VKParameters.from(VKApiConst.USER_ID));
-                    sendMessage(requestMessage);
-                }
-                else
+                    VKRequest request = new VKRequest("message.send", VKParameters.from(VKApiConst.USER_ID, "134132102", VKApiConst.MESSAGE, "HHAHAHHAHAHA(Test by AnswerPhone"));
+
+                } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_LONG).show();
             }
         });// Inflate the layout for this fragment
@@ -95,26 +93,7 @@ public class SettingsFragment extends android.app.Fragment {
         }
     }
 
-    public void sendMessage(VKRequest requestMessage) {
-        requestMessage.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-                Toast.makeText(getActivity(), "Ошибка приложения", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                Toast.makeText(getActivity(), "Вроде работает", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-                super.attemptFailed(request, attemptNumber, totalAttempts);
-                Toast.makeText(getActivity(), "Ошибка ВК", Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void send(int userId) {
 
     }
 

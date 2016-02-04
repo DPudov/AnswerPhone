@@ -20,12 +20,11 @@
         android:weightSum="1">
 
         <Switch
-            android:layout_width="227dp"
+            android:layout_width="217dp"
             android:layout_height="55dp"
             android:text="@string/enableMessages"
             android:id="@+id/switchMessage"
             android:textSize="18sp"
-            android:shadowColor="#977d7d"
             android:textOn="Вкл"
             android:textOff="Выкл"
             android:showText="true"

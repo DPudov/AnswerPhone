@@ -37,7 +37,9 @@ import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
 import static com.vk.sdk.VKScope.STATUS;
 import static com.vk.sdk.VKScope.WALL;
+import static com.vk.sdk.VKSdk.isLoggedIn;
 import static com.vk.sdk.VKSdk.login;
+import static com.vk.sdk.VKSdk.wakeUpSession;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,9 +50,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
+        try {
+            if (!isLoggedIn())
+                login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
+            else
+                wakeUpSession(this);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Что-то пошло не так. Проверьте соединение и попробуйте позже", Toast.LENGTH_LONG).show();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
