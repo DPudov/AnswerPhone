@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -79,13 +80,19 @@ public class SettingsFragment extends android.app.Fragment {
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_LONG).show();
                     VKRequest request = new VKRequest("message.send", VKParameters.from(VKApiConst.USER_ID, "134132102", VKApiConst.MESSAGE, "HHAHAHHAHAHA(Test by AnswerPhone"));
-request.executeWithListener(new VKRequest.VKRequestListener() {
-    @Override
-    public void onComplete(VKResponse response) {
-        super.onComplete(response);
-        Toast.makeText(getActivity(),"ALL IS OKAY YEAAH", Toast.LENGTH_SHORT).show();
-    }
-});
+                    request.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            Toast.makeText(getActivity(),"Yeah",Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            Toast.makeText(getActivity(),"SHIT", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_LONG).show();
             }
