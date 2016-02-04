@@ -95,18 +95,18 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void send(int userId) {
-        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, "HAHA(Test by AnswerPhone"));
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, R.string.defaultMsg));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                Toast.makeText(getActivity(),"Yeah",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),R.string.sentMsg,Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
-                Toast.makeText(getActivity(),"SHIT", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),R.string.VK_Err, Toast.LENGTH_SHORT).show();
             }
         });
     }

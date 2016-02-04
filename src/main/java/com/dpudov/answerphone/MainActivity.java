@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onError(VKError error) {
-                Toast.makeText(getApplicationContext(), R.string.loginError, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.VK_Err, Toast.LENGTH_LONG).show();
 // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
             }
         })) {

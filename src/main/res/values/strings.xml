@@ -22,6 +22,8 @@
     <string name="enableMessages">Включить рассылку</string>
     <string name="messageTextDefault">Я занят.</string>
     <string name="postScriptum">Отправлено с помощью AnswerPhone for VK be DPudov</string>
-    <string name="loginError">Произошла ошибка ВК. Попробуйте позже</string>
+    <string name="VK_Err">Произошла ошибка ВК. Попробуйте позже</string>
     <string name="loginSuccess">Успешная авторизация</string>
+    <string name="defaultMsg">HAHA(Test by AnswerPhone</string>
+    <string name="sentMsg">Отправлено</string>
 </resources>
