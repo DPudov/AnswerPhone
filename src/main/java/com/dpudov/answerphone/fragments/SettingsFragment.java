@@ -37,7 +37,7 @@ public class SettingsFragment extends android.app.Fragment {
     private String mParam2;
     private VKApi vkApi;
     private OnFragmentInteractionListener mListener;
-
+User user = new User();
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -77,6 +77,7 @@ public class SettingsFragment extends android.app.Fragment {
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
                    send(134132102);
@@ -95,12 +96,16 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void send(int userId) {
+
         VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, R.string.defaultMsg));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
+                user.makeUsers(response);
                 Toast.makeText(getActivity(),R.string.sentMsg,Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
