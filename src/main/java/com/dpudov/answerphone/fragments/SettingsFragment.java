@@ -79,7 +79,7 @@ public class SettingsFragment extends android.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_LONG).show();
-                    VKRequest request = new VKRequest("message.send", VKParameters.from(VKApiConst.USER_ID, "134132102", VKApiConst.MESSAGE, "HHAHAHHAHAHA(Test by AnswerPhone"));
+                    VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, "209683362", VKApiConst.MESSAGE, "HHAHAHHAHAHA(Test by AnswerPhone"));
                     request.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
