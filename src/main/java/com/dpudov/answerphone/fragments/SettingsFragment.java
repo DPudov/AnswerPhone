@@ -78,10 +78,10 @@ public class SettingsFragment extends android.app.Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(getActivity(), "On", Toast.LENGTH_LONG).show();
-                   send(0);
+                    Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
+                   send(134132102);
                 } else
-                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
             }
         });// Inflate the layout for this fragment
         return v;
