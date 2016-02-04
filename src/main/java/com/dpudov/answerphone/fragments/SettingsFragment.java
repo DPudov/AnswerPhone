@@ -79,20 +79,7 @@ public class SettingsFragment extends android.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_LONG).show();
-                    VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, "209683362", VKApiConst.MESSAGE, "HHAHAHHAHAHA(Test by AnswerPhone"));
-                    request.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                            Toast.makeText(getActivity(),"Yeah",Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onError(VKError error) {
-                            super.onError(error);
-                            Toast.makeText(getActivity(),"SHIT", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                   send(0);
                 } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_LONG).show();
             }
@@ -108,7 +95,20 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void send(int userId) {
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, "HAHA(Test by AnswerPhone"));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                Toast.makeText(getActivity(),"Yeah",Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                Toast.makeText(getActivity(),"SHIT", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
