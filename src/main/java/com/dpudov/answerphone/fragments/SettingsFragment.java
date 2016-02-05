@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
@@ -35,9 +35,11 @@ public class SettingsFragment extends android.app.Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private VKApi vkApi;
+    private String message;
+    private EditText editText;
+    private User user = new User();
     private OnFragmentInteractionListener mListener;
-User user = new User();
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -73,6 +75,8 @@ User user = new User();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        editText = (EditText) v.findViewById(R.id.editText);
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -80,7 +84,7 @@ User user = new User();
 
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
-                   send(134132102);
+                    send(134132102);
                 } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
             }
@@ -97,13 +101,14 @@ User user = new User();
 
     public void send(int userId) {
 
-        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, R.string.defaultMsg));
+        message = editText.getText().toString()+R.string.defaultMsg;
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 user.makeUsers(response);
-                Toast.makeText(getActivity(),R.string.sentMsg,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
 
 
             }
@@ -111,7 +116,7 @@ User user = new User();
             @Override
             public void onError(VKError error) {
                 super.onError(error);
-                Toast.makeText(getActivity(),R.string.VK_Err, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
             }
         });
     }

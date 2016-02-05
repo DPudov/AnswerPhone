@@ -30,6 +30,19 @@
             android:showText="true"
             android:layout_gravity="center_horizontal" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:layout_gravity="center_horizontal"
+            android:clickable="false"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:hint="Введите сообщение"
+            android:editable="true" />
+
     </LinearLayout>
 
 </FrameLayout>
