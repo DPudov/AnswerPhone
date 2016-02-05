@@ -24,7 +24,7 @@
     <string name="postScriptum">Отправлено с помощью AnswerPhone for VK be DPudov</string>
     <string name="VK_Err">Произошла ошибка ВК. Попробуйте позже</string>
     <string name="loginSuccess">Успешная авторизация</string>
-    <string name="defaultMsg">(Test by AnswerPhone)</string>
+    <string name="defaultMsg">$ отправлено с помощью AnswerPhone for VK by DPudov</string>
     <string name="sentMsg">Отправлено</string>
     <string name="checkFrFrag">Выбрать друзей</string>
     <string name="saveButton">Сохранить</string>
