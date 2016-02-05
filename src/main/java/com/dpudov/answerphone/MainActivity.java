@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity
     SettingsFragment settingsFragment;
     CheckFriendsFragment checkFriendsFragment;
     Button button;
-FragmentTransaction ft1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,15 +71,6 @@ FragmentTransaction ft1;
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        button = (Button) findViewById(R.id.button);
-        button.setVisibility(View.INVISIBLE);
-        button.setClickable(false);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
