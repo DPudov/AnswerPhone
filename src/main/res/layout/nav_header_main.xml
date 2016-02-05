@@ -24,7 +24,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/answerHead"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView"

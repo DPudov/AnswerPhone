@@ -23,7 +23,6 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
-import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
 import static com.dpudov.answerphone.R.id.nav_checkFriend;
 import static com.dpudov.answerphone.R.id.nav_main;
@@ -133,17 +132,17 @@ public class MainActivity extends AppCompatActivity
 
 
         if (id == nav_main) {
-            fTransaction.replace(container, mainFragment);
+            fTransaction.replace(R.id.container, mainFragment);
         } else if (id == nav_settings) {
-            fTransaction.replace(container, settingsFragment);
+            fTransaction.replace(R.id.container, settingsFragment);
 
         } else if (id == nav_share) {
             shareWithVK();
         } else if (id == nav_send) {
-            fTransaction.replace(container, sendFragment);
+            fTransaction.replace(R.id.container, sendFragment);
 
         } else if (id == nav_checkFriend) {
-            fTransaction.replace(container, checkFriendsFragment);
+            fTransaction.replace(R.id.container, checkFriendsFragment);
 
         }
         fTransaction.commit();
