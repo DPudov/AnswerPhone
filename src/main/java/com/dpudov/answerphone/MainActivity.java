@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.fragments.CheckFriendsFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
@@ -24,6 +25,7 @@ import com.vk.sdk.dialogs.VKShareDialog;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.drawer_layout;
+import static com.dpudov.answerphone.R.id.nav_checkFriend;
 import static com.dpudov.answerphone.R.id.nav_main;
 import static com.dpudov.answerphone.R.id.nav_send;
 import static com.dpudov.answerphone.R.id.nav_settings;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     SendFragment sendFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
-
+CheckFriendsFragment checkFriendsFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity
 
 
         sendFragment = new SendFragment();
+        checkFriendsFragment = new CheckFriendsFragment();
     }
 
     @Override
@@ -144,7 +147,8 @@ public class MainActivity extends AppCompatActivity
             vkontaktePublish();
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
-
+        }else if (id == nav_checkFriend){
+            fTransaction.replace(container, checkFriendsFragment);
         }
         fTransaction.commit();
 

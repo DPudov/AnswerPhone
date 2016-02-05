@@ -9,6 +9,9 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/settingsHeadItem" />
+        <item
+            android:id="@+id/nav_checkFriend"
+            android:title="@string/checkFrFrag"/>
     </group>
 
     <item android:title="@string/extendDrawerItem">

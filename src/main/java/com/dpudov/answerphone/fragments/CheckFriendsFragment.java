@@ -28,7 +28,7 @@ import com.vk.sdk.api.model.VKList;
  * Use the {@link CheckFriendsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CheckFriendsFragment extends Fragment {
+public class CheckFriendsFragment extends android.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -91,7 +91,7 @@ public void makeFriendsList(){
         public void onComplete(VKResponse response) {
             super.onComplete(response);
             VKList list = (VKList)response.parsedModel;
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, list);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, list);
             listView.setAdapter(arrayAdapter);
         }
 
