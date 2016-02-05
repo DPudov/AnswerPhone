@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -81,7 +82,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request2 = VKApi.friends().get(VKParameters.from());
-        final VKRequest request = VKApi.friends().get(VKParameters.from());
+        VKRequest request = new VKRequest("friends.get", VKParameters.from(VKApiConst.FIELDS, "first_name, last_name"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
