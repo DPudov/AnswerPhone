@@ -20,7 +20,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Сохранить"
+        android:text="@string/saveButton"
         android:id="@+id/saveButton"
         android:layout_gravity="center_horizontal|bottom" />
 
