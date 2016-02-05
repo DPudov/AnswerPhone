@@ -38,8 +38,6 @@ public class SettingsFragment extends android.app.Fragment {
     private String message;
     private EditText editText;
     private OnFragmentInteractionListener mListener;
-    private CheckFriendsFragment checkFriendsFragment;
-
     public SettingsFragment() {
         // Required empty public constructor
     }

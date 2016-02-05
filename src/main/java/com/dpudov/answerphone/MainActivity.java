@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResult(VKAccessToken res) {
                 Toast.makeText(getApplicationContext(), R.string.loginSuccess, Toast.LENGTH_SHORT).show();
-                FragmentTransaction fTrans = getFragmentManager().beginTransaction();
-                fTrans.replace(container, mainFragment);
-                fTrans.commit();
+
 // Пользователь успешно авторизовался
             }
 

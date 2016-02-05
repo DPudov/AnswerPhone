@@ -43,7 +43,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private Button saveButton;
-    String[] names;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -120,9 +119,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
         return v;
     }
 
-    public void makeFriendsList() {
-
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
