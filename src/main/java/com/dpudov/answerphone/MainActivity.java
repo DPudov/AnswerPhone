@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        checkFriendsFragment = new CheckFriendsFragment();
+        mainFragment = new MainFragment();
+        sendFragment = new SendFragment();
+        settingsFragment = new SettingsFragment();
     }
 
     @Override
