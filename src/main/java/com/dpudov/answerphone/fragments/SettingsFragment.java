@@ -59,7 +59,7 @@ public class SettingsFragment extends android.app.Fragment {
     // TODO: Rename and change types and number of parameters
     public static SettingsFragment newInstance(String param1, String param2) {
         SettingsFragment fragment = new SettingsFragment();
-        CheckFriendsFragment checkFriendsFragment = new CheckFriendsFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,7 +87,8 @@ public class SettingsFragment extends android.app.Fragment {
             public void onClick(View v) {
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.Frag_Sett,checkFriendsFragment );
+                ft.replace(R.id.Frag_Sett, checkFriendsFragment);
+                ft.commit();
 
             }
         });
