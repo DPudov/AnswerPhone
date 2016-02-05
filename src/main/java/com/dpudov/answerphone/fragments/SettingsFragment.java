@@ -1,6 +1,5 @@
 package com.dpudov.answerphone.fragments;
 
-import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -85,10 +84,6 @@ public class SettingsFragment extends android.app.Fragment {
         checkFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.Frag_Sett, checkFriendsFragment);
-                ft.commit();
 
             }
         });

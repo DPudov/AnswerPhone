@@ -44,13 +44,6 @@
             android:hint="@string/editText"
             android:editable="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/checkFrFrag"
-            android:id="@+id/checkFriends"
-            android:layout_gravity="center_horizontal" />
-
     </LinearLayout>
 
 </FrameLayout>

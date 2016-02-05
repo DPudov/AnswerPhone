@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.CheckFriendsFragment;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     CheckFriendsFragment checkFriendsFragment;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +73,19 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        button = (Button) findViewById(R.id.button);
+        button.setVisibility(View.INVISIBLE);
+        button.setClickable(false);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(container, checkFriendsFragment);
+                ft.commit();
+            }
+        });
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        mainFragment = new MainFragment();
-
-        settingsFragment = new SettingsFragment();
-
-
-        sendFragment = new SendFragment();
-        checkFriendsFragment = new CheckFriendsFragment();
     }
 
     @Override
@@ -142,14 +148,34 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         if (id == nav_main) {
             fTransaction.replace(container, mainFragment);
+            if (!settingsFragment.isVisible()) {
+                button.setClickable(false);
+                button.setVisibility(View.INVISIBLE);
+            }
         } else if (id == nav_settings) {
             fTransaction.replace(container, settingsFragment);
+            if (settingsFragment.isVisible()) {
+                button.setClickable(true);
+                button.setVisibility(View.VISIBLE);
+            }
         } else if (id == nav_share) {
             shareWithVK();
+            if (!settingsFragment.isVisible()) {
+                button.setClickable(false);
+                button.setVisibility(View.INVISIBLE);
+            }
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
+            if (!settingsFragment.isVisible()) {
+                button.setClickable(false);
+                button.setVisibility(View.INVISIBLE);
+            }
         } else if (id == nav_checkFriend) {
             fTransaction.replace(container, checkFriendsFragment);
+            if (!settingsFragment.isVisible()) {
+                button.setClickable(false);
+                button.setVisibility(View.INVISIBLE);
+            }
         }
         fTransaction.commit();
 
