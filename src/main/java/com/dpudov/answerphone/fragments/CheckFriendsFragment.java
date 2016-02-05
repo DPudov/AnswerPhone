@@ -99,7 +99,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
                         for (int i=0; i<sbArray.size(); i++){
                             int key = sbArray.keyAt(i);
                             if (sbArray.get(key))
-                                Toast.makeText(getActivity(), (CharSequence) list.getById(key), Toast.LENGTH_SHORT);
+                                Toast.makeText(getActivity(), (CharSequence) list.getById(key), Toast.LENGTH_SHORT).show();
 
 
                         }
