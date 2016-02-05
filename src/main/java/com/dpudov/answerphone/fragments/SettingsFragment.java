@@ -1,11 +1,13 @@
 package com.dpudov.answerphone.fragments;
 
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -37,8 +39,10 @@ public class SettingsFragment extends android.app.Fragment {
     private String mParam2;
     private String message;
     private EditText editText;
+    private Button checkFriends;
     private User user = new User();
     private OnFragmentInteractionListener mListener;
+    private CheckFriendsFragment checkFriendsFragment;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -55,6 +59,7 @@ public class SettingsFragment extends android.app.Fragment {
     // TODO: Rename and change types and number of parameters
     public static SettingsFragment newInstance(String param1, String param2) {
         SettingsFragment fragment = new SettingsFragment();
+        CheckFriendsFragment checkFriendsFragment = new CheckFriendsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -72,10 +77,20 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        checkFriends = (Button) v.findViewById(R.id.checkFriends);
+        checkFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.Frag_Sett,checkFriendsFragment );
+
+            }
+        });
         editText = (EditText) v.findViewById(R.id.editText);
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

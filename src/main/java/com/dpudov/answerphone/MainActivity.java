@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity
     SendFragment sendFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
-CheckFriendsFragment checkFriendsFragment;
+    CheckFriendsFragment checkFriendsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +148,7 @@ CheckFriendsFragment checkFriendsFragment;
             shareWithVK();
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
-        }else if (id == nav_checkFriend){
+        } else if (id == nav_checkFriend) {
             fTransaction.replace(container, checkFriendsFragment);
         }
         fTransaction.commit();

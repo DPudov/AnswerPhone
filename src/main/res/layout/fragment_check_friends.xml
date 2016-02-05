@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dpudov.answerphone.fragments.CheckFriendsFragment">
+    tools:context="com.dpudov.answerphone.fragments.CheckFriendsFragment"
+    android:id="@+id/Frag_Check">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
