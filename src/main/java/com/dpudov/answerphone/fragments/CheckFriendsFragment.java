@@ -3,12 +3,14 @@ package com.dpudov.answerphone.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
@@ -86,13 +88,21 @@ public class CheckFriendsFragment extends android.app.Fragment {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                VKList list = (VKList) response.parsedModel;
+                final VKList list = (VKList)response.parsedModel;
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
                 listView.setAdapter(arrayAdapter);
                 listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        SparseBooleanArray sbArray = listView.getCheckedItemPositions();
+                        for (int i=0; i<sbArray.size(); i++){
+                            int key = sbArray.keyAt(i);
+                            if (sbArray.get(key))
+                                Toast.makeText(getActivity(), (CharSequence) list.getById(key), Toast.LENGTH_SHORT);
+
+
+                        }
                     }
                 });
 
