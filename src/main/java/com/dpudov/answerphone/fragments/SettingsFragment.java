@@ -85,6 +85,8 @@ public class SettingsFragment extends android.app.Fragment {
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
                     int[] usersId = new int[2];
+                    usersId[0] = 238489071;
+                    usersId[1] = 134132102;
                     sendTo(usersId);
                 } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
@@ -122,9 +124,9 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void sendTo(int[] userIds) {
-    for (int i = 0; i<userIds.length; i++){
-        send(userIds[i]);
-    }
+        for (int i = 0; i < userIds.length; i++) {
+            send(userIds[i]);
+        }
 
     }
 
