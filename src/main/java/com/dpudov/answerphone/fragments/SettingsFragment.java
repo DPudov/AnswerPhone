@@ -107,7 +107,6 @@ public class SettingsFragment extends android.app.Fragment {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                user.makeUsers(response);
                 Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
 
 
