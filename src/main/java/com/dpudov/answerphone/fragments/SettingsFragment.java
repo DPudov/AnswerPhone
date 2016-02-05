@@ -84,7 +84,7 @@ public class SettingsFragment extends android.app.Fragment {
 
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
-                    send(238489071);
+                    send(134132102);
                 } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
             }
