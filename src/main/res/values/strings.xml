@@ -26,4 +26,5 @@
     <string name="loginSuccess">Успешная авторизация</string>
     <string name="defaultMsg">HAHA(Test by AnswerPhone</string>
     <string name="sentMsg">Отправлено</string>
+    <string name="checkFrFrag">Выбрать друзей</string>
 </resources>
