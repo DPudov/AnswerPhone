@@ -101,7 +101,7 @@ public class SettingsFragment extends android.app.Fragment {
 
     public void send(int userId) {
 
-        message = editText.getText().toString()+R.string.defaultMsg;
+        message = editText.getText().toString().concat(getString(R.string.defaultMsg));
         VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
