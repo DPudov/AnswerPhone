@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.CheckFriendsFragment;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     CheckFriendsFragment checkFriendsFragment;
-    Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
