@@ -148,34 +148,18 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
         if (id == nav_main) {
             fTransaction.replace(container, mainFragment);
-            if (!settingsFragment.isVisible()) {
-                button.setClickable(false);
-                button.setVisibility(View.INVISIBLE);
-            }
         } else if (id == nav_settings) {
             fTransaction.replace(container, settingsFragment);
-            if (settingsFragment.isVisible()) {
-                button.setClickable(true);
-                button.setVisibility(View.VISIBLE);
-            }
+
         } else if (id == nav_share) {
             shareWithVK();
-            if (!settingsFragment.isVisible()) {
-                button.setClickable(false);
-                button.setVisibility(View.INVISIBLE);
-            }
+
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
-            if (!settingsFragment.isVisible()) {
-                button.setClickable(false);
-                button.setVisibility(View.INVISIBLE);
-            }
+
         } else if (id == nav_checkFriend) {
             fTransaction.replace(container, checkFriendsFragment);
-            if (!settingsFragment.isVisible()) {
-                button.setClickable(false);
-                button.setVisibility(View.INVISIBLE);
-            }
+
         }
         fTransaction.commit();
 
