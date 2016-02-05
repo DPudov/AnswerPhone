@@ -79,10 +79,7 @@ FragmentTransaction ft1;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ft1 = getFragmentManager().beginTransaction();
-                ft1.add(container, checkFriendsFragment);
-                ft1.replace(container, checkFriendsFragment);
-                ft1.commit();
+
             }
         });
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
@@ -147,10 +144,7 @@ FragmentTransaction ft1;
         int id = item.getItemId();
 
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
-        fTransaction.add(container, mainFragment);
-        fTransaction.add(container, sendFragment);
-        fTransaction.add(container,checkFriendsFragment);
-        fTransaction.add(container, settingsFragment);
+
 
         if (id == nav_main) {
             fTransaction.replace(container, mainFragment);
