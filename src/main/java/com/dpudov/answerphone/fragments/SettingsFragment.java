@@ -85,8 +85,6 @@ public class SettingsFragment extends android.app.Fragment {
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
                     int[] usersId = new int[2];
-                    usersId[0] = 238489071;
-                    usersId[1] = 134132102;
                     sendTo(usersId);
                 } else
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
@@ -124,23 +122,10 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void sendTo(int[] userIds) {
-        message = editText.getText().toString().concat(getString(R.string.defaultMsg));
-        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_IDS, userIds[0],",", userIds[1], VKApiConst.MESSAGE, message));
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
+    for (int i = 0; i<userIds.length; i++){
+        send(userIds[i]);
+    }
 
-
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-                Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
