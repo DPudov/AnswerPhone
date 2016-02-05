@@ -82,13 +82,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
         VKSdk.wakeUpSession(getActivity());
         VKRequest request2 = VKApi.friends().get(VKParameters.from());
         final VKRequest request = VKApi.friends().get(VKParameters.from());
-        request2.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                VKList list = (VKList) response.parsedModel;
-            }
-        });
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
