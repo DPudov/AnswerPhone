@@ -1,6 +1,5 @@
 package com.dpudov.answerphone.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.dpudov.answerphone.R;
@@ -40,6 +40,8 @@ public class CheckFriendsFragment extends android.app.Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ListView listView;
+    private Button saveButton;
+    String[] names;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -76,46 +78,45 @@ public class CheckFriendsFragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_check_friends, container, false);
-        if (VKSdk.isLoggedIn()) {
-            listView = (ListView) v.findViewById(R.id.listView);
-          makeFriendsList();
-        }
+        listView = (ListView) v.findViewById(R.id.listView);
+        saveButton = (Button) v.findViewById(R.id.saveButton);
+        VKSdk.wakeUpSession(getActivity());
+        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name"));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKList list = (VKList) response.parsedModel;
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
+                listView.setAdapter(arrayAdapter);
+                listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                saveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
 
-            // Inflate the layout for this fragment
-            return v;
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+        });
+
+
+        // Inflate the layout for this fragment
+        return v;
     }
-public void makeFriendsList(){
-    VKRequest request =VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,"first_name, last_name"));
-    request.executeWithListener(new VKRequest.VKRequestListener() {
-        @Override
-        public void onComplete(VKResponse response) {
-            super.onComplete(response);
-            VKList list = (VKList)response.parsedModel;
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, list);
-            listView.setAdapter(arrayAdapter);
-        }
 
-        @Override
-        public void onError(VKError error) {
-            super.onError(error);
-        }
-    });
-}
+    public void makeFriendsList() {
+
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
         }
     }
 

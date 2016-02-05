@@ -144,7 +144,7 @@ CheckFriendsFragment checkFriendsFragment;
         } else if (id == nav_settings) {
             fTransaction.replace(container, settingsFragment);
         } else if (id == nav_share) {
-            vkontaktePublish();
+            shareWithVK();
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
         }else if (id == nav_checkFriend){
@@ -157,7 +157,7 @@ CheckFriendsFragment checkFriendsFragment;
         return true;
     }
 
-    public final void vkontaktePublish() {
+    public final void shareWithVK() {
         VKSdk.wakeUpSession(this);
         new VKShareDialog()
                 .setText("ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016")

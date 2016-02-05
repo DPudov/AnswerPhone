@@ -7,14 +7,21 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="512dp"
         android:text="@string/checkFrFrag"
         android:textSize="25sp" />
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="452dp"
+        android:layout_height="322dp"
         android:id="@+id/listView"
         android:layout_gravity="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сохранить"
+        android:id="@+id/saveButton"
+        android:layout_gravity="center_horizontal|bottom" />
 
 </FrameLayout>
