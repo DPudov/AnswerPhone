@@ -81,7 +81,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
         listView = (ListView) v.findViewById(R.id.listView);
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
-        VKRequest request2 = VKApi.friends().get(VKParameters.from());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
