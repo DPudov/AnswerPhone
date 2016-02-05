@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -38,8 +37,6 @@ public class SettingsFragment extends android.app.Fragment {
     private String mParam2;
     private String message;
     private EditText editText;
-    private Button checkFriends;
-    private User user = new User();
     private OnFragmentInteractionListener mListener;
     private CheckFriendsFragment checkFriendsFragment;
 
@@ -80,13 +77,6 @@ public class SettingsFragment extends android.app.Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        checkFriends = (Button) v.findViewById(R.id.checkFriends);
-        checkFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         editText = (EditText) v.findViewById(R.id.editText);
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -135,8 +125,8 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void sendTo(int[] userIds) {
-        for (int i = 0; i < userIds.length; i++) {
-            send(userIds[i]);
+        for (int userId : userIds) {
+            send(userId);
         }
 
     }
