@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     SettingsFragment settingsFragment;
     CheckFriendsFragment checkFriendsFragment;
     Button button;
-
+FragmentTransaction ft1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +79,10 @@ public class MainActivity extends AppCompatActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(container, checkFriendsFragment);
-                ft.commit();
+                ft1 = getFragmentManager().beginTransaction();
+                ft1.add(container, checkFriendsFragment);
+                ft1.replace(container, checkFriendsFragment);
+                ft1.commit();
             }
         });
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
@@ -146,6 +147,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
+        fTransaction.add(container, mainFragment);
+        fTransaction.add(container, sendFragment);
+        fTransaction.add(container,checkFriendsFragment);
+        fTransaction.add(container, settingsFragment);
+
         if (id == nav_main) {
             fTransaction.replace(container, mainFragment);
         } else if (id == nav_settings) {
@@ -153,7 +159,6 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == nav_share) {
             shareWithVK();
-
         } else if (id == nav_send) {
             fTransaction.replace(container, sendFragment);
 
