@@ -1,16 +1,15 @@
 package com.dpudov.answerphone.fragments;
 
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
@@ -43,7 +42,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private Button saveButton;
-
+    SettingsFragment settingsFragment;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -81,6 +80,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_check_friends, container, false);
         listView = (ListView) v.findViewById(R.id.listView);
+        settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50"));
@@ -96,14 +96,12 @@ public class CheckFriendsFragment extends android.app.Fragment {
                     @Override
                     public void onClick(View v) {
                         //TODO: Измени код метода, чтобы возпращал нажатых людей
-                        SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                        for (int i = 0; i < sbArray.size(); i++) {
-                            int key = sbArray.keyAt(i);
-                            if (sbArray.get(key))
-                                Toast.makeText(getActivity(), (CharSequence) list.get(key), Toast.LENGTH_SHORT).show();
 
 
-                        }
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.container, settingsFragment);
+                        ft.commit();
+
                     }
                 });
 
