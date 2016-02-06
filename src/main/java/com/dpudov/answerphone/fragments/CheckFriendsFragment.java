@@ -89,7 +89,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 final VKList list = (VKList) response.parsedModel;
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_selectable_list_item, list);
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
                 listView.setAdapter(arrayAdapter);
                 listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
