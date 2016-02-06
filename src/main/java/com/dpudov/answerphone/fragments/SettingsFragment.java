@@ -1,5 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class SettingsFragment extends android.app.Fragment {
     private String mParam2;
     private String message;
     private EditText editText;
+    private Activity activity = getActivity();
     private OnFragmentInteractionListener mListener;
     public SettingsFragment() {
         // Required empty public constructor
@@ -89,10 +91,10 @@ public class SettingsFragment extends android.app.Fragment {
                     usersId[0] = 238489071;
                     usersId[1] = 134132102;
                     sendTo(usersId);
-                    getActivity().startService(new Intent(getActivity(), MessagesService.class));
+                    activity.startService(new Intent(activity, MessagesService.class));
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                    getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                    activity.stopService(new Intent(activity, MessagesService.class));
                 }
             }
         });// Inflate the layout for this fragment

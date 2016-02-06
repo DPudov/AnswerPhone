@@ -44,6 +44,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private ListView listView;
     private Button saveButton;
 
+
     public CheckFriendsFragment() {
         // Required empty public constructor
     }
@@ -87,7 +88,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                final VKList list = (VKList)response.parsedModel;
+                final VKList list = (VKList) response.parsedModel;
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
                 listView.setAdapter(arrayAdapter);
                 listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -96,7 +97,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
                     public void onClick(View v) {
                         //TODO: Измени код метода, чтобы возпращал нажатых людей
                         SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                        for (int i=0; i<sbArray.size(); i++){
+                        for (int i = 0; i < sbArray.size(); i++) {
                             int key = sbArray.keyAt(i);
                             if (sbArray.get(key))
                                 Toast.makeText(getActivity(), (CharSequence) list.get(key), Toast.LENGTH_SHORT).show();
