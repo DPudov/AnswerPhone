@@ -15,12 +15,12 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="407dp"
+        android:layout_height="187dp"
         android:layout_gravity="center"
         android:weightSum="1">
 
         <Switch
-            android:layout_width="217dp"
+            android:layout_width="377dp"
             android:layout_height="55dp"
             android:text="@string/enableMessages"
             android:id="@+id/switchMessage"
@@ -28,20 +28,30 @@
             android:textOn="Вкл"
             android:textOff="Выкл"
             android:showText="true"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.12" />
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/editText"
-            android:layout_gravity="center_horizontal"
             android:clickable="false"
             android:textColor="#000000"
             android:textSize="18sp"
             android:hint="@string/editText"
-            android:editable="true" />
+            android:editable="true"
+            android:layout_weight="0.50" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkFrFrag"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal|bottom"
+            android:visibility="visible"
+            android:clickable="true" />
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -39,8 +41,10 @@ public class SettingsFragment extends android.app.Fragment {
     private String mParam2;
     private String message;
     private EditText editText;
-
+    private Button goToM8Button;
     private OnFragmentInteractionListener mListener;
+    CheckFriendsFragment checkFriendsFragment;
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -79,6 +83,14 @@ public class SettingsFragment extends android.app.Fragment {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         editText = (EditText) v.findViewById(R.id.editText);
+        goToM8Button = (Button) v.findViewById(R.id.button2);
+        goToM8Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.container, checkFriendsFragment);
+            }
+        });
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -95,7 +107,9 @@ public class SettingsFragment extends android.app.Fragment {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
                     getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                 }
+
             }
+
         });// Inflate the layout for this fragment
         return v;
     }
