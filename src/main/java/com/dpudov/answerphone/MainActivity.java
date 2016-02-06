@@ -24,7 +24,6 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
 import static com.dpudov.answerphone.R.id.drawer_layout;
-import static com.dpudov.answerphone.R.id.nav_checkFriend;
 import static com.dpudov.answerphone.R.id.nav_main;
 import static com.dpudov.answerphone.R.id.nav_send;
 import static com.dpudov.answerphone.R.id.nav_settings;
@@ -144,9 +143,6 @@ public class MainActivity extends AppCompatActivity
             shareWithVK();
         } else if (id == nav_send) {
             fTransaction.replace(R.id.container, sendFragment);
-
-        } else if (id == nav_checkFriend) {
-            fTransaction.replace(R.id.container, checkFriendsFragment);
 
         }
         fTransaction.commit();
