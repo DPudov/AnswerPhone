@@ -84,11 +84,13 @@ public class SettingsFragment extends android.app.Fragment {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         editText = (EditText) v.findViewById(R.id.editText);
         goToM8Button = (Button) v.findViewById(R.id.button2);
+        checkFriendsFragment = new CheckFriendsFragment();
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, checkFriendsFragment);
+                ft.commit();
             }
         });
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
