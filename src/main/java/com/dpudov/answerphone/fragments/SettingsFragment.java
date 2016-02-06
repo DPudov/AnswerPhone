@@ -1,5 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -87,8 +89,11 @@ public class SettingsFragment extends android.app.Fragment {
                     usersId[0] = 238489071;
                     usersId[1] = 134132102;
                     sendTo(usersId);
-                } else
+                    getActivity().startService(new Intent(getActivity(), MessagesService.class));
+                } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
+                    getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                }
             }
         });// Inflate the layout for this fragment
         return v;
