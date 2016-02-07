@@ -1,6 +1,7 @@
 package com.dpudov.answerphone.fragments;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ public class SettingsFragment extends android.app.Fragment {
     private Button goToM8Button;
     private OnFragmentInteractionListener mListener;
     CheckFriendsFragment checkFriendsFragment;
+    Context ctx;
+    SettingsFragment settingsFragment;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -83,7 +86,8 @@ public class SettingsFragment extends android.app.Fragment {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         editText = (EditText) v.findViewById(R.id.editText);
-        goToM8Button = (Button) v.findViewById(R.id.button2);
+
+                goToM8Button = (Button) v.findViewById(R.id.button2);
         checkFriendsFragment = new CheckFriendsFragment();
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,10 +108,10 @@ public class SettingsFragment extends android.app.Fragment {
                     usersId[0] = 238489071;
                     usersId[1] = 134132102;
                     sendTo(usersId);
-                    getActivity().startService(new Intent(getActivity(), MessagesService.class));
+                    SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                    getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                    SettingsFragment.this.getActivity().stopService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 }
 
             }
