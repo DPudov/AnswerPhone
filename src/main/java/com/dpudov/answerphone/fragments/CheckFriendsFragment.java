@@ -1,14 +1,11 @@
 package com.dpudov.answerphone.fragments;
 
-import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -16,11 +13,9 @@ import android.widget.Toast;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKUsersArray;
 
 import java.util.ArrayList;
@@ -88,48 +83,58 @@ public class CheckFriendsFragment extends android.app.Fragment {
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
-
-        VKRequest request = VKApi.friends().get(VKParameters.from( "order", "hints"));//VKApiConst.FIELDS, "id, first_name, last_name, photo_50",
-        request.executeWithListener(new VKRequest.VKRequestListener() {
+        VKRequest request1 = VKApi.friends().get(VKParameters.from());
+        request1.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-             // Заполнение массива друзьями
                 final VKUsersArray vkApiUserIds = (VKUsersArray) response.parsedModel;
+                int id = vkApiUserIds.get(0).id;
+                Toast.makeText(getActivity(), Integer.toString(id), Toast.LENGTH_SHORT).show();
 
-                final VKList list = (VKList) response.parsedModel;
-                ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
-                listView.setAdapter(arrayAdapter);
-
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO: Измени код метода, чтобы возпращал нажатых людей
-                        SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                        for (int i = 0; i < sbArray.size(); i++) {
-                            int key = sbArray.keyAt(i);
-                            if (sbArray.get(key)) {
-                                Toast.makeText(getActivity(), list.get(key).toString(), Toast.LENGTH_SHORT).show();
-
-                            }
-
-
-                        }
-
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.container, settingsFragment);
-                        ft.commit();
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
             }
         });
+        //VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
+      //  request.executeWithListener(new VKRequest.VKRequestListener() {
+           // @Override
+           // public void onComplete(VKResponse response) {
+             //   super.onComplete(response);
+                // Заполнение массива друзьями
+
+
+              //  final VKList list = (VKList) response.parsedModel;
+             //   ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
+             //   listView.setAdapter(arrayAdapter);
+
+              //  saveButton.setOnClickListener(new View.OnClickListener() {
+                  //  @Override
+                  //  public void onClick(View v) {
+                        //TODO: Измени код метода, чтобы возпращал нажатых людей
+                    //    SparseBooleanArray sbArray = listView.getCheckedItemPositions();
+                      //  for (int i = 0; i < sbArray.size(); i++) {
+                        //    int key = sbArray.keyAt(i);
+                       //     if (sbArray.get(key)) {
+                        //        Toast.makeText(getActivity(), list.get(key).toString(), Toast.LENGTH_SHORT).show();
+
+                        //    }
+
+
+                      //  }
+
+                     //   FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    //    ft.replace(R.id.container, settingsFragment);
+                 //       ft.commit();
+
+                 //   }
+               // });
+
+            //}
+
+           // @Override
+           // public void onError(VKError error) {
+             //   super.onError(error);
+           // }
+        //});
 
 
         // Inflate the layout for this fragment
