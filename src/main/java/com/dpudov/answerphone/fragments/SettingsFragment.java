@@ -106,7 +106,7 @@ public class SettingsFragment extends android.app.Fragment {
                     //  usersId[0] = 238489071;
                     // usersId[1] = 134132102;
                     //sendTo(usersId);
-                    //  SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
+                      SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
                     SettingsFragment.this.getActivity().stopService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
