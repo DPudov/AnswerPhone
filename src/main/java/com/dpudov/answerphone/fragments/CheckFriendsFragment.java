@@ -88,10 +88,14 @@ public class CheckFriendsFragment extends android.app.Fragment {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                final VKUsersArray vkApiUserIds = (VKUsersArray) response.parsedModel;
-                int id = vkApiUserIds.get(0).id;
-                Toast.makeText(getActivity(), Integer.toString(id), Toast.LENGTH_SHORT).show();
+                try {
 
+                    final VKUsersArray vkApiUserIds = (VKUsersArray) response.parsedModel;
+                    int id = vkApiUserIds.get(238489071).id;
+                    Toast.makeText(getActivity(), Integer.toString(id), Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         //VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
