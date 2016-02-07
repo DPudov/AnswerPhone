@@ -85,7 +85,7 @@ public class SettingsFragment extends android.app.Fragment {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         editText = (EditText) v.findViewById(R.id.editText);
 
-                goToM8Button = (Button) v.findViewById(R.id.button2);
+        goToM8Button = (Button) v.findViewById(R.id.button2);
         checkFriendsFragment = new CheckFriendsFragment();
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,11 +102,11 @@ public class SettingsFragment extends android.app.Fragment {
 
                 if (isChecked) {
                     Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
-                   // int[] usersId = new int[2];
-                  //  usersId[0] = 238489071;
-                   // usersId[1] = 134132102;
+                    // int[] usersId = new int[2];
+                    //  usersId[0] = 238489071;
+                    // usersId[1] = 134132102;
                     //sendTo(usersId);
-                  //  SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
+                    //  SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
                     SettingsFragment.this.getActivity().stopService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));

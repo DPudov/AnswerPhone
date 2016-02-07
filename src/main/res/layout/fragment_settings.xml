@@ -20,7 +20,7 @@
         android:weightSum="1">
 
         <Switch
-            android:layout_width="377dp"
+            android:layout_width="fill_parent"
             android:layout_height="55dp"
             android:text="@string/enableMessages"
             android:id="@+id/switchMessage"
@@ -28,8 +28,7 @@
             android:textOn="Вкл"
             android:textOff="Выкл"
             android:showText="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
+            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
