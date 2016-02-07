@@ -1,7 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,8 +44,7 @@ public class SettingsFragment extends android.app.Fragment {
     private Button goToM8Button;
     private OnFragmentInteractionListener mListener;
     CheckFriendsFragment checkFriendsFragment;
-    Context ctx;
-    SettingsFragment settingsFragment;
+
 
     public SettingsFragment() {
         // Required empty public constructor
