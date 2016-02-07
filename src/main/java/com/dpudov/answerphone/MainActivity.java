@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ import static com.dpudov.answerphone.R.id.nav_send;
 import static com.dpudov.answerphone.R.id.nav_settings;
 import static com.dpudov.answerphone.R.id.nav_share;
 import static com.dpudov.answerphone.R.id.nav_view;
-import static com.dpudov.answerphone.R.menu.main;
 import static com.vk.sdk.VKScope.ADS;
 import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.GROUPS;
@@ -104,13 +102,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(main, menu);
-        return true;
     }
 
     @Override
