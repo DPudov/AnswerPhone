@@ -31,4 +31,5 @@
     <string name="editText">Введите сообщение</string>
     <string name="serviceStarted">Рассылка включена</string>
     <string name="sendUsMsg">Оставьте свой отзыв или жалобу:)</string>
+    <string name="e_mail">dimapudov99@gmail.com</string>
 </resources>
