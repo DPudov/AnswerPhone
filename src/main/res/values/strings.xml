@@ -30,4 +30,5 @@
     <string name="saveButton">Сохранить</string>
     <string name="editText">Введите сообщение</string>
     <string name="serviceStarted">Рассылка включена</string>
+    <string name="sendUsMsg">Оставьте свой отзыв или жалобу:)</string>
 </resources>

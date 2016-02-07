@@ -6,8 +6,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +36,9 @@ public class SendFragment extends android.app.Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private EditText editText;
+    private Button sendButton;
+    private String message;
 
     public SendFragment() {
         // Required empty public constructor
@@ -63,8 +74,17 @@ public class SendFragment extends android.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_send, container, false);
+        sendButton = (Button) v.findViewById(R.id.sendButton);
+        editText = (EditText) v.findViewById(R.id.editText2);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMe();
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_send, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -73,8 +93,6 @@ public class SendFragment extends android.app.Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-
 
 
     @Override
@@ -96,5 +114,26 @@ public class SendFragment extends android.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void sendMe() {
+
+        message = editText.getText().toString().concat(getString(R.string.defaultMsg));
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, 134132102, VKApiConst.MESSAGE, message));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
