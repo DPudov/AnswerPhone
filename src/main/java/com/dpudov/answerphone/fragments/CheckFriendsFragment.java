@@ -4,12 +4,14 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
@@ -96,7 +98,13 @@ public class CheckFriendsFragment extends android.app.Fragment {
                     @Override
                     public void onClick(View v) {
                         //TODO: Измени код метода, чтобы возпращал нажатых людей
+                        SparseBooleanArray sbArray = listView.getCheckedItemPositions();
+                        for (int i = 0; i < sbArray.size(); i++) {
+                            int key = sbArray.keyAt(i);
+                            if (sbArray.get(key))
+                                Toast.makeText(getActivity(),list.get(key).toString(),Toast.LENGTH_SHORT).show();
 
+                        }
 
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, settingsFragment);
