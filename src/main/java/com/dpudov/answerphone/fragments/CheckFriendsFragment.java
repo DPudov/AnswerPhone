@@ -22,6 +22,9 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKUsersArray;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +48,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private ListView listView;
     private Button saveButton;
     SettingsFragment settingsFragment;
+    ArrayList<String> users;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -85,11 +89,15 @@ public class CheckFriendsFragment extends android.app.Fragment {
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
-        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50"));
+
+        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
+             // Заполнение массива друзьями
+                final VKUsersArray vkApiUserFulls = (VKUsersArray) response.parsedModel;
+
                 final VKList list = (VKList) response.parsedModel;
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
                 listView.setAdapter(arrayAdapter);
@@ -101,8 +109,11 @@ public class CheckFriendsFragment extends android.app.Fragment {
                         SparseBooleanArray sbArray = listView.getCheckedItemPositions();
                         for (int i = 0; i < sbArray.size(); i++) {
                             int key = sbArray.keyAt(i);
-                            if (sbArray.get(key))
-                                Toast.makeText(getActivity(),list.get(key).toString(),Toast.LENGTH_SHORT).show();
+                            if (sbArray.get(key)) {
+                                Toast.makeText(getActivity(), vkApiUserFulls.get(key).toString(), Toast.LENGTH_SHORT).show();
+
+                            }
+
 
                         }
 
