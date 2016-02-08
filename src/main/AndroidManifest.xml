@@ -27,7 +27,7 @@
         </activity>
 
         <service
-            android:name=".MessagesService"
+            android:name=".fragments.MessagesService"
             android:enabled="true"
             android:exported="true">
         </service>

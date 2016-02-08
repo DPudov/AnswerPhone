@@ -1,4 +1,4 @@
-package com.dpudov.answerphone;
+package com.dpudov.answerphone.fragments;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -69,16 +70,16 @@ public class MessagesService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
-        if (!(bundle == null)) {
-            checkedUsers = bundle.getIntArray("userIds");
-            try {
-                getAndSendMessages();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
+        //if (!(bundle == null)) {
+       //     checkedUsers = bundle.getIntArray("userIds");
+        //try {
+        ///        getAndSendMessages();
+            //} catch (Exception e) {
+              //  e.printStackTrace();
+           // }
+      //  } else {
             showNotificationNew();
-        }
+        //}
         return START_NOT_STICKY;
     }
 

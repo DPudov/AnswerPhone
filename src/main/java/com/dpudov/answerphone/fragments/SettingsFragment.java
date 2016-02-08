@@ -15,7 +15,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
-import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -118,12 +117,12 @@ public class SettingsFragment extends android.app.Fragment {
                                                              Bundle b = new Bundle();
                                                              b.putIntArray("userIds", userIds);
                                                              intent.putExtras(b);
-                                                             SettingsFragment.this.getActivity().startService(intent);
+                                                            getActivity().startService(intent);
                                                          } else
 
                                                          {
                                                              Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                                                             SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                                                             getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                                                          }
 
                                                      }
