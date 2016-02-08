@@ -111,12 +111,21 @@ public class SettingsFragment extends android.app.Fragment {
                     //sendTo(usersId);
                     userIds = ((MainActivity) getActivity()).getUserIds();
                     //sendTo(userIds);
+                    Intent intent = null;
+                    try {
 
-                    Intent intent = new Intent(getActivity(), MessagesService.class);
-                    Bundle b = new Bundle();
-                    b.putIntArray("userIds", userIds);
-                    intent.putExtras(b);
-                    SettingsFragment.this.getActivity().startService(intent);
+                        intent = new Intent(getActivity(), MessagesService.class);
+                        Bundle b = new Bundle();
+                        b.putIntArray("userIds", userIds);
+                        intent.putExtras(b);
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+                    }
+                    try {
+                        SettingsFragment.this.getActivity().startService(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
                     SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
