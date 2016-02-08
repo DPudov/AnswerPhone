@@ -27,6 +27,7 @@ public class MessagesService extends Service {
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
     private int[] userId;
+    private int[] userIdReturn;
     String message;
 
     public MessagesService() {
@@ -72,19 +73,16 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         if (!(bundle == null)) {
             checkedUsers = bundle.getIntArray("userIds");
-
+//TODO: Исправь ошибку
              getAndSendMessages();
-            //} catch (Exception e) {
-              //  e.printStackTrace();
-           // }
-      } else {
+
+        } else {
             showNotificationNew();
         }
         return START_NOT_STICKY;
     }
 
-    private void getAndSendMessages() {
-
+    void getAndSendMessages() {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
             @Override
@@ -93,7 +91,7 @@ public class MessagesService extends Service {
                     userId = getMsg();
                     sendTo(userId);
                     try {
-                        TimeUnit.MINUTES.sleep(3);
+                        TimeUnit.SECONDS.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -102,16 +100,17 @@ public class MessagesService extends Service {
                 stopSelf();
             }
         }).start();
+
     }
 
     private int[] getMsg() {
-        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 180));
+        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 100));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 VKUsersArray messages = (VKUsersArray) response.parsedModel;
-                userId = null;
+                userIdReturn = null;
                 if (messages.size() > 0) {
                     // Пришло новое сообщение. Возвращаем true
                     ArrayList<Integer> userArr = new ArrayList<>();
@@ -147,10 +146,10 @@ public class MessagesService extends Service {
                         }
                     }
                     int count = 0;
-                    userId = new int[counter];
+                    userIdReturn = new int[counter];
                     for (int userId1 : userIds) {
                         if (!(userId1 == 0)) {
-                            userId[count] = userId1;
+                            userIdReturn[count] = userId1;
                             count++;
                         }
                     }
@@ -164,7 +163,7 @@ public class MessagesService extends Service {
             }
 
         });
-        return userId;
+        return userIdReturn;
     }
 
     public static boolean hasConnection(final Context context) {
