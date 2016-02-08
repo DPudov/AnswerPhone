@@ -91,7 +91,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
                 try {
 
                     final VKUsersArray vkApiUserIds = (VKUsersArray) response.parsedModel;
-                    int id = vkApiUserIds.get(238489071).id;
+                    int id = vkApiUserIds.get(0).getId();
                     Toast.makeText(getActivity(), Integer.toString(id), Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
