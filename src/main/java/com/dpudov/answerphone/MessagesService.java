@@ -59,6 +59,7 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
+        VKSdk.wakeUpSession(getApplicationContext());
         try {
             getAndSendMessages();
         } catch (Exception e) {
@@ -68,12 +69,12 @@ public class MessagesService extends Service {
     }
 
     private void getAndSendMessages() throws Exception{
-        VKSdk.wakeUpSession(getApplicationContext());
+
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
+                while (hasConnection(getApplicationContext())){
                     userId = getMsg();
                     sendTo(userId);
                     try {
@@ -81,7 +82,9 @@ public class MessagesService extends Service {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                 }
+                stopSelf();
             }
         }).start();
     }
