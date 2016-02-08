@@ -71,20 +71,17 @@ public class MessagesService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
-        if (!(bundle == null)) {
             checkedUsers = bundle.getIntArray("userIds");
 //TODO: Исправь ошибку
             getAndSendMessages();
 
-        } else {
-            showNotificationNew();
-        }
+
         return START_NOT_STICKY;
     }
 
     void getAndSendMessages() {
-        //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        Thread t = new Thread(new Runnable() {
+      showNotificationNew();  //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (hasConnection(getApplicationContext())) {
@@ -98,8 +95,7 @@ public class MessagesService extends Service {
                 }
                 stopSelf();
             }
-        });
-        t.start();
+        }).start();
 
     }
 
