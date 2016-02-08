@@ -23,6 +23,8 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import static com.vk.sdk.VKSdk.wakeUpSession;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -104,6 +106,7 @@ public class SettingsFragment extends android.app.Fragment {
                                                      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                                                          if (isChecked) {
+                                                             wakeUpSession(getActivity());
                                                              Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
                                                              // int[] usersId = new int[2];
                                                              //  usersId[0] = 238489071;
@@ -120,7 +123,7 @@ public class SettingsFragment extends android.app.Fragment {
 
                                                          {
                                                              Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                                                            SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                                                             SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                                                          }
 
                                                      }

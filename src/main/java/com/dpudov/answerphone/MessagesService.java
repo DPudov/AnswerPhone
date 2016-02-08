@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -59,11 +58,16 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        VKSdk.wakeUpSession(getApplicationContext());
-        try {
-            getAndSendMessages();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (checkedUsers == null)
+            stopSelf();
+        else {
+            try {
+                getAndSendMessages();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
         return super.onStartCommand(intent, flags, startId);
     }
