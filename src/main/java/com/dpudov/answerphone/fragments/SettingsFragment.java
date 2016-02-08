@@ -100,40 +100,38 @@ public class SettingsFragment extends android.app.Fragment {
 
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                                     @Override
+                                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked) {
-                    Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
-                    // int[] usersId = new int[2];
-                    //  usersId[0] = 238489071;
-                    // usersId[1] = 134132102;
-                    //sendTo(usersId);
-                    userIds = ((MainActivity) getActivity()).getUserIds();
-                    //sendTo(userIds);
-                    Intent intent = null;
-                    try {
+                                                         if (isChecked) {
+                                                             Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
+                                                             // int[] usersId = new int[2];
+                                                             //  usersId[0] = 238489071;
+                                                             // usersId[1] = 134132102;
+                                                             //sendTo(usersId);
+                                                             userIds = ((MainActivity) getActivity()).getUserIds();
+                                                             //sendTo(userIds);
+                                                             Intent intent = new Intent(getActivity(), MessagesService.class);
 
-                        intent = new Intent(getActivity(), MessagesService.class);
-                        Bundle b = new Bundle();
-                        b.putIntArray("userIds", userIds);
-                        intent.putExtras(b);
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
-                    }
-                    try {
-                        SettingsFragment.this.getActivity().startService(intent);
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                    SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
-                }
 
-            }
+                                                             Bundle b = new Bundle();
+                                                             b.putIntArray("userIds", userIds);
+                                                             intent.putExtras(b);
+                                                             Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+                                                             SettingsFragment.this.getActivity().startService(intent);
+                                                             Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
+                                                         } else
 
-        });// Inflate the layout for this fragment
+                                                         {
+                                                             Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
+                                                             SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                                                         }
+
+                                                     }
+
+                                                 }
+
+        );// Inflate the layout for this fragment
         return v;
     }
 
