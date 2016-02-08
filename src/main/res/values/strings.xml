@@ -32,4 +32,5 @@
     <string name="serviceStarted">Рассылка включена</string>
     <string name="sendUsMsg">Оставьте свой отзыв или жалобу:)</string>
     <string name="e_mail">dimapudov99@gmail.com</string>
+    <string name="user_is_busy">Пользователь занят</string>
 </resources>

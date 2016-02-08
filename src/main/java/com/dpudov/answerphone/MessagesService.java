@@ -7,23 +7,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.os.IBinder;
 
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKUsersArray;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
-    int userSenderId = 0;
+    private int[] checkedUsers;
     private int[] userIds;
     String message;
-    private boolean newMessage = false;
 
     public MessagesService() {
     }
@@ -52,6 +55,8 @@ public class MessagesService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Bundle bundle = intent.getExtras();
+        checkedUsers = bundle.getIntArray("userIds");
         getAndSendMessages();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -62,27 +67,67 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 while (true) {
-                    try {
-                        TimeUnit.MINUTES.sleep(3);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (newMsg()) {
-
-                        send(getMessages());
-                    }
                     if (hasConnection(getApplicationContext()))
                         break;
+                    else {
+                        userIds = getMsg();
+                        sendTo(userIds);
+                    }
                 }
-
+                try {
+                    TimeUnit.MINUTES.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
         }).start();
     }
 
-    private boolean newMsg() {
+    private int[] getMsg() {
+        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 180));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKUsersArray messages = (VKUsersArray) response.parsedModel;
+                if (messages.size() > 0) {
+                    // Пришло новое сообщение. Возвращаем true
+                    ArrayList<Integer> userArr = new ArrayList<>();
+                    ArrayList<Integer> userArrCopy = new ArrayList<>();
+                    int firstId = messages.get(0).getId();
+                    int id;
+                    int c = 0;
+                    userArr.add(0, firstId);
+                    for (int i = 0; i < messages.size(); i++) {
+                        id = messages.get(i).getId();
+                        if (!(firstId == id)) {
+                            c++;
+                            userArr.add(c, id);
+                            userArrCopy.add(c, id);
+                        }
+                    }
+                    //проверка на соответствие с выбранными друзьями
+                    for (int i = 0; i < userArr.size(); i++) {
+                        for (int checkedUser : checkedUsers)
+                            if (!(userArr.get(i) == checkedUser)) {
+                                userArrCopy.remove(i);
+                            }
+                    }
+//После всего создаем userIds
+                    for (int i = 0; i < userArrCopy.size(); i++) {
+                        int[] userIds = new int[userArrCopy.size()];
+                        userIds[i] = userArrCopy.get(i);
+                    }
+                }
+            }
 
-        return newMessage;
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+        });
+        return userIds;
     }
 
     public static boolean hasConnection(final Context context) {
@@ -96,31 +141,12 @@ public class MessagesService extends Service {
             return true;
         }
         wifiInfo = cm.getActiveNetworkInfo();
-        if (wifiInfo != null && wifiInfo.isConnected()) {
-            return true;
-        }
-        return false;
-    }
-
-    private int getMessages() {
-        VKRequest requestGet = new VKRequest("messages.get", VKParameters.from("time_offset", 180));
-        requestGet.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-        });
-        return userSenderId;
+        return wifiInfo != null && wifiInfo.isConnected();
     }
 
     public void send(int userId) {
 
-        message = "Пользователь занят" + getString(R.string.defaultMsg);
+        message = getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
 
         VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
         requestSend.executeWithListener(new VKRequest.VKRequestListener() {
