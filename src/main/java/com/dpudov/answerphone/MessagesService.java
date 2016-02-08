@@ -64,26 +64,20 @@ public class MessagesService extends Service {
 
     private void getAndSendMessages() {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        Thread t = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    if (hasConnection(getApplicationContext()))
-                        break;
-                    else {
-                        userId = getMsg();
-                        sendTo(userId);
+                    userId = getMsg();
+                    sendTo(userId);
+                    try {
+                        TimeUnit.MINUTES.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
-                try {
-                    TimeUnit.MINUTES.sleep(3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
             }
-        });
-        t.start();
+        }).start();
     }
 
     private int[] getMsg() {
