@@ -70,7 +70,7 @@ public class MessagesService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
-        //if (!(bundle == null)) {
+        if (!(bundle == null)) {
        //     checkedUsers = bundle.getIntArray("userIds");
         //try {
         ///        getAndSendMessages();
@@ -79,7 +79,7 @@ public class MessagesService extends Service {
            // }
       //  } else {
             showNotificationNew();
-        //}
+        }
         return START_NOT_STICKY;
     }
 
