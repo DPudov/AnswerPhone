@@ -122,16 +122,16 @@ public class MessagesService extends Service {
                         userIds[i] = userArrCopy.get(i);
                     }
                     int counter = 0;
-                    for (int i = 0; i < userIds.length; i++) {
-                        if (!(userIds[i] == 0)) {
+                    for (int userId1 : userIds) {
+                        if (!(userId1 == 0)) {
                             counter++;
                         }
                     }
                     int count = 0;
                     userId = new int[counter];
-                    for (int i = 0; i < userIds.length; i++) {
-                        if (!(userIds[i] == 0)) {
-                            userId[count] = userIds[i];
+                    for (int userId1 : userIds) {
+                        if (!(userId1 == 0)) {
+                            userId[count] = userId1;
                         }
                     }
                 }
