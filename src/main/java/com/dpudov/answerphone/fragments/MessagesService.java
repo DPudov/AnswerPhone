@@ -20,6 +20,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKUsersArray;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MessagesService extends Service {
     NotificationManager nM;
@@ -83,14 +84,14 @@ public class MessagesService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (hasConnection(getApplicationContext())) {
+                //while (hasConnection(getApplicationContext())) {
                     sendTo(getMsg());
-                   // try {
-                     //   TimeUnit.SECONDS.sleep(30);
-                   // } catch (InterruptedException e) {
-                       // e.printStackTrace();
-                    //}
-                }
+                    try {
+                        TimeUnit.SECONDS.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                //}
             }
         }).start();
 
