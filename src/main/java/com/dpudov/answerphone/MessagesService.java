@@ -132,6 +132,7 @@ public class MessagesService extends Service {
                     for (int userId1 : userIds) {
                         if (!(userId1 == 0)) {
                             userId[count] = userId1;
+                            count++;
                         }
                     }
                 }
