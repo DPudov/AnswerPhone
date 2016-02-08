@@ -53,6 +53,7 @@ public class MessagesService extends Service {
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
+
     private void showNotificationNew() {
         CharSequence text = "bundle=null";
         Notification notification = new Notification.Builder(this)
@@ -64,9 +65,15 @@ public class MessagesService extends Service {
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle bundle = intent.getExtras();
+        Bundle bundle = null;
+        try {
+            bundle = intent.getExtras();
+        } catch (Exception e) {
+           showNotificationNew();
+        }
         if (!(bundle == null)) {
             checkedUsers = bundle.getIntArray("userIds");
             try {
@@ -74,8 +81,7 @@ public class MessagesService extends Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else{
+        } else {
             showNotificationNew();
         }
         return super.onStartCommand(intent, flags, startId);
