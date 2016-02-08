@@ -88,8 +88,7 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 while (hasConnection(getApplicationContext())) {
-                    userId = getMsg();
-                    sendTo(userId);
+                   // sendTo(getMsg());
                     try {
                         TimeUnit.SECONDS.sleep(100);
                     } catch (InterruptedException e) {
