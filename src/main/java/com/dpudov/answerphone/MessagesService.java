@@ -3,7 +3,10 @@ package com.dpudov.answerphone;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 
 import com.vk.sdk.api.VKApiConst;
@@ -12,12 +15,15 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import java.util.concurrent.TimeUnit;
+
 public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
     int userSenderId = 0;
-    int[] userIds;
+    private int[] userIds;
     String message;
+    private boolean newMessage = false;
 
     public MessagesService() {
     }
@@ -54,13 +60,48 @@ public class MessagesService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-               send(getMessages());
+                while (true) {
+                    try {
+                        TimeUnit.MINUTES.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (newMsg()){
+
+                    send(getMessages());}
+                    if(hasConnection(getApplicationContext()))
+                        break;
+                }
 
 
             }
-        });
+        }).start();
     }
 
+    private boolean newMsg() {
+
+        return newMessage;
+    }
+    public static boolean hasConnection(final Context context)
+    {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        wifiInfo = cm.getActiveNetworkInfo();
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        return false;
+    }
     private int getMessages() {
         VKRequest requestGet = new VKRequest("messages.get", VKParameters.from());
         requestGet.executeWithListener(new VKRequest.VKRequestListener() {
