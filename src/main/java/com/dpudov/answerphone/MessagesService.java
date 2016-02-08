@@ -57,6 +57,7 @@ public class MessagesService extends Service {
     }
 
     private void getAndSendMessages() {
+        //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -66,10 +67,11 @@ public class MessagesService extends Service {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (newMsg()){
+                    if (newMsg()) {
 
-                    send(getMessages());}
-                    if(hasConnection(getApplicationContext()))
+                        send(getMessages());
+                    }
+                    if (hasConnection(getApplicationContext()))
                         break;
                 }
 
@@ -82,26 +84,24 @@ public class MessagesService extends Service {
 
         return newMessage;
     }
-    public static boolean hasConnection(final Context context)
-    {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    public static boolean hasConnection(final Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
+        if (wifiInfo != null && wifiInfo.isConnected()) {
             return true;
         }
         wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
+        if (wifiInfo != null && wifiInfo.isConnected()) {
             return true;
         }
         wifiInfo = cm.getActiveNetworkInfo();
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
+        if (wifiInfo != null && wifiInfo.isConnected()) {
             return true;
         }
         return false;
     }
+
     private int getMessages() {
         VKRequest requestGet = new VKRequest("messages.get", VKParameters.from("time_offset", 180));
         requestGet.executeWithListener(new VKRequest.VKRequestListener() {
