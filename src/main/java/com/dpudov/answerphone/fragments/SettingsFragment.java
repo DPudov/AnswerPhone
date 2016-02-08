@@ -97,7 +97,7 @@ public class SettingsFragment extends android.app.Fragment {
                 ft.commit();
             }
         });
-
+        userIds = ((MainActivity) getActivity()).getUserIds();
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                                      @Override
@@ -109,18 +109,20 @@ public class SettingsFragment extends android.app.Fragment {
                                                              //  usersId[0] = 238489071;
                                                              // usersId[1] = 134132102;
                                                              //sendTo(usersId);
-                                                             userIds = ((MainActivity) getActivity()).getUserIds();
+
                                                              //sendTo(userIds);
-                                                             Intent intent = new Intent(getActivity(), MessagesService.class);
-                                                             Bundle b = new Bundle();
-                                                             b.putIntArray("userIds", userIds);
-                                                             intent.putExtras(b);
-                                                             getActivity().startService(intent);
+                                                             if (userIds[0]==0)
+                                                                 Toast.makeText(getActivity(), "huh", Toast.LENGTH_SHORT);
+                                                             //Intent intent = new Intent(getActivity(), MessagesService.class);
+                                                            // Bundle b = new Bundle();
+                                                            // b.putIntArray("userIds", userIds);
+                                                            // intent.putExtras(b);
+                                                             //getActivity().startService(intent);
                                                          } else
 
                                                          {
                                                              Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                                                            getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                                                             getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                                                          }
 
                                                      }
