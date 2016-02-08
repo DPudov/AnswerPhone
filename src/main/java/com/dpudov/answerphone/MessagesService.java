@@ -25,7 +25,7 @@ public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
-    private int[] userIds;
+    private int[] userId;
     String message;
 
     public MessagesService() {
@@ -35,6 +35,7 @@ public class MessagesService extends Service {
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         showNotification();
+
     }
 
     @Override
@@ -63,15 +64,15 @@ public class MessagesService extends Service {
 
     private void getAndSendMessages() {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-       Thread t = new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     if (hasConnection(getApplicationContext()))
                         break;
                     else {
-                        userIds = getMsg();
-                        sendTo(userIds);
+                        userId = getMsg();
+                        sendTo(userId);
                     }
                 }
                 try {
@@ -116,11 +117,15 @@ public class MessagesService extends Service {
                             }
                     }
 //После всего создаем userIds
+                    int[] userIds = new int[userArrCopy.size()];
                     for (int i = 0; i < userArrCopy.size(); i++) {
-                        int[] userIds = new int[userArrCopy.size()];
+
+                        userIds = new int[userArrCopy.size()];
                         userIds[i] = userArrCopy.get(i);
                     }
+                    userId = userIds;
                 }
+
             }
 
             @Override
@@ -128,7 +133,7 @@ public class MessagesService extends Service {
                 super.onError(error);
             }
         });
-        return userIds;
+        return userId;
     }
 
     public static boolean hasConnection(final Context context) {
