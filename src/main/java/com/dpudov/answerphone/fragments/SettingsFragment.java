@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApiConst;
@@ -43,6 +44,7 @@ public class SettingsFragment extends android.app.Fragment {
     private EditText editText;
     private Button goToM8Button;
     private OnFragmentInteractionListener mListener;
+    public int[] userIds;
     CheckFriendsFragment checkFriendsFragment;
 
 
@@ -106,8 +108,9 @@ public class SettingsFragment extends android.app.Fragment {
                     //  usersId[0] = 238489071;
                     // usersId[1] = 134132102;
                     //sendTo(usersId);
-                    sendTo(checkFriendsFragment.userIds);
-                      SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
+                    userIds = ((MainActivity)getActivity()).getUserIds();
+                    sendTo(userIds);
+                    SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
                     SettingsFragment.this.getActivity().stopService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
@@ -127,31 +130,30 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     private void send(int userId) {
+        if (userId == 0)
+            Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
+        else {
+            message = editText.getText().toString().concat(getString(R.string.defaultMsg));
+            VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
+            request.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
 
-        message = editText.getText().toString().concat(getString(R.string.defaultMsg));
-        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
 
+                }
 
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-                Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                    Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     public void sendTo(int[] userIds) {
-        for (int i = 0; i<userIds.length; i++){
-            if (userIds[i]==0)
-                Toast.makeText(getActivity(), "Сначала выберите друзей", Toast.LENGTH_SHORT).show();
-        }
         for (int userId : userIds) {
             send(userId);
         }

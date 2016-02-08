@@ -45,6 +45,15 @@ public class MainActivity extends AppCompatActivity
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     CheckFriendsFragment checkFriendsFragment;
+    public int[] userIds;
+
+    public void setUserIds(int[] userIds) {
+        this.userIds = userIds;
+    }
+
+    public int[] getUserIds() {
+        return userIds;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -49,7 +50,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private Button saveButton;
     SettingsFragment settingsFragment;
     ArrayList<String> users;
-    public int[] userIds;
+    private int[] userIds;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -130,6 +131,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
                                 userIds[i] = list.get(key).getId();
                             }
                         }
+                        ((MainActivity)getActivity()).setUserIds(userIds);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, settingsFragment);
                         ft.commit();
