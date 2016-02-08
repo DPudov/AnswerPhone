@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -83,7 +84,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
-        VKRequest request1 = VKApi.friends().get(VKParameters.from());
+        VKRequest request1 = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id", "order", "hints"));
         request1.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -91,7 +92,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
                 try {
 
                     final VKUsersArray vkApiUserIds = (VKUsersArray) response.parsedModel;
-                    int id = vkApiUserIds.get(0).getId();
+                    int id = vkApiUserIds.get(1).getId();
                     Toast.makeText(getActivity(), Integer.toString(id), Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
