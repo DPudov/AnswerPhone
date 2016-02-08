@@ -86,14 +86,13 @@ public class MessagesService extends Service {
             public void run() {
                 while (hasConnection(getApplicationContext())) {
                     //sendTo(getMsg());
+                    showNotificationNew();
                     try {
-                        TimeUnit.SECONDS.sleep(100);
+                        TimeUnit.SECONDS.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 }
-                stopSelf();
             }
         }).start();
 
