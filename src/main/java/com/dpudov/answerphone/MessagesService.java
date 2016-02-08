@@ -116,14 +116,24 @@ public class MessagesService extends Service {
                                 userArrCopy.remove(i);
                             }
                     }
-//После всего создаем userIds
+//После всего создаем userIds, который проверяем на повторы и нули и закидываем в итог
                     int[] userIds = new int[userArrCopy.size()];
                     for (int i = 0; i < userArrCopy.size(); i++) {
-
-                        userIds = new int[userArrCopy.size()];
                         userIds[i] = userArrCopy.get(i);
                     }
-                    userId = userIds;
+                    int counter = 0;
+                    for (int i = 0; i < userIds.length; i++) {
+                        if (!(userIds[i] == 0)) {
+                            counter++;
+                        }
+                    }
+                    int count = 0;
+                    userId = new int[counter];
+                    for (int i = 0; i < userIds.length; i++) {
+                        if (!(userIds[i] == 0)) {
+                            userId[count] = userIds[i];
+                        }
+                    }
                 }
 
             }
@@ -132,6 +142,7 @@ public class MessagesService extends Service {
             public void onError(VKError error) {
                 super.onError(error);
             }
+
         });
         return userId;
     }
