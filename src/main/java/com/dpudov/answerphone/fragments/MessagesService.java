@@ -71,21 +71,21 @@ public class MessagesService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
-            checkedUsers = bundle.getIntArray("userIds");
+        checkedUsers = bundle.getIntArray("userIds");
 //TODO: Исправь ошибку
-            getAndSendMessages();
+        getAndSendMessages();
 
 
         return START_NOT_STICKY;
     }
 
     void getAndSendMessages() {
-      showNotificationNew();  //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
+        //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (hasConnection(getApplicationContext())) {
-                    sendTo(getMsg());
+                    //sendTo(getMsg());
                     try {
                         TimeUnit.SECONDS.sleep(100);
                     } catch (InterruptedException e) {
