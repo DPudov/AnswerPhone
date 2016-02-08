@@ -68,12 +68,7 @@ public class MessagesService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle bundle = null;
-        try {
-            bundle = intent.getExtras();
-        } catch (Exception e) {
-           showNotificationNew();
-        }
+        Bundle bundle = intent.getExtras();
         if (!(bundle == null)) {
             checkedUsers = bundle.getIntArray("userIds");
             try {
@@ -84,7 +79,7 @@ public class MessagesService extends Service {
         } else {
             showNotificationNew();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     private void getAndSendMessages() throws Exception {
