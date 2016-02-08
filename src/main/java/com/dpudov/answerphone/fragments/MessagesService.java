@@ -71,7 +71,7 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         if (!(bundle == null)) {
-       //     checkedUsers = bundle.getIntArray("userIds");
+            checkedUsers = bundle.getIntArray("userIds");
         //try {
         ///        getAndSendMessages();
             //} catch (Exception e) {
