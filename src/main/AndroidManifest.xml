@@ -29,7 +29,9 @@
         <service
             android:name=".MessagesService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"
+            android:permission="android.permission.INTERNET">
+        </service>
     </application>
 
 </manifest>
