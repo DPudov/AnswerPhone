@@ -1,7 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
-import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -110,10 +108,10 @@ public class SettingsFragment extends android.app.Fragment {
                     //sendTo(usersId);
                     userIds = ((MainActivity) getActivity()).getUserIds();
                     sendTo(userIds);
-                    SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
+                    //SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 } else {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                    SettingsFragment.this.getActivity().stopService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
+                    //SettingsFragment.this.getActivity().stopService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 }
 
             }

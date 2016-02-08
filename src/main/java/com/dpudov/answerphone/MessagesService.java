@@ -42,7 +42,7 @@ public class MessagesService extends Service {
     private void showNotification() {
         CharSequence text = getString(R.string.serviceStarted);
         Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_answerphone_48px)
+                .setSmallIcon(R.drawable.ic_answerphone_64px)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
@@ -103,7 +103,7 @@ public class MessagesService extends Service {
         return false;
     }
     private int getMessages() {
-        VKRequest requestGet = new VKRequest("messages.get", VKParameters.from());
+        VKRequest requestGet = new VKRequest("messages.get", VKParameters.from("time_offset", 180));
         requestGet.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -120,7 +120,7 @@ public class MessagesService extends Service {
 
     public void send(int userId) {
 
-        message = getString(R.string.defaultMsg);
+        message = "Пользователь занят" + getString(R.string.defaultMsg);
 
         VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
         requestSend.executeWithListener(new VKRequest.VKRequestListener() {
