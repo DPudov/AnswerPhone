@@ -63,7 +63,7 @@ public class MessagesService extends Service {
 
     private void getAndSendMessages() {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        new Thread(new Runnable() {
+       Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -81,7 +81,8 @@ public class MessagesService extends Service {
                 }
 
             }
-        }).start();
+        });
+        t.start();
     }
 
     private int[] getMsg() {
