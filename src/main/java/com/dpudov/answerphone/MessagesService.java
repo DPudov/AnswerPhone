@@ -96,6 +96,7 @@ public class MessagesService extends Service {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 VKUsersArray messages = (VKUsersArray) response.parsedModel;
+                userId = null;
                 if (messages.size() > 0) {
                     // Пришло новое сообщение. Возвращаем true
                     ArrayList<Integer> userArr = new ArrayList<>();
