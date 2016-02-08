@@ -36,7 +36,6 @@ public class MessagesService extends Service {
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         showNotification();
-
     }
 
     @Override
@@ -56,6 +55,7 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
@@ -68,13 +68,13 @@ public class MessagesService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void getAndSendMessages() throws Exception{
+    private void getAndSendMessages() throws Exception {
 
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (hasConnection(getApplicationContext())){
+                while (hasConnection(getApplicationContext())) {
                     userId = getMsg();
                     sendTo(userId);
                     try {

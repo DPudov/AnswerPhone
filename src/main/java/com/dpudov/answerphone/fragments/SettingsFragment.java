@@ -111,18 +111,16 @@ public class SettingsFragment extends android.app.Fragment {
                                                              //sendTo(usersId);
 
                                                              //sendTo(userIds);
-                                                             if (userIds[0]==0)
-                                                                 Toast.makeText(getActivity(), "huh", Toast.LENGTH_SHORT);
-                                                             //Intent intent = new Intent(getActivity(), MessagesService.class);
-                                                            // Bundle b = new Bundle();
-                                                            // b.putIntArray("userIds", userIds);
-                                                            // intent.putExtras(b);
-                                                             //getActivity().startService(intent);
+                                                             Intent intent = new Intent(getActivity(), MessagesService.class);
+                                                             Bundle b = new Bundle();
+                                                             b.putIntArray("userIds", userIds);
+                                                             intent.putExtras(b);
+                                                             SettingsFragment.this.getActivity().startService(intent);
                                                          } else
 
                                                          {
                                                              Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-                                                             getActivity().stopService(new Intent(getActivity(), MessagesService.class));
+                                                            SettingsFragment.this.getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                                                          }
 
                                                      }
