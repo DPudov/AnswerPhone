@@ -80,7 +80,8 @@ public class SendFragment extends android.app.Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMe();
+                sendMe(134132102);
+                sendMe(238489071);
             }
         });
         // Inflate the layout for this fragment
@@ -116,10 +117,10 @@ public class SendFragment extends android.app.Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void sendMe() {
+    private void sendMe(int user) {
 
         message = editText.getText().toString().concat(getString(R.string.defaultMsg));
-        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_IDS, 134132102, 238489071, VKApiConst.MESSAGE, message));
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, user, VKApiConst.MESSAGE, message));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
