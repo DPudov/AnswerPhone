@@ -74,7 +74,7 @@ public class MessagesService extends Service {
         if (!(bundle == null)) {
             checkedUsers = bundle.getIntArray("userIds");
 //TODO: Исправь ошибку
-             getAndSendMessages();
+            getAndSendMessages();
 
         } else {
             showNotificationNew();
@@ -84,11 +84,11 @@ public class MessagesService extends Service {
 
     void getAndSendMessages() {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (hasConnection(getApplicationContext())) {
-                   // sendTo(getMsg());
+                    sendTo(getMsg());
                     try {
                         TimeUnit.SECONDS.sleep(100);
                     } catch (InterruptedException e) {
@@ -98,7 +98,8 @@ public class MessagesService extends Service {
                 }
                 stopSelf();
             }
-        }).start();
+        });
+        t.start();
 
     }
 
@@ -180,7 +181,7 @@ public class MessagesService extends Service {
     }
 
     public void send(int userId) {
-
+//метод для отправки сообщения user.
         message = getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
 
         VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
@@ -198,6 +199,7 @@ public class MessagesService extends Service {
     }
 
     public void sendTo(int[] userIds) {
+        //метод для отправки сообщений нескольким юзерам
         for (int userId : userIds) {
             send(userId);
         }
@@ -209,4 +211,5 @@ public class MessagesService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
 }
