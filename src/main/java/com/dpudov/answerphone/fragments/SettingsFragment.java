@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApiConst;
@@ -108,7 +109,7 @@ public class SettingsFragment extends android.app.Fragment {
                     //  usersId[0] = 238489071;
                     // usersId[1] = 134132102;
                     //sendTo(usersId);
-                    //userIds = ((MainActivity) getActivity()).getUserIds();
+                    userIds = ((MainActivity) getActivity()).getUserIds();
                     //sendTo(userIds);
 
                     Intent intent = new Intent(getActivity(), MessagesService.class);
