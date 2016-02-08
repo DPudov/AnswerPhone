@@ -119,7 +119,7 @@ public class SendFragment extends android.app.Fragment {
     private void sendMe() {
 
         message = editText.getText().toString().concat(getString(R.string.defaultMsg));
-        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, 134132102, VKApiConst.MESSAGE, message));
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_IDS, 134132102, 238489071, VKApiConst.MESSAGE, message));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {

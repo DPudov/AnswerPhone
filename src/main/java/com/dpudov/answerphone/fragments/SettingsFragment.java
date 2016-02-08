@@ -108,7 +108,7 @@ public class SettingsFragment extends android.app.Fragment {
                     //  usersId[0] = 238489071;
                     // usersId[1] = 134132102;
                     //sendTo(usersId);
-                    userIds = ((MainActivity)getActivity()).getUserIds();
+                    userIds = ((MainActivity) getActivity()).getUserIds();
                     sendTo(userIds);
                     SettingsFragment.this.getActivity().startService(new Intent(SettingsFragment.this.getActivity(), MessagesService.class));
                 } else {
@@ -154,10 +154,13 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     public void sendTo(int[] userIds) {
-        for (int userId : userIds) {
-            send(userId);
+        if (userIds.length == 0)
+            Toast.makeText(getActivity(), "Вы не выбрали друзей!", Toast.LENGTH_LONG).show();
+        else {
+            for (int userId : userIds) {
+                send(userId);
+            }
         }
-
     }
 
 
