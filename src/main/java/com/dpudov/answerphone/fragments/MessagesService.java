@@ -72,18 +72,18 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         if (!(bundle == null)) {
             checkedUsers = bundle.getIntArray("userIds");
-        //try {
-        ///        getAndSendMessages();
+
+             getAndSendMessages();
             //} catch (Exception e) {
               //  e.printStackTrace();
            // }
-      //  } else {
+      } else {
             showNotificationNew();
         }
         return START_NOT_STICKY;
     }
 
-    private void getAndSendMessages() throws Exception {
+    private void getAndSendMessages() {
 
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
