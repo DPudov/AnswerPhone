@@ -84,15 +84,21 @@ public class MessagesService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //while (hasConnection(getApplicationContext())) {
+                while (hasConnection(getApplicationContext())) {
                     sendTo(getMsg());
                     try {
-                        TimeUnit.SECONDS.sleep(30);
+                        TimeUnit.SECONDS.sleep(180);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                //}
+                    try {
+                        Thread.sleep(1800000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+
         }).start();
 
     }
