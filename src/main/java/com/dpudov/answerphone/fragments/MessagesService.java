@@ -20,7 +20,6 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKUsersArray;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MessagesService extends Service {
     NotificationManager nM;
@@ -73,33 +72,30 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
 //TODO: Исправь ошибку
-        getAndSendMessages();
+        try {
+            getAndSendMessages();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         return START_NOT_STICKY;
     }
 
-    void getAndSendMessages() {
+    void getAndSendMessages() throws InterruptedException {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (hasConnection(getApplicationContext())) {
-                    sendTo(getMsg());
-                    try {
-                        TimeUnit.SECONDS.sleep(180);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        Thread.sleep(1800000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
-        }).start();
+                sendTo(getMsg());
+
+            }
+        });
+        while (hasConnection(getApplicationContext())) {
+            t.run();
+            t.sleep(1800000);
+        }
 
     }
 
