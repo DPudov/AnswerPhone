@@ -53,21 +53,30 @@ public class MessagesService extends Service {
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
-
+    private void showNotificationNew() {
+        CharSequence text = "bundle=null";
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_answerphone_64px)
+                .setTicker(text)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(getText(R.string.app_name))
+                .setContentText(text)
+                .build();
+        nM.notify(NOTIFICATION, notification);
+    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
-        checkedUsers = bundle.getIntArray("userIds");
-
-        if (checkedUsers == null)
-            stopSelf();
-        else {
+        if (!(bundle == null)) {
+            checkedUsers = bundle.getIntArray("userIds");
             try {
                 getAndSendMessages();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+        }
+        else{
+            showNotificationNew();
         }
         return super.onStartCommand(intent, flags, startId);
     }
