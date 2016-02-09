@@ -30,7 +30,6 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
-    private int[] userIdReturn;
     String message;
 
     public MessagesService() {
@@ -94,8 +93,7 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 try {
-                    userId = getMsg();
-                    sendTo(userId);
+                    sendTo(getMsg());
                     Thread.sleep(1800000);
 
                 } catch (Exception e) {
@@ -145,7 +143,7 @@ public class MessagesService extends Service {
                 super.onError(error);
             }
         });
-        return userIdReturn;
+        return userIdCopy;
     }
 
     public static boolean hasConnection(final Context context) {
