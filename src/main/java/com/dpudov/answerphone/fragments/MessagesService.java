@@ -91,12 +91,11 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 try {
-                    while (hasConnection(getApplicationContext())) {
-                        userId = getMsg();
-                        showNotificationNew(userId[0]);
-                        sendTo(userId);
-                        Thread.sleep(1800000);
-                    }
+                    userId = getMsg();
+                    showNotificationNew(userId[0]);
+                    sendTo(userId);
+                    Thread.sleep(1800000);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
