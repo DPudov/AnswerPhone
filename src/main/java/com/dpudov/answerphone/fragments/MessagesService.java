@@ -118,7 +118,7 @@ public class MessagesService extends Service {
                 // конвертируем в массив
                 userId = new int[authors.size()];
 
-                userIdCopy = new int[checkedUsers.length];
+                //userIdCopy = new int[checkedUsers.length];
                 Iterator<Integer> iterator = authors.iterator();
                 for (int i = 0; i < authors.size(); i++) {
                     userId[i] = iterator.next();
@@ -126,15 +126,15 @@ public class MessagesService extends Service {
                 }
                 //сравниваем с выбранными друзьями
                 //TODO Bug тут. исправляй
-                int c = 0;
-                for (int i = 0; i < userId.length; i++) {
-                    for (int j = 0; i < userId.length; i++) {
-                        if (userId[i] == checkedUsers[j]) {
-                            userIdCopy[c] = userId[i];
-                            c++;
-                        }
-                    }
-                }
+               // int c = 0;
+                //for (int i = 0; i < userId.length; i++) {
+                 //   for (int j = 0; i < userId.length; i++) {
+                 //       if (userId[i] == checkedUsers[j]) {
+                  //          userIdCopy[c] = userId[i];
+                  //          c++;
+                  //      }
+                  //  }
+                //}
             }
 
             @Override
@@ -182,8 +182,8 @@ public class MessagesService extends Service {
     public void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int userId : userIds) {
-                send(userId);
+            for (int i = 0; i<userIds.length; i++) {
+                send(userIds[i]);
             }
         }
     }
