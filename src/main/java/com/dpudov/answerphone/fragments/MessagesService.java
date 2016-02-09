@@ -30,7 +30,6 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
-    private int[] finalIds;
     String message;
 
     public MessagesService() {
@@ -73,15 +72,12 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        // try {
-        //  getAndSendMessages();
-        finalIds = new int[getMsg().length];
-        finalIds = getMsg();
-        sendTo(finalIds);
-        //  } catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //    showNotificationNew();
-        //  }
+         try {
+          getAndSendMessages();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+            showNotificationNew();
+          }
 
 
         return START_NOT_STICKY;
@@ -95,7 +91,7 @@ public class MessagesService extends Service {
             public void run() {
                 try {
                     sendTo(getMsg());
-                    Thread.sleep(300000);
+                    Thread.sleep(30000);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -129,6 +125,7 @@ public class MessagesService extends Service {
 
                 }
                 //сравниваем с выбранными друзьями
+                //TODO Bug тут. исправляй
                 int c = 0;
                 for (int i = 0; i < userId.length; i++) {
                     for (int j = 0; i < userId.length; i++) {
@@ -145,7 +142,7 @@ public class MessagesService extends Service {
                 super.onError(error);
             }
         });
-        return userIdCopy;
+        return userId;
     }
 
     public static boolean hasConnection(final Context context) {
