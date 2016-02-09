@@ -84,19 +84,21 @@ public class MessagesService extends Service {
 
     void getAndSendMessages() throws InterruptedException {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        Thread t = new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                sendTo(getMsg());
-
+                try {
+                    while (hasConnection(getApplicationContext())) {
+                        userId = getMsg();
+                        sendTo(userId);
+                        Thread.sleep(1800000);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
-        while (hasConnection(getApplicationContext())) {
-            t.run();
-            t.sleep(1800000);
-        }
-
+        thread.start();
     }
 
     private int[] getMsg() {
