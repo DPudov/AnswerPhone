@@ -17,9 +17,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKUsersArray;
-
-import java.util.ArrayList;
+import com.vk.sdk.api.model.VKApiMessage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,7 +41,7 @@ public class SendFragment extends android.app.Fragment {
     private EditText editText;
     private Button sendButton;
     private String message;
-    private int[] userIdReturn;
+    private int[] userIdReturn = null;
     private int[] userId;
 private Button nttbutton;
     public SendFragment() {
@@ -86,23 +84,12 @@ private Button nttbutton;
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMe(134132102);
-                sendMe(238489071);
+                getMsg();
+                //sendMe(134132102);
+                //sendMe(238489071);
             }
         });
-        nttbutton = (Button)v.findViewById(R.id.nttbutton);
-        nttbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    userId = getMsg();
-                    Toast.makeText(getActivity(), Integer.toString(userId[0]), Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e){
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
         // Inflate the layout for this fragment
         return v;
     }
@@ -157,62 +144,26 @@ private Button nttbutton;
         });
     }
 
-    private int[] getMsg() {
+    private void getMsg() {
         //TODO Ошибка тут. Исправляй
-        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 3600));
-        request.executeWithListener(new VKRequest.VKRequestListener() {
+       final VKRequest getMsg = VKApi.messages().get(VKParameters.from("out", 0));
+        getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                VKUsersArray messages = (VKUsersArray) response.parsedModel;
-                userIdReturn = null;
-                if (messages.size() > 0) {
-                    // Пришло новое сообщение. Возвращаем true
-                    ArrayList<Integer> userArr = new ArrayList<>();
-                    ArrayList<Integer> userArrCopy = new ArrayList<>();
-                    int firstId = messages.get(0).getId();
-                    int id;
-                    int c = 0;
-                    userArr.add(0, firstId);
-                    for (int i = 0; i < messages.size(); i++) {
-                        id = messages.get(i).getId();
-                        if (!(firstId == id)) {
-                            c++;
-                            userArr.add(c, id);
-                            userArrCopy.add(c, id);
-                        }
-                    }
-                    //проверка на соответствие с выбранными друзьями
-//После всего создаем userIds, который проверяем на повторы и нули и закидываем в итог
-                    int[] userIds = new int[userArrCopy.size()];
-                    for (int i = 0; i < userArrCopy.size(); i++) {
-                        userIds[i] = userArrCopy.get(i);
-                    }
-                    int counter = 0;
-                    for (int userId1 : userIds) {
-                        if (!(userId1 == 0)) {
-                            counter++;
-                        }
-                    }
-                    int count = 0;
-                    userIdReturn = new int[counter];
-                    for (int userId1 : userIds) {
-                        if (!(userId1 == 0)) {
-                            userIdReturn[count] = userId1;
-                            count++;
-                        }
-                    }
-                }
-
+                VKApiMessage message = (VKApiMessage)response.parsedModel;
+                userId = new int[2];
+                userId[0] = message.getId();
+                Toast.makeText(getActivity(), Integer.toString(userId[0]), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
             }
-
         });
-        return userIdReturn;
+
+        //return userIdReturn;
     }
 }
 
