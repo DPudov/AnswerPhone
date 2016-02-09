@@ -17,15 +17,19 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKUsersArray;
+import com.vk.sdk.api.model.VKApiGetMessagesResponse;
+import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKList;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
     private int[] userId;
+    private int[] userIdCopy;
     private int[] userIdReturn;
     String message;
 
@@ -104,64 +108,42 @@ public class MessagesService extends Service {
 
     private int[] getMsg() {
         //TODO Ошибка тут. Исправляй
-                       VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 3600));
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-                        VKUsersArray messages = (VKUsersArray) response.parsedModel;
-                        userIdReturn = null;
-                        if (messages.size() > 0) {
-                            // Пришло новое сообщение. Возвращаем true
-                            ArrayList<Integer> userArr = new ArrayList<>();
-                            ArrayList<Integer> userArrCopy = new ArrayList<>();
-                            int firstId = messages.get(0).getId();
-                            int id;
-                            int c = 0;
-                            userArr.add(0, firstId);
-                            for (int i = 0; i < messages.size(); i++) {
-                                id = messages.get(i).getId();
-                                if (!(firstId == id)) {
-                                    c++;
-                                    userArr.add(c, id);
-                                    userArrCopy.add(c, id);
-                                }
-                            }
-                            //проверка на соответствие с выбранными друзьями
-                            for (int i = 0; i < userArr.size(); i++) {
-                                for (int checkedUser : checkedUsers)
-                                    if (!(userArr.get(i) == checkedUser)) {
-                                        userArrCopy.remove(i);
-                                    }
-                            }
-//После всего создаем userIds, который проверяем на повторы и нули и закидываем в итог
-                            int[] userIds = new int[userArrCopy.size()];
-                            for (int i = 0; i < userArrCopy.size(); i++) {
-                                userIds[i] = userArrCopy.get(i);
-                            }
-                            int counter = 0;
-                            for (int userId1 : userIds) {
-                                if (!(userId1 == 0)) {
-                                    counter++;
-                                }
-                            }
-                            int count = 0;
-                            userIdReturn = new int[counter];
-                            for (int userId1 : userIds) {
-                                if (!(userId1 == 0)) {
-                                    userIdReturn[count] = userId1;
-                                    count++;
-                                }
-                            }
-                        }
+        final VKRequest getMsg = VKApi.messages().get(VKParameters.from());
+        getMsg.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKApiGetMessagesResponse getMessagesResponse = (VKApiGetMessagesResponse) response.parsedModel;
+                VKList<VKApiMessage> list = getMessagesResponse.items;
+                // Формируем лист с id авторов сообщений без повторений
+                LinkedHashSet<Integer> authors = new LinkedHashSet<>();
+                for (VKApiMessage msg : list) {
+                    authors.add(msg.user_id);
+                }
+                // конвертируем в массив
+                userId = new int[authors.size()];
+                userIdCopy = new int[checkedUsers.length];
+                Iterator<Integer> iterator = authors.iterator();
+                for (int i = 0; i < authors.size(); i++) {
+                    userId[i] = iterator.next();
 
+                }
+                //сравниваем с выбранными друзьями
+                int c = 0;
+                for (int i = 0; i < userId.length; i++) {
+                    for (int j = 0; i < userId.length; i++) {
+                        if (userId[i] == checkedUsers[j]) {
+                            userIdCopy[c] = userId[i];
+                            c++;
+                        }
+                    }
+                }
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
             }
-
         });
         return userIdReturn;
     }
@@ -183,19 +165,20 @@ public class MessagesService extends Service {
     public void send(int userId) {
 //метод для отправки сообщения user.
         message = getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        if (!(userId == 0)) {
+            VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
+            requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                }
 
-        VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-        requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-        });
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                }
+            });
+        }
     }
 
     public void sendTo(int[] userIds) {
