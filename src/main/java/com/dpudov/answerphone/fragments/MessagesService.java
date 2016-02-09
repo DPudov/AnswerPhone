@@ -92,7 +92,6 @@ public class MessagesService extends Service {
             public void run() {
                 try {
                     userId = getMsg();
-                    showNotificationNew(userId[0]);
                     sendTo(userId);
                     Thread.sleep(1800000);
 
