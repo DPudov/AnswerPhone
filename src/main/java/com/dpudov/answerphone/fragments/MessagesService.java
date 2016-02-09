@@ -72,7 +72,7 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
         userId= getMsg();
-        showNotificationNew(userId[0]);
+
         //try {
         //   getAndSendMessages();
         // } catch (InterruptedException e) {
