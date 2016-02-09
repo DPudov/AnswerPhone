@@ -39,9 +39,6 @@ public class SendFragment extends android.app.Fragment {
     private EditText editText;
     private Button sendButton;
     private String message;
-    private int[] userIdReturn = null;
-    private int[] userId;
-    private Button nttbutton;
 
     public SendFragment() {
         // Required empty public constructor
