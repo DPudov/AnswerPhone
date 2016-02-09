@@ -56,8 +56,8 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    private void showNotificationNew() {
-        CharSequence text = "bundle=null";
+    private void showNotificationNew(int i) {
+        CharSequence text = Integer.toString(i);
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_answerphone_64px)
                 .setTicker(text)
@@ -72,7 +72,7 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-//TODO: Исправь ошибку
+
         try {
             getAndSendMessages();
         } catch (InterruptedException e) {
@@ -93,12 +93,8 @@ public class MessagesService extends Service {
                 try {
                     while (hasConnection(getApplicationContext())) {
                         userId = getMsg();
-                        if (userId == null) {
-                            showNotificationNew();
-                        } else {
-                            sendTo(userId);
-                        }
-
+                        showNotificationNew(userId[0]);
+                        sendTo(userId);
                         Thread.sleep(1800000);
                     }
                 } catch (Exception e) {
@@ -110,7 +106,7 @@ public class MessagesService extends Service {
     }
 
     private int[] getMsg() {
-        VKRequest request = VKApi.messages().get(VKParameters.from("time_offset", 0));
+        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 3600));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
