@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApi;
@@ -73,9 +74,11 @@ public class MessagesService extends Service {
         checkedUsers = bundle.getIntArray("userIds");
 //TODO: Исправь ошибку
         try {
+            showNotificationNew();
             getAndSendMessages();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Произошла ошибка. Попробуйте позже", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -84,7 +87,8 @@ public class MessagesService extends Service {
 
     void getAndSendMessages() throws InterruptedException {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        Thread thread = new Thread(new Runnable() {
+        //Thread thread = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -97,8 +101,8 @@ public class MessagesService extends Service {
                     e.printStackTrace();
                 }
             }
-        });
-        thread.start();
+        }).start();
+        //thread.start();
     }
 
     private int[] getMsg() {
