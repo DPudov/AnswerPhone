@@ -72,12 +72,12 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-         try {
-          getAndSendMessages();
-          } catch (InterruptedException e) {
+        try {
+            getAndSendMessages();
+        } catch (InterruptedException e) {
             e.printStackTrace();
             showNotificationNew();
-          }
+        }
 
 
         return START_NOT_STICKY;
@@ -85,7 +85,7 @@ public class MessagesService extends Service {
 
     void getAndSendMessages() throws InterruptedException {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-        //Thread thread = new Thread(new Runnable() {
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -98,12 +98,12 @@ public class MessagesService extends Service {
                 }
             }
         }).start();
-        //thread.start();
+
     }
 
     private int[] getMsg() {
 
-        final VKRequest getMsg = VKApi.messages().get(VKParameters.from());
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from());
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -126,14 +126,14 @@ public class MessagesService extends Service {
                 }
                 //сравниваем с выбранными друзьями
                 //TODO Bug тут. исправляй
-               // int c = 0;
+                // int c = 0;
                 //for (int i = 0; i < userId.length; i++) {
-                 //   for (int j = 0; i < userId.length; i++) {
-                 //       if (userId[i] == checkedUsers[j]) {
-                  //          userIdCopy[c] = userId[i];
-                  //          c++;
-                  //      }
-                  //  }
+                //   for (int j = 0; i < userId.length; i++) {
+                //       if (userId[i] == checkedUsers[j]) {
+                //          userIdCopy[c] = userId[i];
+                //          c++;
+                //      }
+                //  }
                 //}
             }
 
@@ -182,7 +182,7 @@ public class MessagesService extends Service {
     public void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int i = 0; i<userIds.length; i++) {
+            for (int i = 0; i < userIds.length; i++) {
                 send(userIds[i]);
             }
         }
