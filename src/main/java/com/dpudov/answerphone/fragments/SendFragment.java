@@ -11,18 +11,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiGetMessagesResponse;
-import com.vk.sdk.api.model.VKApiMessage;
-import com.vk.sdk.api.model.VKList;
-
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,9 +83,8 @@ public class SendFragment extends android.app.Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMsg();
-                //sendMe(134132102);
-                //sendMe(238489071);
+                sendMe(134132102);
+                sendMe(238489071);
             }
         });
 
@@ -149,38 +141,7 @@ public class SendFragment extends android.app.Fragment {
             }
         });
     }
-
-    private void getMsg() {
-        //TODO Ошибка тут. Исправляй
-        final VKRequest getMsg = VKApi.messages().get(VKParameters.from());
-        getMsg.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                VKApiGetMessagesResponse getMessagesResponse = (VKApiGetMessagesResponse) response.parsedModel;
-                VKList<VKApiMessage> list = getMessagesResponse.items;
-                // Формируем лист с id авторов сообщений без повторений
-                LinkedHashSet<Integer> authors = new LinkedHashSet<>();
-                for (VKApiMessage msg : list) {
-                    authors.add(msg.user_id);
-                }
-                // конвертируем в массив
-                userId = new int[authors.size()];
-                Iterator<Integer> iterator = authors.iterator();
-                for (int i = 0; i < authors.size(); i++) {
-                    userId[i] = iterator.next();
-                    Toast.makeText(getActivity(), Integer.toString(userId[i]), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-        });
-
-        //return userIdReturn;
-    }
 }
+
+
 

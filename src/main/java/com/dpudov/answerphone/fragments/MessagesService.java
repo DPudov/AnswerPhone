@@ -58,14 +58,12 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    private void showNotificationNew(int i) {
-        CharSequence text = Integer.toString(i);
+    private void showNotificationNew() {
+
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_answerphone_64px)
-                .setTicker(text)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
-                .setContentText(text)
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
@@ -103,7 +101,7 @@ public class MessagesService extends Service {
     }
 
     private int[] getMsg() {
-        //TODO Ошибка тут. Исправляй
+
         final VKRequest getMsg = VKApi.messages().get(VKParameters.from());
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -175,6 +173,8 @@ public class MessagesService extends Service {
                 }
             });
         }
+        else
+            showNotificationNew();
     }
 
     public void sendTo(int[] userIds) {
