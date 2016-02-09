@@ -74,13 +74,11 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-
-        //try {
-        //   getAndSendMessages();
-        // } catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //    Toast.makeText(getApplicationContext(), "Произошла ошибка. Попробуйте позже", Toast.LENGTH_SHORT).show();
-        // }
+        try {
+           getAndSendMessages();
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         return START_NOT_STICKY;
