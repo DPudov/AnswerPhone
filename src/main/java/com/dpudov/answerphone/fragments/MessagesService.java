@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApi;
@@ -72,13 +71,14 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-
-        try {
-            getAndSendMessages();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Произошла ошибка. Попробуйте позже", Toast.LENGTH_SHORT).show();
-        }
+        userId= getMsg();
+        showNotificationNew(userId[0]);
+        //try {
+        //   getAndSendMessages();
+        // } catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //    Toast.makeText(getApplicationContext(), "Произошла ошибка. Попробуйте позже", Toast.LENGTH_SHORT).show();
+        // }
 
 
         return START_NOT_STICKY;
