@@ -74,7 +74,6 @@ public class MessagesService extends Service {
         checkedUsers = bundle.getIntArray("userIds");
 //TODO: Исправь ошибку
         try {
-            showNotificationNew();
             getAndSendMessages();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -94,7 +93,12 @@ public class MessagesService extends Service {
                 try {
                     while (hasConnection(getApplicationContext())) {
                         userId = getMsg();
-                        sendTo(userId);
+                        if (userId == null) {
+                            showNotificationNew();
+                        } else {
+                            sendTo(userId);
+                        }
+
                         Thread.sleep(1800000);
                     }
                 } catch (Exception e) {
