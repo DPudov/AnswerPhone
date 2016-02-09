@@ -30,6 +30,7 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
+    private int[] finalIds;
     String message;
 
     public MessagesService() {
@@ -72,13 +73,15 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-       // try {
-          //  getAndSendMessages();
-            sendTo(getMsg());
-      //  } catch (InterruptedException e) {
+        // try {
+        //  getAndSendMessages();
+        finalIds = new int[getMsg().length];
+        finalIds = getMsg();
+        sendTo(finalIds);
+        //  } catch (InterruptedException e) {
         //    e.printStackTrace();
         //    showNotificationNew();
-      //  }
+        //  }
 
 
         return START_NOT_STICKY;
@@ -104,7 +107,7 @@ public class MessagesService extends Service {
 
     private int[] getMsg() {
 
-        final VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 3600));
+        final VKRequest getMsg = VKApi.messages().get(VKParameters.from());
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -118,6 +121,7 @@ public class MessagesService extends Service {
                 }
                 // конвертируем в массив
                 userId = new int[authors.size()];
+
                 userIdCopy = new int[checkedUsers.length];
                 Iterator<Integer> iterator = authors.iterator();
                 for (int i = 0; i < authors.size(); i++) {
@@ -125,15 +129,15 @@ public class MessagesService extends Service {
 
                 }
                 //сравниваем с выбранными друзьями
-              //  int c = 0;
-              //  for (int i = 0; i < userId.length; i++) {
-              //      for (int j = 0; i < userId.length; i++) {
-                //        if (userId[i] == checkedUsers[j]) {
-                 //           userIdCopy[c] = userId[i];
-                 //           c++;
-                  //      }
-                   // }
-                //}
+                int c = 0;
+                for (int i = 0; i < userId.length; i++) {
+                    for (int j = 0; i < userId.length; i++) {
+                        if (userId[i] == checkedUsers[j]) {
+                            userIdCopy[c] = userId[i];
+                            c++;
+                        }
+                    }
+                }
             }
 
             @Override
@@ -179,11 +183,12 @@ public class MessagesService extends Service {
     }
 
     public void sendTo(int[] userIds) {
-        //метод для отправки сообщений нескольким юзерам
-        for (int userId : userIds) {
-            send(userId);
+        if (!(userIds == null)) {
+            //метод для отправки сообщений нескольким юзерам
+            for (int userId : userIds) {
+                send(userId);
+            }
         }
-
     }
 
     @Override
