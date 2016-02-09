@@ -71,7 +71,6 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        userId= getMsg();
 
         //try {
         //   getAndSendMessages();
@@ -104,56 +103,57 @@ public class MessagesService extends Service {
     }
 
     private int[] getMsg() {
-        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 3600));
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                VKUsersArray messages = (VKUsersArray) response.parsedModel;
-                userIdReturn = null;
-                if (messages.size() > 0) {
-                    // Пришло новое сообщение. Возвращаем true
-                    ArrayList<Integer> userArr = new ArrayList<>();
-                    ArrayList<Integer> userArrCopy = new ArrayList<>();
-                    int firstId = messages.get(0).getId();
-                    int id;
-                    int c = 0;
-                    userArr.add(0, firstId);
-                    for (int i = 0; i < messages.size(); i++) {
-                        id = messages.get(i).getId();
-                        if (!(firstId == id)) {
-                            c++;
-                            userArr.add(c, id);
-                            userArrCopy.add(c, id);
-                        }
-                    }
-                    //проверка на соответствие с выбранными друзьями
-                    for (int i = 0; i < userArr.size(); i++) {
-                        for (int checkedUser : checkedUsers)
-                            if (!(userArr.get(i) == checkedUser)) {
-                                userArrCopy.remove(i);
+        //TODO Ошибка тут. Исправляй
+                       VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 3600));
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        VKUsersArray messages = (VKUsersArray) response.parsedModel;
+                        userIdReturn = null;
+                        if (messages.size() > 0) {
+                            // Пришло новое сообщение. Возвращаем true
+                            ArrayList<Integer> userArr = new ArrayList<>();
+                            ArrayList<Integer> userArrCopy = new ArrayList<>();
+                            int firstId = messages.get(0).getId();
+                            int id;
+                            int c = 0;
+                            userArr.add(0, firstId);
+                            for (int i = 0; i < messages.size(); i++) {
+                                id = messages.get(i).getId();
+                                if (!(firstId == id)) {
+                                    c++;
+                                    userArr.add(c, id);
+                                    userArrCopy.add(c, id);
+                                }
                             }
-                    }
+                            //проверка на соответствие с выбранными друзьями
+                            for (int i = 0; i < userArr.size(); i++) {
+                                for (int checkedUser : checkedUsers)
+                                    if (!(userArr.get(i) == checkedUser)) {
+                                        userArrCopy.remove(i);
+                                    }
+                            }
 //После всего создаем userIds, который проверяем на повторы и нули и закидываем в итог
-                    int[] userIds = new int[userArrCopy.size()];
-                    for (int i = 0; i < userArrCopy.size(); i++) {
-                        userIds[i] = userArrCopy.get(i);
-                    }
-                    int counter = 0;
-                    for (int userId1 : userIds) {
-                        if (!(userId1 == 0)) {
-                            counter++;
+                            int[] userIds = new int[userArrCopy.size()];
+                            for (int i = 0; i < userArrCopy.size(); i++) {
+                                userIds[i] = userArrCopy.get(i);
+                            }
+                            int counter = 0;
+                            for (int userId1 : userIds) {
+                                if (!(userId1 == 0)) {
+                                    counter++;
+                                }
+                            }
+                            int count = 0;
+                            userIdReturn = new int[counter];
+                            for (int userId1 : userIds) {
+                                if (!(userId1 == 0)) {
+                                    userIdReturn[count] = userId1;
+                                    count++;
+                                }
+                            }
                         }
-                    }
-                    int count = 0;
-                    userIdReturn = new int[counter];
-                    for (int userId1 : userIds) {
-                        if (!(userId1 == 0)) {
-                            userIdReturn[count] = userId1;
-                            count++;
-                        }
-                    }
-                }
 
             }
 
