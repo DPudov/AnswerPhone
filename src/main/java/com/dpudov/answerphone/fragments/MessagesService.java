@@ -90,7 +90,7 @@ public class MessagesService extends Service {
             public void run() {
                 try {
                     sendTo(getMsg());
-                    Thread.sleep(1800000);
+                    Thread.sleep(300000);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -102,7 +102,7 @@ public class MessagesService extends Service {
 
     private int[] getMsg() {
 
-        final VKRequest getMsg = VKApi.messages().get(VKParameters.from());
+        final VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 3600));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
