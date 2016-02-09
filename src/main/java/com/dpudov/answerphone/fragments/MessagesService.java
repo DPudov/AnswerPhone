@@ -106,7 +106,7 @@ public class MessagesService extends Service {
     }
 
     private int[] getMsg() {
-        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 100));
+        VKRequest request = VKApi.messages().get(VKParameters.from("out", 0, "time_offset", 600));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
