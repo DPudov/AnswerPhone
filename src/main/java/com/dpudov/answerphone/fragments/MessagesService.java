@@ -72,11 +72,13 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        try {
-           getAndSendMessages();
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+       // try {
+          //  getAndSendMessages();
+            sendTo(getMsg());
+      //  } catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //    showNotificationNew();
+      //  }
 
 
         return START_NOT_STICKY;
@@ -123,15 +125,15 @@ public class MessagesService extends Service {
 
                 }
                 //сравниваем с выбранными друзьями
-                int c = 0;
-                for (int i = 0; i < userId.length; i++) {
-                    for (int j = 0; i < userId.length; i++) {
-                        if (userId[i] == checkedUsers[j]) {
-                            userIdCopy[c] = userId[i];
-                            c++;
-                        }
-                    }
-                }
+              //  int c = 0;
+              //  for (int i = 0; i < userId.length; i++) {
+              //      for (int j = 0; i < userId.length; i++) {
+                //        if (userId[i] == checkedUsers[j]) {
+                 //           userIdCopy[c] = userId[i];
+                 //           c++;
+                  //      }
+                   // }
+                //}
             }
 
             @Override
@@ -172,8 +174,7 @@ public class MessagesService extends Service {
                     super.onError(error);
                 }
             });
-        }
-        else
+        } else
             showNotificationNew();
     }
 
