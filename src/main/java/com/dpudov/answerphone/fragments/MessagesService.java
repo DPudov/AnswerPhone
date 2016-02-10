@@ -120,8 +120,8 @@ public class MessagesService extends Service {
                 LinkedHashSet<Integer> authors = new LinkedHashSet<>();
                 for (VKApiMessage msg : list) {
                     // проверка. Если не прочитано и не из чата, добавляем
-                   // if ((!msg.read_state))
-                        authors.add(msg.user_id);
+                    // if ((!msg.read_state))
+                    authors.add(msg.user_id);
                 }
                 // конвертируем в массив
                 userId = new int[authors.size()];
@@ -168,7 +168,7 @@ public class MessagesService extends Service {
 
     public void send(int userId) {
 //метод для отправки сообщения user.
-        message = "Привет, " + Integer.toString(userId)+"! "+getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
@@ -188,8 +188,8 @@ public class MessagesService extends Service {
     public void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int userId1 : userIds) {
-                send(userId1);
+            for (int i = 0; i < userIds.length; i++) {
+                send(userIds[i]);
             }
         }
     }
