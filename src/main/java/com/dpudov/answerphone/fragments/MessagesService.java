@@ -73,10 +73,10 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
         try {
-             getAndSendMessages();
+            getAndSendMessages();
 
         } catch (InterruptedException e) {
-           e.printStackTrace();
+            e.printStackTrace();
             showNotificationNew();
         }
 
@@ -91,8 +91,10 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 try {
-                    getMsg();
-                    Thread.sleep(30000);
+                    while (hasConnection(getApplicationContext())) {
+                        sentMsgToRecentSenders();
+                        Thread.sleep(30000);
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -102,9 +104,9 @@ public class MessagesService extends Service {
 
     }
 
-    private void getMsg() {
-
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10));
+    private void sentMsgToRecentSenders() {
+//Получаем сообщения за последние 30 секунд
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 30));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -124,18 +126,20 @@ public class MessagesService extends Service {
                 for (int i = 0; i < authors.size(); i++) {
                     userId[i] = iterator.next();
                 }
-                sendTo(userId);
+
                 //сравниваем с выбранными друзьями
-                //TODO Bug тут. исправляй
-                // int c = 0;
-                //for (int i = 0; i < userId.length; i++) {
-                //   for (int j = 0; i < userId.length; i++) {
-                //       if (userId[i] == checkedUsers[j]) {
-                //          userIdCopy[c] = userId[i];
-                //          c++;
-                //      }
-                //  }
-                //}
+                userIdCopy = new int[checkedUsers.length];
+                int c = 0;
+                for (int i = 0; i < userId.length; i++) {
+                    for (int j = 0; i < userId.length; i++) {
+                        if (userId[i] == checkedUsers[j]) {
+                            userIdCopy[c] = userId[i];
+                            c++;
+                        }
+                    }
+                }
+                // Отправляем сообщение
+                sendTo(userIdCopy);
             }
 
             @Override
