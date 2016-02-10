@@ -109,7 +109,7 @@ public class MessagesService extends Service {
 
     private void sentMsgToRecentSenders() {
 //Получаем сообщения за последние 30 секунд
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 30000));
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 200, VKApiConst.TIME_OFFSET, 30));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
