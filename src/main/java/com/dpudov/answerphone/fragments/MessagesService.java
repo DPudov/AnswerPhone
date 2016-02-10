@@ -85,8 +85,8 @@ public class MessagesService extends Service {
         checkedUsers = bundle.getIntArray("userIds");
         //try {
         //     getAndSendMessages();
-        int[] userIdCopy = getMsg();
-        sendTo(userIdCopy);
+
+        sendTo(getMsg());
         //} catch (InterruptedException e) {
         //   e.printStackTrace();
         //    showNotificationNew();
@@ -136,7 +136,7 @@ public class MessagesService extends Service {
                 Iterator<Integer> iterator = authors.iterator();
                 for (int i = 0; i < authors.size(); i++) {
                     userId[i] = iterator.next();
-                    showNotificationNew(i);
+                    //showNotificationNew(userId[i]);
                 }
 
                 //сравниваем с выбранными друзьями
@@ -177,7 +177,7 @@ public class MessagesService extends Service {
     public void send(int userId) {
 //метод для отправки сообщения user.
         message = getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
-        if (!(userId == 0)) {
+        if (userId != 0) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
                 @Override
@@ -195,7 +195,7 @@ public class MessagesService extends Service {
     }
 
     public void sendTo(int[] userIds) {
-        if (!(userIds == null)) {
+        if (userIds != null) {
             //метод для отправки сообщений нескольким юзерам
             for (int userId1 : userIds) {
                 send(userId1);
