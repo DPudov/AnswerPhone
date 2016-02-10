@@ -28,7 +28,7 @@ public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
-    private int[] userId;
+    int[] userId;
     String message;
 
     public MessagesService() {
@@ -68,12 +68,13 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    private void showNotificationNew() {
+    void showNotificationNew(int i) {
 
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_answerphone_64px)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
+                .setContentText(Integer.toString(i))
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
@@ -107,14 +108,14 @@ public class MessagesService extends Service {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showNotificationNew();
+
                 }
             }
         }).start();
 
     }
 
-    private int[] getMsg() {
+    int[] getMsg() {
 
         VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10, VKApiConst.OUT, 0, VKApiConst.TIME_OFFSET, 3600));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
@@ -135,8 +136,9 @@ public class MessagesService extends Service {
                 Iterator<Integer> iterator = authors.iterator();
                 for (int i = 0; i < authors.size(); i++) {
                     userId[i] = iterator.next();
-
+                    showNotificationNew(i);
                 }
+
                 //сравниваем с выбранными друзьями
                 //TODO Bug тут. исправляй
                 // int c = 0;
@@ -188,8 +190,8 @@ public class MessagesService extends Service {
                     super.onError(error);
                 }
             });
-        } else
-            showNotificationNew();
+        }
+
     }
 
     public void sendTo(int[] userIds) {
