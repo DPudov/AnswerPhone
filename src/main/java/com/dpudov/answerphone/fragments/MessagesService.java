@@ -57,6 +57,7 @@ public class MessagesService extends Service {
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
+
     private void showNotificationNew() {
         CharSequence text = "Error";
         Notification notification = new Notification.Builder(this)
@@ -68,7 +69,6 @@ public class MessagesService extends Service {
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
-
 
 
     @Override
@@ -92,7 +92,7 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 try {
-                    while (hasConnection(getApplicationContext())) {
+                    for (int i = 0; i < 100; i++) {
                         showNotification();
                         sentMsgToRecentSenders();
                         Thread.sleep(30000);
@@ -121,7 +121,7 @@ public class MessagesService extends Service {
                 for (VKApiMessage msg : list) {
                     // проверка. Если не прочитано и не из чата, добавляем
                     if ((!msg.read_state))
-                    authors.add(msg.user_id);
+                        authors.add(msg.user_id);
                 }
                 // конвертируем в массив
                 userId = new int[authors.size()];
