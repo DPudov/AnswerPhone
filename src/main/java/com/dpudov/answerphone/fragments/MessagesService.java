@@ -23,6 +23,7 @@ import com.vk.sdk.api.model.VKList;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 public class MessagesService extends Service {
     NotificationManager nM;
@@ -58,15 +59,6 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    private void showNotificationNew() {
-
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_answerphone_64px)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(getText(R.string.app_name))
-                .build();
-        nM.notify(NOTIFICATION, notification);
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -77,7 +69,6 @@ public class MessagesService extends Service {
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-            showNotificationNew();
         }
 
 
@@ -86,7 +77,6 @@ public class MessagesService extends Service {
 
     void getAndSendMessages() throws InterruptedException {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -116,12 +106,12 @@ public class MessagesService extends Service {
                 // Формируем лист с id авторов сообщений без повторений
                 LinkedHashSet<Integer> authors = new LinkedHashSet<>();
                 for (VKApiMessage msg : list) {
+                    // проверка. Если не прочитано и не из чата, добавляем
+                    if ((!msg.read_state) && (Objects.equals(msg.title, "...")))
                     authors.add(msg.user_id);
                 }
                 // конвертируем в массив
                 userId = new int[authors.size()];
-
-                //userIdCopy = new int[checkedUsers.length];
                 Iterator<Integer> iterator = authors.iterator();
                 for (int i = 0; i < authors.size(); i++) {
                     userId[i] = iterator.next();
@@ -179,8 +169,7 @@ public class MessagesService extends Service {
                     super.onError(error);
                 }
             });
-        } else
-            showNotificationNew();
+        }
     }
 
     public void sendTo(int[] userIds) {
