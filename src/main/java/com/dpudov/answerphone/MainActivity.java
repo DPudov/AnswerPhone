@@ -28,12 +28,9 @@ import static com.dpudov.answerphone.R.id.nav_send;
 import static com.dpudov.answerphone.R.id.nav_settings;
 import static com.dpudov.answerphone.R.id.nav_share;
 import static com.dpudov.answerphone.R.id.nav_view;
-import static com.vk.sdk.VKScope.ADS;
 import static com.vk.sdk.VKScope.FRIENDS;
-import static com.vk.sdk.VKScope.GROUPS;
 import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
-import static com.vk.sdk.VKScope.STATUS;
 import static com.vk.sdk.VKScope.WALL;
 import static com.vk.sdk.VKSdk.isLoggedIn;
 import static com.vk.sdk.VKSdk.login;
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         try {
             if (!isLoggedIn())
-                login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL, ADS, GROUPS, STATUS);
+                login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
             else
                 wakeUpSession(this);
         } catch (Exception e) {
