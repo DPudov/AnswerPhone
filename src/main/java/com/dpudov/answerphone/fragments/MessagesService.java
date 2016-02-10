@@ -168,7 +168,7 @@ public class MessagesService extends Service {
 
     public void send(int userId) {
 //метод для отправки сообщения user.
-        message = getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        message = "Привет, " + Integer.toString(userId)+"! "+getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
