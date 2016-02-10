@@ -23,7 +23,6 @@ import com.vk.sdk.api.model.VKList;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.concurrent.TimeUnit;
 
 public class MessagesService extends Service {
     NotificationManager nM;
@@ -191,11 +190,7 @@ public class MessagesService extends Service {
             //метод для отправки сообщений нескольким юзерам
             for (int i = 0; i < userIds.length; i++) {
                 send(userIds[i]);
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
             }
         }
     }

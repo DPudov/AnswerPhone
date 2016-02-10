@@ -103,16 +103,9 @@ public class SettingsFragment extends android.app.Fragment {
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                                      @Override
                                                      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                                                          if (isChecked) {
                                                              wakeUpSession(getActivity());
                                                              Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
-                                                             // int[] usersId = new int[2];
-                                                             //  usersId[0] = 238489071;
-                                                             // usersId[1] = 134132102;
-                                                             //sendTo(usersId);
-
-                                                             //sendTo(userIds);
                                                              Intent intent = new Intent(getActivity(), MessagesService.class);
                                                              Bundle b = new Bundle();
                                                              b.putIntArray("userIds", userIds);
@@ -164,15 +157,7 @@ public class SettingsFragment extends android.app.Fragment {
         }
     }
 
-    public void sendTo(int[] userIds) {
-        if (userIds.length == 0)
-            Toast.makeText(getActivity(), "Вы не выбрали друзей!", Toast.LENGTH_LONG).show();
-        else {
-            for (int userId : userIds) {
-                send(userId);
-            }
-        }
-    }
+
 
 
     @Override

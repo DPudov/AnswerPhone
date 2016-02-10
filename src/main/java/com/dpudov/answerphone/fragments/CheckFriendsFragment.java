@@ -120,14 +120,12 @@ public class CheckFriendsFragment extends android.app.Fragment {
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO: Измени код метода, чтобы возпращал нажатых людей
                         SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-
                         userIds = new int[sbArray.size()];
+                        Toast.makeText(getActivity(), Integer.toString(userIds.length), Toast.LENGTH_SHORT).show();
                         for (int i = 0; i < sbArray.size(); i++) {
                             int key = sbArray.keyAt(i);
                             if (sbArray.get(key)) {
-                                Toast.makeText(getActivity(), Integer.toString(list.get(key).getId()), Toast.LENGTH_SHORT).show();
                                 userIds[i] = list.get(key).getId();
                             }
                         }
