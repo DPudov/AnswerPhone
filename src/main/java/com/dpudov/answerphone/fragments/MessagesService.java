@@ -28,7 +28,7 @@ public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
-    int[] userId;
+    public int userId;
     String message;
 
     public MessagesService() {
@@ -68,12 +68,13 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    void showNotificationNew() {
+    void showNotificationNew(int i) {
 
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_answerphone_64px)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
+                .setContentText(Integer.toString(i))
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
@@ -85,7 +86,7 @@ public class MessagesService extends Service {
         //try {
         //     getAndSendMessages();
         getMsg();
-        sendTo(userId);
+        send(userId);
         //} catch (InterruptedException e) {
         //   e.printStackTrace();
         //    showNotificationNew();
@@ -103,7 +104,7 @@ public class MessagesService extends Service {
             public void run() {
                 try {
                     getMsg();
-                    sendTo(userId);
+                    send(userId);
                     Thread.sleep(30000);
 
                 } catch (Exception e) {
@@ -115,7 +116,7 @@ public class MessagesService extends Service {
 
     }
 
-    void getMsg() {
+    public void getMsg() {
 
         VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10, VKApiConst.OUT, 0, VKApiConst.TIME_OFFSET, 3600));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
@@ -130,14 +131,12 @@ public class MessagesService extends Service {
                     authors.add(msg.user_id);
                 }
                 // конвертируем в массив
-                userId = new int[authors.size()];
 
                 //userIdCopy = new int[checkedUsers.length];
                 Iterator<Integer> iterator = authors.iterator();
-                for (int i = 0; i < authors.size(); i++) {
-                    userId[i] = iterator.next();
+                    userId = iterator.next();
                     //showNotificationNew(userId[i]);
-                }
+
 
                 //сравниваем с выбранными друзьями
 
@@ -155,7 +154,6 @@ public class MessagesService extends Service {
             @Override
             public void onError(VKError error) {
                 super.onError(error);
-                showNotificationNew();
             }
         });
     }
