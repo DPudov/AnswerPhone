@@ -23,7 +23,6 @@ import com.vk.sdk.api.model.VKList;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 
 public class MessagesService extends Service {
     NotificationManager nM;
@@ -39,7 +38,7 @@ public class MessagesService extends Service {
     @Override
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        showNotification();
+
     }
 
     @Override
@@ -58,6 +57,18 @@ public class MessagesService extends Service {
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
+    private void showNotificationNew() {
+        CharSequence text = "Error";
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_answerphone_64px)
+                .setTicker(text)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(getText(R.string.app_name))
+                .setContentText(text)
+                .build();
+        nM.notify(NOTIFICATION, notification);
+    }
+
 
 
     @Override
@@ -82,12 +93,14 @@ public class MessagesService extends Service {
             public void run() {
                 try {
                     while (hasConnection(getApplicationContext())) {
+                        showNotification();
                         sentMsgToRecentSenders();
                         Thread.sleep(30000);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    showNotificationNew();
                 }
             }
         }).start();
@@ -107,7 +120,7 @@ public class MessagesService extends Service {
                 LinkedHashSet<Integer> authors = new LinkedHashSet<>();
                 for (VKApiMessage msg : list) {
                     // проверка. Если не прочитано и не из чата, добавляем
-                    if ((!msg.read_state) && (Objects.equals(msg.title, "...")))
+                    if ((!msg.read_state))
                     authors.add(msg.user_id);
                 }
                 // конвертируем в массив
