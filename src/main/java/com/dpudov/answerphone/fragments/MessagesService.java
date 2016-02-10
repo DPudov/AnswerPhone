@@ -28,7 +28,8 @@ public class MessagesService extends Service {
     NotificationManager nM;
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
-    public int userId;
+    private int[] userId;
+    private int[] userIdCopy;
     String message;
 
     public MessagesService() {
@@ -57,24 +58,12 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    private void showNotificationNull() {
+    private void showNotificationNew() {
 
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_answerphone_64px)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
-                .setContentText("Null")
-                .build();
-        nM.notify(NOTIFICATION, notification);
-    }
-
-    void showNotificationNew(int i) {
-
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_answerphone_64px)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(getText(R.string.app_name))
-                .setContentText(Integer.toString(i))
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
@@ -85,8 +74,7 @@ public class MessagesService extends Service {
         checkedUsers = bundle.getIntArray("userIds");
         //try {
         //     getAndSendMessages();
-        getMsg();
-        send(userId);
+
         //} catch (InterruptedException e) {
         //   e.printStackTrace();
         //    showNotificationNew();
@@ -104,21 +92,19 @@ public class MessagesService extends Service {
             public void run() {
                 try {
                     getMsg();
-                    send(userId);
                     Thread.sleep(30000);
 
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
             }
         }).start();
 
     }
 
-    public void getMsg() {
+    private void getMsg() {
 
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10, VKApiConst.OUT, 0, VKApiConst.TIME_OFFSET, 3600));
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -131,15 +117,16 @@ public class MessagesService extends Service {
                     authors.add(msg.user_id);
                 }
                 // конвертируем в массив
+                userId = new int[authors.size()];
 
                 //userIdCopy = new int[checkedUsers.length];
                 Iterator<Integer> iterator = authors.iterator();
-                    userId = iterator.next();
-                    //showNotificationNew(userId[i]);
-
-
+                for (int i = 0; i < authors.size(); i++) {
+                    userId[i] = iterator.next();
+                }
+                sendTo(userId);
                 //сравниваем с выбранными друзьями
-
+                //TODO Bug тут. исправляй
                 // int c = 0;
                 //for (int i = 0; i < userId.length; i++) {
                 //   for (int j = 0; i < userId.length; i++) {
@@ -175,7 +162,7 @@ public class MessagesService extends Service {
     public void send(int userId) {
 //метод для отправки сообщения user.
         message = getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
-        if (userId != 0) {
+        if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
                 @Override
@@ -188,18 +175,16 @@ public class MessagesService extends Service {
                     super.onError(error);
                 }
             });
-        }
-
+        } else
+            showNotificationNew();
     }
 
     public void sendTo(int[] userIds) {
-        if (userIds != null) {
+        if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
             for (int userId1 : userIds) {
                 send(userId1);
             }
-        } else {
-            showNotificationNull();
         }
     }
 
