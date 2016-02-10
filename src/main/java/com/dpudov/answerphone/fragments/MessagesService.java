@@ -68,13 +68,12 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    void showNotificationNew(int i) {
+    void showNotificationNew() {
 
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_answerphone_64px)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
-                .setContentText(Integer.toString(i))
                 .build();
         nM.notify(NOTIFICATION, notification);
     }
@@ -85,8 +84,8 @@ public class MessagesService extends Service {
         checkedUsers = bundle.getIntArray("userIds");
         //try {
         //     getAndSendMessages();
-
-        sendTo(getMsg());
+        getMsg();
+        sendTo(userId);
         //} catch (InterruptedException e) {
         //   e.printStackTrace();
         //    showNotificationNew();
@@ -103,7 +102,8 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 try {
-                    sendTo(getMsg());
+                    getMsg();
+                    sendTo(userId);
                     Thread.sleep(30000);
 
                 } catch (Exception e) {
@@ -115,7 +115,7 @@ public class MessagesService extends Service {
 
     }
 
-    int[] getMsg() {
+    void getMsg() {
 
         VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10, VKApiConst.OUT, 0, VKApiConst.TIME_OFFSET, 3600));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
@@ -140,7 +140,7 @@ public class MessagesService extends Service {
                 }
 
                 //сравниваем с выбранными друзьями
-                //TODO Bug тут. исправляй
+
                 // int c = 0;
                 //for (int i = 0; i < userId.length; i++) {
                 //   for (int j = 0; i < userId.length; i++) {
@@ -155,9 +155,9 @@ public class MessagesService extends Service {
             @Override
             public void onError(VKError error) {
                 super.onError(error);
+                showNotificationNew();
             }
         });
-        return userId;
     }
 
     public static boolean hasConnection(final Context context) {
