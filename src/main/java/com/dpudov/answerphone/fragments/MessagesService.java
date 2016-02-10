@@ -3,10 +3,7 @@ package com.dpudov.answerphone.fragments;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 
@@ -58,17 +55,6 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
-    private void showNotificationNew() {
-        CharSequence text = "Error";
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_answerphone_64px)
-                .setTicker(text)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(getText(R.string.app_name))
-                .setContentText(text)
-                .build();
-        nM.notify(NOTIFICATION, notification);
-    }
 
 
     @Override
@@ -77,7 +63,6 @@ public class MessagesService extends Service {
         checkedUsers = bundle.getIntArray("userIds");
         try {
             getAndSendMessages();
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -100,7 +85,7 @@ public class MessagesService extends Service {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showNotificationNew();
+
                 }
             }
         }).start();
@@ -152,21 +137,8 @@ public class MessagesService extends Service {
         });
     }
 
-    public static boolean hasConnection(final Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (wifiInfo != null && wifiInfo.isConnected()) {
-            return true;
-        }
-        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (wifiInfo != null && wifiInfo.isConnected()) {
-            return true;
-        }
-        wifiInfo = cm.getActiveNetworkInfo();
-        return wifiInfo != null && wifiInfo.isConnected();
-    }
 
-    public void send(int userId) {
+    private void send(int userId) {
 //метод для отправки сообщения user.
         message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
@@ -185,7 +157,7 @@ public class MessagesService extends Service {
         }
     }
 
-    public void sendTo(int[] userIds) {
+    private void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
             for (int userId1 : userIds) {
