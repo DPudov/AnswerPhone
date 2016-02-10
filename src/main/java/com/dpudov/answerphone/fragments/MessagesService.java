@@ -72,13 +72,13 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        //try {
-        //     getAndSendMessages();
+        try {
+             getAndSendMessages();
 
-        //} catch (InterruptedException e) {
-        //   e.printStackTrace();
-        //    showNotificationNew();
-        //}
+        } catch (InterruptedException e) {
+           e.printStackTrace();
+            showNotificationNew();
+        }
 
 
         return START_NOT_STICKY;
