@@ -109,7 +109,7 @@ public class MessagesService extends Service {
 
     private void sentMsgToRecentSenders() {
 //Получаем сообщения за последние 30 секунд
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 200, VKApiConst.TIME_OFFSET, 30));
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 30));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -120,8 +120,8 @@ public class MessagesService extends Service {
                 LinkedHashSet<Integer> authors = new LinkedHashSet<>();
                 for (VKApiMessage msg : list) {
                     // проверка. Если не прочитано и не из чата, добавляем
-                    // if ((!msg.read_state))
-                    authors.add(msg.user_id);
+                    if ((!msg.read_state))
+                        authors.add(msg.user_id);
                 }
                 // конвертируем в массив
                 userId = new int[authors.size()];
@@ -133,10 +133,10 @@ public class MessagesService extends Service {
                 //сравниваем с выбранными друзьями
                 userIdCopy = new int[checkedUsers.length];
                 int c = 0;
-                for (int i = 0; i < userId.length; i++) {
-                    for (int j = 0; i < userId.length; i++) {
-                        if (userId[i] == checkedUsers[j]) {
-                            userIdCopy[c] = userId[i];
+                for (int anUserId : userId) {
+                    for (int checkedUser : checkedUsers) {
+                        if (anUserId == checkedUser) {
+                            userIdCopy[c] = anUserId;
                             c++;
                         }
                     }
@@ -188,8 +188,8 @@ public class MessagesService extends Service {
     public void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int i = 0; i < userIds.length; i++) {
-                send(userIds[i]);
+            for (int userId1 : userIds) {
+                send(userId1);
 
             }
         }
