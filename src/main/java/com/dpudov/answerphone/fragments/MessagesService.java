@@ -109,7 +109,7 @@ public class MessagesService extends Service {
 
     private void sentMsgToRecentSenders() {
 //Получаем сообщения за последние 30 секунд
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 30));
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 30000));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -120,7 +120,7 @@ public class MessagesService extends Service {
                 LinkedHashSet<Integer> authors = new LinkedHashSet<>();
                 for (VKApiMessage msg : list) {
                     // проверка. Если не прочитано и не из чата, добавляем
-                    if ((!msg.read_state))
+                   // if ((!msg.read_state))
                         authors.add(msg.user_id);
                 }
                 // конвертируем в массив
