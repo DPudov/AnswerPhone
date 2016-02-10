@@ -15,7 +15,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="187dp"
+        android:layout_height="246dp"
         android:layout_gravity="center"
         android:weightSum="1">
 
@@ -32,7 +32,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/editText"
@@ -40,15 +40,14 @@
             android:textColor="#000000"
             android:textSize="18sp"
             android:hint="@string/editText"
-            android:editable="true"
-            android:layout_weight="0.50" />
+            android:editable="true" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/checkFrFrag"
             android:id="@+id/button2"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal"
             android:visibility="visible"
             android:clickable="true" />
 

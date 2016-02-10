@@ -20,8 +20,6 @@
     <string name="icon_name">Иконка нашего приложения</string>
     <string name="FuncSoon">Функция появится позже. Следите за обновлениями</string>
     <string name="enableMessages">Включить рассылку</string>
-    <string name="messageTextDefault">Я занят.</string>
-    <string name="postScriptum">Отправлено с помощью AnswerPhone for VK be DPudov</string>
     <string name="VK_Err">Произошла ошибка ВК. Попробуйте позже</string>
     <string name="loginSuccess">Успешная авторизация</string>
     <string name="defaultMsg"> $ отправлено с помощью AnswerPhone for VK by DPudov</string>
@@ -33,4 +31,5 @@
     <string name="sendUsMsg">Оставьте свой отзыв или жалобу:)</string>
     <string name="e_mail">dimapudov99@gmail.com</string>
     <string name="user_is_busy">Пользователь занят</string>
+    <string name="help_frag_head">Помощь</string>
 </resources>

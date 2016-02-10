@@ -7,7 +7,7 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="289dp"
         android:text="@string/sendFrag"
         android:textSize="25sp"
         android:textColor="#000000" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sendFrag"
             android:id="@+id/sendButton"
-            android:background="@color/vk_grey_color"
+            android:background="@color/button_material_light"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
