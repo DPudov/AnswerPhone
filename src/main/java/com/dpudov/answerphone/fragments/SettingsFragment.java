@@ -110,7 +110,7 @@ public class SettingsFragment extends android.app.Fragment {
                                                              Bundle b = new Bundle();
                                                              b.putIntArray("userIds", userIds);
                                                              intent.putExtras(b);
-                                                            getActivity().startService(intent);
+                                                             getActivity().startService(intent);
                                                          } else
 
                                                          {
@@ -134,30 +134,32 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     private void send(int userId) {
-        if (userId == 0)
-            Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
-        else {
-            message = editText.getText().toString().concat(getString(R.string.defaultMsg));
-            VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-            request.executeWithListener(new VKRequest.VKRequestListener() {
+        message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        if (!(userId == 0)) {
+            VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
+            requestSend.executeWithListener(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
-
-
                 }
 
                 @Override
                 public void onError(VKError error) {
                     super.onError(error);
-                    Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
+    public void sendTo(int[] userIds) {
+        if (!(userIds == null)) {
+            //метод для отправки сообщений нескольким юзерам
+            for (int i = 0; i < userIds.length; i++) {
+                send(userIds[i]);
 
+            }
+        }
+    }
 
 
     @Override
