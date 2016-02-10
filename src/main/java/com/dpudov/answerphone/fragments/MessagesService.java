@@ -29,7 +29,6 @@ public class MessagesService extends Service {
     private int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
     private int[] userId;
-    private int[] userIdCopy;
     String message;
 
     public MessagesService() {
@@ -58,6 +57,17 @@ public class MessagesService extends Service {
         nM.notify(NOTIFICATION, notification);
     }
 
+    private void showNotificationNull() {
+
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_answerphone_64px)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(getText(R.string.app_name))
+                .setContentText("Null")
+                .build();
+        nM.notify(NOTIFICATION, notification);
+    }
+
     private void showNotificationNew() {
 
         Notification notification = new Notification.Builder(this)
@@ -73,11 +83,11 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
         //try {
-       //     getAndSendMessages();
-            userIdCopy = getMsg();
-            sendTo(userIdCopy);
+        //     getAndSendMessages();
+        int[] userIdCopy = getMsg();
+        sendTo(userIdCopy);
         //} catch (InterruptedException e) {
-         //   e.printStackTrace();
+        //   e.printStackTrace();
         //    showNotificationNew();
         //}
 
@@ -97,6 +107,7 @@ public class MessagesService extends Service {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    showNotificationNew();
                 }
             }
         }).start();
@@ -105,7 +116,7 @@ public class MessagesService extends Service {
 
     private int[] getMsg() {
 
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from());
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10, VKApiConst.OUT, 0, VKApiConst.TIME_OFFSET, 3600));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -184,9 +195,11 @@ public class MessagesService extends Service {
     public void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int i = 0; i < userIds.length; i++) {
-                send(userIds[i]);
+            for (int userId1 : userIds) {
+                send(userId1);
             }
+        } else {
+            showNotificationNull();
         }
     }
 
