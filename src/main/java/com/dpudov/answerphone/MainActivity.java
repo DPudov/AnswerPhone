@@ -37,10 +37,10 @@ import static com.vk.sdk.VKSdk.wakeUpSession;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private SendFragment sendFragment;
-    private MainFragment mainFragment;
-    private SettingsFragment settingsFragment;
-    private int[] userIds;
+    SendFragment sendFragment;
+    MainFragment mainFragment;
+    SettingsFragment settingsFragment;
+    int[] userIds;
 
     public int[] getUserIds() {
         return userIds;
@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity
         VKSdk.wakeUpSession(this);
         //noinspection deprecation
         new VKShareDialog()
-                .setText("ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016")
-                .setAttachmentLink("DPudov", "https://vk.com/answerphone_dev")
+                .setText(getString(R.string.default_post))
+                .setAttachmentLink("DPudov", getString(R.string.group_link))
                 .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                     @Override
                     public void onVkShareComplete(int postId) {

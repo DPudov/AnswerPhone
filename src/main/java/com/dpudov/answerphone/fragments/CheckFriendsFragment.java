@@ -35,23 +35,22 @@ import java.util.ArrayList;
  * Use the {@link CheckFriendsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class CheckFriendsFragment extends android.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    ArrayList<String> users;
     // TODO: Rename and change types of parameters
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private Button saveButton;
     private SettingsFragment settingsFragment;
-    ArrayList<String> users;
     private int[] userIds;
 
     public CheckFriendsFragment() {
@@ -75,6 +74,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,14 +151,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
 
         // Inflate the layout for this fragment
         return v;
-    }
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override

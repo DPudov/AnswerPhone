@@ -34,4 +34,9 @@
     <string name="hint_for_time">Сколько минут отправлять</string>
     <string name="answerHead">Автоответчик для ВК</string>
     <string name="try_again_internet">Потеряно соединение. Попробуйте позже</string>
+    <string name="default_post">ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016</string>
+    <string name="group_link">https://vk.com/answerphone_dev</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

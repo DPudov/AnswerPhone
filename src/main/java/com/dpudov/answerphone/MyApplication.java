@@ -8,7 +8,8 @@ import com.vk.sdk.VKSdk;
  * Created by DPudov on 31.01.2016.
  * This class is for the VKSdk library initialization
  */
-public class Application extends android.app.Application {
+
+public class MyApplication extends android.app.Application {
     private final VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
