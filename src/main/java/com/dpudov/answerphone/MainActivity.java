@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.dpudov.answerphone.fragments.CheckFriendsFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
@@ -43,12 +42,12 @@ public class MainActivity extends AppCompatActivity
     private SettingsFragment settingsFragment;
     private int[] userIds;
 
-    public void setUserIds(int[] userIds) {
-        this.userIds = userIds;
-    }
-
     public int[] getUserIds() {
         return userIds;
+    }
+
+    public void setUserIds(int[] userIds) {
+        this.userIds = userIds;
     }
 
     @Override
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        CheckFriendsFragment checkFriendsFragment = new CheckFriendsFragment();
         mainFragment = new MainFragment();
         sendFragment = new SendFragment();
         settingsFragment = new SettingsFragment();
