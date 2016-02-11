@@ -10,7 +10,7 @@ import com.vk.sdk.VKSdk;
  */
 
 public class MyApplication extends android.app.Application {
-    private final VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
+    VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
             //noinspection StatementWithEmptyBody
