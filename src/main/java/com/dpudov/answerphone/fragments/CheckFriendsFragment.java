@@ -42,13 +42,15 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private Button saveButton;
-    SettingsFragment settingsFragment;
+    private SettingsFragment settingsFragment;
     ArrayList<String> users;
     private int[] userIds;
 
@@ -142,6 +144,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
             @Override
             public void onError(VKError error) {
                 super.onError(error);
+                Toast.makeText(getActivity(), R.string.try_again_internet, Toast.LENGTH_SHORT).show();
             }
         });
 

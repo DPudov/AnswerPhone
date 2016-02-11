@@ -1,16 +1,17 @@
 package com.dpudov.answerphone.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -22,12 +23,11 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 public class MessagesService extends Service {
-    NotificationManager nM;
-    private int NOTIFICATION = R.string.serviceStarted;
+    private NotificationManager nM;
+    private final int NOTIFICATION = R.string.serviceStarted;
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
-    String message;
 
     public MessagesService() {
     }
@@ -43,15 +43,19 @@ public class MessagesService extends Service {
         nM.cancel(NOTIFICATION);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showNotification() {
         CharSequence text = getString(R.string.serviceStarted);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_answerphone_64px)
-                .setTicker(text)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(getText(R.string.app_name))
-                .setContentText(text)
-                .build();
+        Notification notification = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            notification = new Notification.Builder(this)
+                    .setSmallIcon(R.drawable.ic_answerphone_64px)
+                    .setTicker(text)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(text)
+                    .build();
+        }
         nM.notify(NOTIFICATION, notification);
     }
 
@@ -61,17 +65,13 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        try {
-            getAndSendMessages();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        getAndSendMessages();
 
 
         return START_NOT_STICKY;
     }
 
-    void getAndSendMessages() throws InterruptedException {
+    private void getAndSendMessages() {
         //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
             @Override
@@ -130,30 +130,22 @@ public class MessagesService extends Service {
                 sendTo(userIdCopy);
             }
 
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
         });
     }
 
 
     private void send(int userId) {
 //метод для отправки сообщения user.
-        message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        String message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
+            //noinspection EmptyMethod
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                }
-
-                @Override
-                public void onError(VKError error) {
-                    super.onError(error);
-                }
-            });
+               @Override
+               public void onComplete(VKResponse response) {
+                   super.onComplete(response);
+               }
+           });
         }
     }
 

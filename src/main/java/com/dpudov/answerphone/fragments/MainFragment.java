@@ -24,7 +24,9 @@ public class MainFragment extends android.app.Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;

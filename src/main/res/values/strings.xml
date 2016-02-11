@@ -1,10 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">AnswerPhone</string>
-    <integer name="com_vk_sdk_AppId">5230534</integer>
+    <integer name="com_vk_sdk_AppId" tools:ignore="UnusedResources">5230534</integer>
     <string name="navigation_drawer_open">Открыть "шторку"</string>
     <string name="navigation_drawer_close">Закрыть "шторку"</string>
     <string name="hello">Рад приветствовать тебя в этом бесполезном приложении!)</string>
-    <string name="answerHead">AnswerPhone for VK</string>
     <string name="mainHeadItem">Главная</string>
     <string name="settingsHeadItem">Настройки</string>
     <string name="extendDrawerItem">Дополнительно</string>
@@ -18,7 +17,7 @@
     <string name="edt1_text_hint">Впиши сюда текст сообщения</string>
     <string name="shareButton_text">Поделиться</string>
     <string name="icon_name">Иконка нашего приложения</string>
-    <string name="FuncSoon">Функция появится позже. Следите за обновлениями</string>
+    <string name="FuncSoon" tools:ignore="UnusedResources">Функция появится позже. Следите за обновлениями</string>
     <string name="enableMessages">Включить рассылку</string>
     <string name="VK_Err">Произошла ошибка ВК. Попробуйте позже</string>
     <string name="loginSuccess">Успешная авторизация</string>
@@ -29,8 +28,10 @@
     <string name="editText">Введите сообщение</string>
     <string name="serviceStarted">Рассылка включена</string>
     <string name="sendUsMsg">Оставьте свой отзыв или жалобу:)</string>
-    <string name="e_mail">dimapudov99@gmail.com</string>
+    <string name="e_mail" translatable="false">dimapudov99@gmail.com</string>
     <string name="user_is_busy">Пользователь занят</string>
     <string name="help_frag_head">Помощь</string>
     <string name="hint_for_time">Сколько минут отправлять</string>
+    <string name="answerHead">Автоответчик для ВК</string>
+    <string name="try_again_internet">Потеряно соединение. Попробуйте позже</string>
 </resources>

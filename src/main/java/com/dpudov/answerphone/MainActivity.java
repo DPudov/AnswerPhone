@@ -38,11 +38,10 @@ import static com.vk.sdk.VKSdk.wakeUpSession;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    SendFragment sendFragment;
-    MainFragment mainFragment;
-    SettingsFragment settingsFragment;
-    CheckFriendsFragment checkFriendsFragment;
-    public int[] userIds;
+    private SendFragment sendFragment;
+    private MainFragment mainFragment;
+    private SettingsFragment settingsFragment;
+    private int[] userIds;
 
     public void setUserIds(int[] userIds) {
         this.userIds = userIds;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        checkFriendsFragment = new CheckFriendsFragment();
+        CheckFriendsFragment checkFriendsFragment = new CheckFriendsFragment();
         mainFragment = new MainFragment();
         sendFragment = new SendFragment();
         settingsFragment = new SettingsFragment();
@@ -110,6 +109,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @SuppressWarnings("UnusedAssignment")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -149,8 +149,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public final void shareWithVK() {
+    private void shareWithVK() {
         VKSdk.wakeUpSession(this);
+        //noinspection deprecation
         new VKShareDialog()
                 .setText("ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016")
                 .setAttachmentLink("DPudov", "https://vk.com/answerphone_dev")

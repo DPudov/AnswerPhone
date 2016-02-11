@@ -28,7 +28,8 @@
             android:textOn="Вкл"
             android:textOff="Выкл"
             android:showText="true"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            tools:ignore="UnusedAttribute" />
 
         <EditText
             android:layout_width="match_parent"

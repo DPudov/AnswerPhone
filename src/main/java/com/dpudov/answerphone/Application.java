@@ -6,11 +6,13 @@ import com.vk.sdk.VKSdk;
 
 /**
  * Created by DPudov on 31.01.2016.
+ * This class is for the VKSdk library initialization
  */
 public class Application extends android.app.Application {
-    VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
+    private final VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
+            //noinspection StatementWithEmptyBody
             if (newToken == null) {
 
 // VKAccessToken is invalid

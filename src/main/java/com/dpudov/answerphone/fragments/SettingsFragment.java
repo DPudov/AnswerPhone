@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -39,14 +38,13 @@ public class SettingsFragment extends android.app.Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
-    private String message;
-    private EditText editText;
-    private Button goToM8Button;
     private OnFragmentInteractionListener mListener;
     private int[] userIds;
-    CheckFriendsFragment checkFriendsFragment;
+    private CheckFriendsFragment checkFriendsFragment;
 
 
     public SettingsFragment() {
@@ -86,9 +84,9 @@ public class SettingsFragment extends android.app.Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        editText = (EditText) v.findViewById(R.id.editText);
+        @SuppressWarnings("UnusedAssignment") EditText editText = (EditText) v.findViewById(R.id.editText);
 
-        goToM8Button = (Button) v.findViewById(R.id.button2);
+        Button goToM8Button = (Button) v.findViewById(R.id.button2);
         checkFriendsFragment = new CheckFriendsFragment();
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,19 +132,16 @@ public class SettingsFragment extends android.app.Fragment {
     }
 
     private void send(int userId) {
-        message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        String message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+                @SuppressWarnings("EmptyMethod")
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
                 }
 
-                @Override
-                public void onError(VKError error) {
-                    super.onError(error);
-                }
             });
         }
     }
@@ -154,8 +149,8 @@ public class SettingsFragment extends android.app.Fragment {
     public void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int i = 0; i < userIds.length; i++) {
-                send(userIds[i]);
+            for (int userId : userIds) {
+                send(userId);
 
             }
         }

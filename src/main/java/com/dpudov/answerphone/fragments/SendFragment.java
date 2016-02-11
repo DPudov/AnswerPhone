@@ -32,13 +32,13 @@ public class SendFragment extends android.app.Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
+    @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private EditText editText;
-    private Button sendButton;
-    private String message;
 
     public SendFragment() {
         // Required empty public constructor
@@ -75,7 +75,7 @@ public class SendFragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_send, container, false);
-        sendButton = (Button) v.findViewById(R.id.sendButton);
+        Button sendButton = (Button) v.findViewById(R.id.sendButton);
         editText = (EditText) v.findViewById(R.id.editText2);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +120,7 @@ public class SendFragment extends android.app.Fragment {
 
     private void sendMe(int user) {
 
-        message = editText.getText().toString().concat(getString(R.string.defaultMsg));
+        String message = editText.getText().toString().concat(getString(R.string.defaultMsg));
         VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, user, VKApiConst.MESSAGE, message));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
