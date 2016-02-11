@@ -36,6 +36,7 @@
     <string name="try_again_internet">Потеряно соединение. Попробуйте позже</string>
     <string name="default_post">ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016</string>
     <string name="group_link">https://vk.com/answerphone_dev</string>
+    <string name="hi">"Привет, "</string>
     <string-array name="screen_array">
         <item>Screen 1</item>
         <item>Screen 2</item>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnswerPhone</string>
+    <string name="FuncSoon">Function will appear soon. Follow updates.</string>
+    <string name="VK_Err">VK error occured. Try again later</string>
+    <string name="answerHead">AnswerPhone</string>
+    <string name="checkFrFrag">Choose friends</string>
+    <string name="defaultMsg">$ send with AnswerPhone for VK by DPudov</string>
+    <string name="default_post">It\'s incredible! Alpha-version AnswerPhone is ready for work. All rights reserved by DPudov 2016</string>
+    <string name="e_mail" translatable="false"></string>
+    <string name="editText">Edit your message...</string>
+    <string name="edt1_text_hint">Edit your message...</string>
+    <string name="enableMessages">Enable mail</string>
+    <string name="extendDrawerItem">Extra</string>
+    <string name="group_link">https://vk.com/answerphone_dev</string>
+    <string name="hello">I\'m glad to see you in this app</string>
+    <string name="help_frag_head">Help</string>
+    <string name="hi">"Hi, "</string>
+    <string name="hint_for_time">How many minutes send</string>
+    <string name="icon_name">Icon of our app</string>
+    <string name="loginSuccess">Success authorization</string>
+    <string name="mainFragment">Main</string>
+    <string name="mainHeadItem">Main</string>
+    <string name="messageHeadItem">Send message</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="saveButton">Save</string>
+    <string name="sendFrag">Send message</string>
+    <string name="sendUsMsg">Leave your recall or appeal :)</string>
+    <string name="sentMsg">Sent</string>
+    <string name="serviceStarted">Mail enabled</string>
+    <string name="settFrag">Settings</string>
+    <string name="settingsHeadItem">Settings</string>
+    <string name="shareButton_text">Share</string>
+    <string name="shareVK_head">Share with VK</string>
+    <string name="showHeadItem">Share</string>
+    <string name="switch1Text">Enable mail service</string>
+    <string name="try_again_internet">Connection failed. Try again later</string>
+    <string name="user_is_busy">User is busy</string>
+</resources>

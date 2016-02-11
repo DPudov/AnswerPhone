@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 public class MessagesService extends Service {
-    private NotificationManager nM;
     private final int NOTIFICATION = R.string.serviceStarted;
+    private NotificationManager nM;
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
@@ -136,7 +136,7 @@ public class MessagesService extends Service {
 
     private void send(int userId) {
 //метод для отправки сообщения user.
-        String message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        String message = getString(R.string.hi) + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             //noinspection EmptyMethod
