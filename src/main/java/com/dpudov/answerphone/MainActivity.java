@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,18 +14,21 @@ import android.widget.Toast;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
-import static com.dpudov.answerphone.R.id.drawer_layout;
 import static com.dpudov.answerphone.R.id.nav_main;
 import static com.dpudov.answerphone.R.id.nav_send;
 import static com.dpudov.answerphone.R.id.nav_settings;
 import static com.dpudov.answerphone.R.id.nav_share;
-import static com.dpudov.answerphone.R.id.nav_view;
 import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
@@ -35,12 +37,12 @@ import static com.vk.sdk.VKSdk.isLoggedIn;
 import static com.vk.sdk.VKSdk.login;
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends ActionBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    SendFragment sendFragment;
-    MainFragment mainFragment;
-    SettingsFragment settingsFragment;
-    int[] userIds;
+    private SendFragment sendFragment;
+    private MainFragment mainFragment;
+    private SettingsFragment settingsFragment;
+    private int[] userIds;
 
     public int[] getUserIds() {
         return userIds;
@@ -64,11 +66,23 @@ public class MainActivity extends AppCompatActivity
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        new Drawer()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withActionBarDrawerToggle(true)
+                .withHeader(R.layout.drawer_header)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon().withBadge("99").withIdentifier(1),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_free_play).withIcon(FontAwesome.Icon.faw_gamepad),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_custom).withIcon(FontAwesome.Icon.faw_eye).withBadge("6").withIdentifier(2),
+                        new SectionDrawerItem().withName(R.string.drawer_item_settings),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_help).withIcon(FontAwesome.Icon.faw_cog),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_open_source).withIcon(FontAwesome.Icon.faw_question).setEnabled(false),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_contact).withIcon(FontAwesome.Icon.faw_github).withBadge("12+").withIdentifier(1)
+                )
+                .build();
 
         NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
