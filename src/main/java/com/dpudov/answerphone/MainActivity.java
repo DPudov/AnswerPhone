@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +33,7 @@ import static com.vk.sdk.VKSdk.isLoggedIn;
 import static com.vk.sdk.VKSdk.login;
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     private SendFragment sendFragment;
     private MainFragment mainFragment;
     private SettingsFragment settingsFragment;
@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private CharSequence mDrawerTitle;
+    private CharSequence mDrawerTitle = getString(R.string.app_name);
     private CharSequence mTitle;
 
     public int[] getUserIds() {

@@ -6,7 +6,8 @@ android {
     defaultConfig {
         applicationId "com.dpudov.answerphone"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 21
+        maxSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
