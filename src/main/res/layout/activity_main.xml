@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:openDrawer="start">
+
         <!-- The main content view -->
         <FrameLayout
             android:id="@+id/content_frame"
@@ -22,7 +26,6 @@
             android:background="#111"
             android:choiceMode="singleChoice"
             android:divider="@android:color/transparent"
-            android:dividerHeight="1dp"
-            />
+            android:dividerHeight="1dp" />
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
