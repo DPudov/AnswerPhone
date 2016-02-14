@@ -5,4 +5,5 @@
     android:adjustViewBounds="true"
     android:orientation="vertical"
     android:scaleType="fitCenter"
-    android:src="@drawable/header"></ImageView>
+    android:src="@drawable/header"
+    android:contentDescription="@string/head" />

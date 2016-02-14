@@ -1,6 +1,5 @@
 package com.dpudov.answerphone.fragments;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +30,7 @@ import static com.vk.sdk.VKSdk.wakeUpSession;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends android.app.Fragment {
+public class SettingsFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -91,8 +90,8 @@ public class SettingsFragment extends android.app.Fragment {
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.container, checkFriendsFragment);
+                android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, checkFriendsFragment);
                 ft.commit();
             }
         });

@@ -1,34 +1,29 @@
 package com.dpudov.answerphone;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.fragments.HelpFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
-import static com.dpudov.answerphone.R.id.nav_main;
-import static com.dpudov.answerphone.R.id.nav_send;
-import static com.dpudov.answerphone.R.id.nav_settings;
-import static com.dpudov.answerphone.R.id.nav_share;
 import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
@@ -37,12 +32,18 @@ import static com.vk.sdk.VKSdk.isLoggedIn;
 import static com.vk.sdk.VKSdk.login;
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
-public class MainActivity extends ActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends ActionBarActivity {
     private SendFragment sendFragment;
     private MainFragment mainFragment;
     private SettingsFragment settingsFragment;
     private int[] userIds;
+    private String[] mDrawerHeads;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
 
     public int[] getUserIds() {
         return userIds;
@@ -64,31 +65,36 @@ public class MainActivity extends ActionBarActivity
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Что-то пошло не так. Проверьте соединение и попробуйте позже", Toast.LENGTH_LONG).show();
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mDrawerHeads = getResources().getStringArray(R.array.items_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mDrawerHeads));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        new Drawer()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withActionBarDrawerToggle(true)
-                .withHeader(R.layout.drawer_header)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon().withBadge("99").withIdentifier(1),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_free_play).withIcon(FontAwesome.Icon.faw_gamepad),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_custom).withIcon(FontAwesome.Icon.faw_eye).withBadge("6").withIdentifier(2),
-                        new SectionDrawerItem().withName(R.string.drawer_item_settings),
-                        new SecondaryDrawerItem().withName(R.string.drawer_item_help).withIcon(FontAwesome.Icon.faw_cog),
-                        new SecondaryDrawerItem().withName(R.string.drawer_item_open_source).withIcon(FontAwesome.Icon.faw_question).setEnabled(false),
-                        new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(R.string.drawer_item_contact).withIcon(FontAwesome.Icon.faw_github).withBadge("12+").withIdentifier(1)
-                )
-                .build();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
 
-        NavigationView navigationView = (NavigationView) findViewById(nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        mainFragment = new MainFragment();
-        sendFragment = new SendFragment();
-        settingsFragment = new SettingsFragment();
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        if (savedInstanceState == null) {
+            selectItem(0);
+        }
+
     }
 
     @Override
@@ -111,15 +117,6 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @SuppressWarnings("UnusedAssignment")
     @Override
@@ -132,33 +129,6 @@ public class MainActivity extends ActionBarActivity
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        FragmentTransaction fTransaction = getFragmentManager().beginTransaction();
-
-
-        if (id == nav_main) {
-            fTransaction.replace(R.id.container, mainFragment);
-        } else if (id == nav_settings) {
-            fTransaction.replace(R.id.container, settingsFragment);
-
-        } else if (id == nav_share) {
-            shareWithVK();
-        } else if (id == nav_send) {
-            fTransaction.replace(R.id.container, sendFragment);
-
-        }
-        fTransaction.commit();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     private void shareWithVK() {
@@ -183,6 +153,68 @@ public class MainActivity extends ActionBarActivity
 
                     }
                 }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = new MainFragment();
+                break;
+            case 1:
+                fragment = new SettingsFragment();
+                break;
+            case 2:
+                fragment = new HelpFragment();
+                break;
+            case 3:
+                fragment = new SendFragment();
+                break;
+            case 4:
+                shareWithVK();
+                break;
+            default:
+                break;
+
+        }
+        // Insert the fragment by replacing any existing fragment
+        if (fragment != null) {
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment).commit();
+
+            // Highlight the selected item, update the title, and close the drawer
+            mDrawerList.setItemChecked(position, true);
+            setTitle(mDrawerHeads[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        //noinspection ConstantConditions
+        getSupportActionBar().setTitle(mTitle);
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 }
 
