@@ -24,6 +24,7 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
+import static com.dpudov.answerphone.R.layout.activity_main;
 import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
@@ -56,7 +57,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(activity_main);
         try {
             if (!isLoggedIn())
                 login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
