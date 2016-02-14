@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,11 +27,9 @@ import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
 import static com.vk.sdk.VKScope.WALL;
-import static com.vk.sdk.VKSdk.isLoggedIn;
-import static com.vk.sdk.VKSdk.login;
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity{
 
     private int[] userIds;
     private String[] mDrawerHeads;
@@ -52,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try {
-            if (!isLoggedIn()) {
-                login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
+            if (!VKSdk.isLoggedIn()) {
+                VKSdk.login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
             }
             else {
                 wakeUpSession(this);
@@ -177,9 +175,8 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void setTitle(CharSequence title) {
-        CharSequence mTitle = title;
         //noinspection ConstantConditions
-        getSupportActionBar().setTitle(mTitle);
+        getSupportActionBar().setTitle(title);
     }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
