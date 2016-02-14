@@ -7,7 +7,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,17 +33,12 @@ import static com.vk.sdk.VKSdk.login;
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
 public class MainActivity extends AppCompatActivity {
-    private SendFragment sendFragment;
-    private MainFragment mainFragment;
-    private SettingsFragment settingsFragment;
+
     private int[] userIds;
     private String[] mDrawerHeads;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
-    private CharSequence mDrawerTitle = getString(R.string.app_name);
-    private CharSequence mTitle;
 
     public int[] getUserIds() {
         return userIds;
@@ -59,10 +53,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_main);
         try {
-            if (!isLoggedIn())
+            if (!isLoggedIn()) {
                 login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
-            else
+            }
+            else {
                 wakeUpSession(this);
+            }
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Что-то пошло не так. Проверьте соединение и попробуйте позже", Toast.LENGTH_LONG).show();
         }
@@ -71,9 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mDrawerHeads));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -82,12 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -116,20 +108,6 @@ public class MainActivity extends AppCompatActivity {
         })) {
             super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-
-    @SuppressWarnings("UnusedAssignment")
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void shareWithVK() {
@@ -200,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
+        CharSequence mTitle = title;
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(mTitle);
     }
