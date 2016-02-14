@@ -7,6 +7,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +28,6 @@ import static com.vk.sdk.VKScope.FRIENDS;
 import static com.vk.sdk.VKScope.MESSAGES;
 import static com.vk.sdk.VKScope.NOTIFICATIONS;
 import static com.vk.sdk.VKScope.WALL;
-import static com.vk.sdk.VKSdk.wakeUpSession;
 
 public class MainActivity extends ActionBarActivity{
 
@@ -53,9 +53,7 @@ public class MainActivity extends ActionBarActivity{
             if (!VKSdk.isLoggedIn()) {
                 VKSdk.login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
             }
-            else {
-                wakeUpSession(this);
-            }
+            else VKSdk.wakeUpSession(this);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Что-то пошло не так. Проверьте соединение и попробуйте позже", Toast.LENGTH_LONG).show();
         }
@@ -86,7 +84,13 @@ public class MainActivity extends ActionBarActivity{
         }
 
     }
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.drawer_layout).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
