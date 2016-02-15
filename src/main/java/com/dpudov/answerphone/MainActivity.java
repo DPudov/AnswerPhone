@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.fragments.HelpFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
@@ -28,6 +29,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
 import static com.dpudov.answerphone.R.id.container;
+import static com.dpudov.answerphone.R.id.nav_help;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private MainFragment mainFragment;
     private SendToFriendsFragment sendToFriendsFragment;
     private SettingsFragment settingsFragment;
+    private HelpFragment helpFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         settingsFragment = new SettingsFragment();
         sendFragment = new SendFragment();
         sendToFriendsFragment = new SendToFriendsFragment();
+        helpFragment = new HelpFragment();
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
         else {
@@ -145,11 +149,18 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(container, sendToFriendsFragment);
         } else if (id == R.id.nav_manage) {
             fragmentTransaction.replace(container, settingsFragment);
-        } else if (id == R.id.nav_share) {
+        } else if (id == nav_help) {
+            fragmentTransaction.replace(container, helpFragment);
+        } else if (id == R.id.nav_share)
+
+        {
             shareWithVK();
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_send)
+
+        {
             fragmentTransaction.replace(container, sendFragment);
         }
+
         fragmentTransaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

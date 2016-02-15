@@ -7,6 +7,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hi" />
+        android:text="@string/sendToFriends"
+        android:textSize="25sp"
+        android:textColor="#000000" />
 
 </FrameLayout>

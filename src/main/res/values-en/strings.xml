@@ -7,7 +7,7 @@
     <string name="checkFrFrag">Choose friends</string>
     <string name="defaultMsg">$ send with AnswerPhone for VK by DPudov</string>
     <string name="default_post">It\'s incredible! Alpha-version AnswerPhone is ready for work. All rights reserved by DPudov 2016</string>
-    <string name="e_mail" translatable="false"></string>
+    <string name="e_mail" translatable="false">dimapudov99@gmail.com</string>
     <string name="editText">Edit your message...</string>
     <string name="edt1_text_hint">Edit your message...</string>
     <string name="enableMessages">Enable mail</string>
@@ -37,4 +37,7 @@
     <string name="switch1Text">Enable mail service</string>
     <string name="try_again_internet">Connection failed. Try again later</string>
     <string name="user_is_busy">User is busy</string>
+    <string name="head">header</string>
+    <string name="sendToFriends">Send to friends</string>
+    <string name="title_activity_main">AnswerPhone</string>
 </resources>

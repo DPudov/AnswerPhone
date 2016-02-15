@@ -12,6 +12,9 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/settFrag" />
+        <item
+            android:id="@+id/nav_help"
+            android:title="@string/help_frag_head"/>
     </group>
 
     <item android:title="@string/extendDrawerItem">
