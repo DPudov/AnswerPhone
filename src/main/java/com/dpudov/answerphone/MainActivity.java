@@ -1,114 +1,159 @@
 package com.dpudov.answerphone;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.dpudov.answerphone.fragments.HelpFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
+import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 
-import static com.vk.sdk.VKScope.FRIENDS;
-import static com.vk.sdk.VKScope.MESSAGES;
-import static com.vk.sdk.VKScope.NOTIFICATIONS;
-import static com.vk.sdk.VKScope.WALL;
+import static com.dpudov.answerphone.R.id.container;
 
-public class MainActivity extends ActionBarActivity{
-
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     private int[] userIds;
-    private String[] mDrawerHeads;
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
-
-    public int[] getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(int[] userIds) {
-        this.userIds = userIds;
-    }
+    private SendFragment sendFragment;
+    private MainFragment mainFragment;
+    private SendToFriendsFragment sendToFriendsFragment;
+    private SettingsFragment settingsFragment;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            if (!VKSdk.isLoggedIn()) {
-                VKSdk.login(this, NOTIFICATIONS, MESSAGES, FRIENDS, WALL);
-            }
-            else VKSdk.wakeUpSession(this);
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Что-то пошло не так. Проверьте соединение и попробуйте позже", Toast.LENGTH_LONG).show();
+        mainFragment = new MainFragment();
+        settingsFragment = new SettingsFragment();
+        sendFragment = new SendFragment();
+        sendToFriendsFragment = new SendToFriendsFragment();
+        if (VKSdk.isLoggedIn())
+            VKSdk.wakeUpSession(this);
+        else {
+            while (!VKSdk.isLoggedIn())
+                VKSdk.login(this, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL);
         }
-        mDrawerHeads = getResources().getStringArray(R.array.items_drawer);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mDrawerHeads));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed(View view) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(container, mainFragment);
+        fragmentTransaction.commit();
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, R.string.sendUsMsg, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(container, sendFragment);
+                fragmentTransaction.commit();
             }
+        });
 
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        if (savedInstanceState == null) {
-            selectItem(0);
-        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.drawer_layout).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
-    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
                 Toast.makeText(getApplicationContext(), R.string.loginSuccess, Toast.LENGTH_SHORT).show();
-
 // Пользователь успешно авторизовался
             }
 
             @Override
             public void onError(VKError error) {
-                Toast.makeText(getApplicationContext(), R.string.VK_Err, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
 // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
             }
         })) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(container, settingsFragment);
+        fragmentTransaction.commit();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (id == R.id.nav_main) {
+            fragmentTransaction.replace(container, mainFragment);
+            // Handle the camera action
+        } else if (id == R.id.nav_sendToFriends) {
+            fragmentTransaction.replace(container, sendToFriendsFragment);
+        } else if (id == R.id.nav_manage) {
+            fragmentTransaction.replace(container, settingsFragment);
+        } else if (id == R.id.nav_share) {
+            shareWithVK();
+        } else if (id == R.id.nav_send) {
+            fragmentTransaction.replace(container, sendFragment);
+        }
+        fragmentTransaction.commit();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     private void shareWithVK() {
@@ -135,65 +180,11 @@ public class MainActivity extends ActionBarActivity{
                 }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
+    public int[] getUserIds() {
+        return userIds;
     }
 
-    private void selectItem(int position) {
-        Fragment fragment = null;
-        switch (position) {
-            case 0:
-                fragment = new MainFragment();
-                break;
-            case 1:
-                fragment = new SettingsFragment();
-                break;
-            case 2:
-                fragment = new HelpFragment();
-                break;
-            case 3:
-                fragment = new SendFragment();
-                break;
-            case 4:
-                shareWithVK();
-                break;
-            default:
-                break;
-
-        }
-        // Insert the fragment by replacing any existing fragment
-        if (fragment != null) {
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment).commit();
-
-            // Highlight the selected item, update the title, and close the drawer
-            mDrawerList.setItemChecked(position, true);
-            setTitle(mDrawerHeads[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
-    }
-    @Override
-    public void setTitle(CharSequence title) {
-        //noinspection ConstantConditions
-        getSupportActionBar().setTitle(title);
-    }
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
+    public void setUserIds(int[] userIds) {
+        this.userIds = userIds;
     }
 }
-

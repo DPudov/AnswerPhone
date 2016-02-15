@@ -91,7 +91,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, checkFriendsFragment);
+                ft.replace(R.id.container, checkFriendsFragment);
                 ft.commit();
             }
         });

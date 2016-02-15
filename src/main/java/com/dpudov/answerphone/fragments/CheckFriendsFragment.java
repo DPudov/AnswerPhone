@@ -132,7 +132,7 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                         }
                         ((MainActivity)getActivity()).setUserIds(userIds);
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.content_frame, settingsFragment);
+                        ft.replace(R.id.container, settingsFragment);
                         ft.commit();
 
                     }
