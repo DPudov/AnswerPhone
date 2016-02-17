@@ -33,12 +33,14 @@ import static com.dpudov.answerphone.R.id.nav_help;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private int[] userIds;
+    private int[] usersToSendNow;
+    private int[] usersToSendAuto;
     private SendFragment sendFragment;
     private MainFragment mainFragment;
     private SendToFriendsFragment sendToFriendsFragment;
     private SettingsFragment settingsFragment;
     private HelpFragment helpFragment;
+    private String msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,11 +193,27 @@ public class MainActivity extends AppCompatActivity
                 }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
     }
 
-    public int[] getUserIds() {
-        return userIds;
+    public int[] getUsersToSendAuto() {
+        return usersToSendAuto;
     }
 
-    public void setUserIds(int[] userIds) {
-        this.userIds = userIds;
+    public void setUsersToSendAuto(int[] usersToSendAuto) {
+        this.usersToSendAuto = usersToSendAuto;
+    }
+
+    public int[] getUsersToSendNow() {
+        return usersToSendNow;
+    }
+
+    public void setUsersToSendNow(int[] usersToSendNow) {
+        this.usersToSendNow = usersToSendNow;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

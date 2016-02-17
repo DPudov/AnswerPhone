@@ -40,4 +40,7 @@
     <string name="head">header</string>
     <string name="title_activity_main">AnswerPhone</string>
     <string name="sendToFriends">Отправить друзьям</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,14 +2,14 @@
 <resources>
     <string name="app_name">AnswerPhone</string>
     <string name="FuncSoon">Function will appear soon. Follow updates.</string>
-    <string name="VK_Err">VK error occured. Try again later</string>
+    <string name="VK_Err">VK error occurred. Try again later</string>
     <string name="answerHead">AnswerPhone</string>
     <string name="checkFrFrag">Choose friends</string>
     <string name="defaultMsg">$ send with AnswerPhone for VK by DPudov</string>
     <string name="default_post">It\'s incredible! Alpha-version AnswerPhone is ready for work. All rights reserved by DPudov 2016</string>
-    <string name="e_mail" translatable="false">dimapudov99@gmail.com</string>
-    <string name="editText">Edit your message...</string>
-    <string name="edt1_text_hint">Edit your message...</string>
+    <string name="e_mail">dimapudov99@gmail.com</string>
+    <string name="editText">Edit your message…</string>
+    <string name="edt1_text_hint">Edit your message…</string>
     <string name="enableMessages">Enable mail</string>
     <string name="extendDrawerItem">Extra</string>
     <string name="group_link">https://vk.com/answerphone_dev</string>

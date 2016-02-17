@@ -95,7 +95,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                 ft.commit();
             }
         });
-        userIds = ((MainActivity) getActivity()).getUserIds();
+        userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
         Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
         switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                                      @Override
@@ -105,9 +105,15 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                                                              Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
                                                              Intent intent = new Intent(getActivity(), MessagesService.class);
                                                              Bundle b = new Bundle();
-                                                             b.putIntArray("userIds", userIds);
-                                                             intent.putExtras(b);
-                                                             getActivity().startService(intent);
+                                                             if (userIds != null) {
+                                                                 b.putIntArray("userIds", userIds);
+                                                                 intent.putExtras(b);
+                                                                 getActivity().startService(intent);
+                                                             } else {
+                                                                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                                 ft.replace(R.id.container, checkFriendsFragment);
+                                                                 ft.commit();
+                                                             }
                                                          } else
 
                                                          {

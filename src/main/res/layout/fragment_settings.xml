@@ -28,7 +28,6 @@
             android:textOn="Вкл"
             android:textOff="Выкл"
             android:showText="true"
-            android:layout_gravity="center_horizontal"
             tools:ignore="UnusedAttribute" />
 
         <EditText
@@ -43,6 +42,14 @@
             android:hint="@string/editText"
             android:editable="true" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/timePicker"
+            android:hint="@string/hint_for_time" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,14 +58,6 @@
             android:layout_gravity="center_horizontal"
             android:visibility="visible"
             android:clickable="true" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/timePicker"
-            android:hint="@string/hint_for_time" />
 
     </LinearLayout>
 

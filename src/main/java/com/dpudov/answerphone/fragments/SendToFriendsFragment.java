@@ -3,10 +3,14 @@ package com.dpudov.answerphone.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
 
 /**
@@ -26,7 +30,9 @@ public class SendToFriendsFragment extends android.support.v4.app.Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private Button sendFrButton;
+    private EditText editText;
+    private CheckFriends2Fragment checkFriends2Fragment;
     private OnFragmentInteractionListener mListener;
 
     public SendToFriendsFragment() {
@@ -61,10 +67,26 @@ public class SendToFriendsFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_send_to_friends, container, false);
+        checkFriends2Fragment = new CheckFriends2Fragment();
+        editText = (EditText)v.findViewById(R.id.editMsgToFr);
+        sendFrButton = (Button) v.findViewById(R.id.sendFrButton);
+        sendFrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Смотрим сообщение и отправляем на главную
+                ((MainActivity)getActivity()).setMsg(editText.getText().toString());
+
+                //После клика вызываем выбор друзей
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, checkFriends2Fragment);
+                fragmentTransaction.commit();
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_send_to_friends, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

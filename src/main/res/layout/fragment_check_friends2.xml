@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/saveButton"
-        android:id="@+id/saveButton"
+        android:id="@+id/saveButton2"
         android:layout_gravity="center_horizontal|bottom" />
 
     <RelativeLayout
@@ -26,7 +26,7 @@
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="371dp"
-            android:id="@+id/listView"
+            android:id="@+id/listView2"
             android:choiceMode="multipleChoice" />
     </RelativeLayout>
 

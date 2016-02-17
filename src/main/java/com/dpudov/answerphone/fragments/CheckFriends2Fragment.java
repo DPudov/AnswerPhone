@@ -24,35 +24,31 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKUsersArray;
 
-import java.util.ArrayList;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CheckFriendsFragment.OnFragmentInteractionListener} interface
+ * {@link CheckFriends2Fragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CheckFriendsFragment#newInstance} factory method to
+ * Use the {@link CheckFriends2Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-
-public class CheckFriendsFragment extends android.support.v4.app.Fragment {
+public class CheckFriends2Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ArrayList<String> users;
-    // TODO: Rename and change types of parameters
-    @SuppressWarnings("FieldCanBeLocal")
-    private String mParam1;
-    @SuppressWarnings("FieldCanBeLocal")
-    private String mParam2;
-    private OnFragmentInteractionListener mListener;
-    private ListView listView;
-    private Button saveButton;
-    private SettingsFragment settingsFragment;
-    private int[] userIds;
 
-    public CheckFriendsFragment() {
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private ListView listView;
+    private SendToFriendsFragment sendToFriendsFragment;
+    private Button saveButton;
+    private String msg;
+    private int[] userIds;
+    private OnFragmentInteractionListener mListener;
+
+    public CheckFriends2Fragment() {
         // Required empty public constructor
     }
 
@@ -62,18 +58,17 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment CheckFriendsFragment.
+     * @return A new instance of fragment CheckFriends2Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CheckFriendsFragment newInstance(String param1, String param2) {
-        CheckFriendsFragment fragment = new CheckFriendsFragment();
+    public static CheckFriends2Fragment newInstance(String param1, String param2) {
+        CheckFriends2Fragment fragment = new CheckFriends2Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,10 +82,10 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_check_friends, container, false);
-        listView = (ListView) v.findViewById(R.id.listView);
-        settingsFragment = new SettingsFragment();
-        saveButton = (Button) v.findViewById(R.id.saveButton);
+        View v = inflater.inflate(R.layout.fragment_check_friends2, container, false);
+        listView = (ListView) v.findViewById(R.id.listView2);
+        sendToFriendsFragment = new SendToFriendsFragment();
+        saveButton = (Button) v.findViewById(R.id.saveButton2);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -114,9 +109,13 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                                 userIds[i] = list.get(key).getId();
                             }
                         }
-                        ((MainActivity)getActivity()).setUsersToSendAuto(userIds);
+                        ((MainActivity) getActivity()).setUsersToSendNow(userIds);
+                        //Отправляем сообщения
+                        msg = ((MainActivity)getActivity()).getMsg()+getString(R.string.defaultMsg);
+                        sendTo(userIds);
+                        //Возвращаемся на начальный фрагмент
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.container, settingsFragment);
+                        ft.replace(R.id.container, sendToFriendsFragment);
                         ft.commit();
 
                     }
@@ -130,16 +129,46 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                 Toast.makeText(getActivity(), R.string.try_again_internet, Toast.LENGTH_SHORT).show();
             }
         });
-
-
         // Inflate the layout for this fragment
         return v;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void send(int userId) {
+//метод для отправки сообщения user.
+
+        if (!(userId == 0)) {
+            VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, msg));
+            //noinspection EmptyMethod
+            requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                }
+            });
+        }
+    }
+
+    private void sendTo(int[] userIds) {
+        if (!(userIds == null)) {
+            //метод для отправки сообщений нескольким юзерам
+            for (int i=0; i<userIds.length; i++){
+                send(userIds[i]);
+
+            }
+        }
     }
 
     /**
