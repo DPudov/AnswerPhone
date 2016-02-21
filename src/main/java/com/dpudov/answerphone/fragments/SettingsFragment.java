@@ -93,6 +93,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, checkFriendsFragment);
+                getActivity().setTitle(R.string.checkFrFrag);
                 ft.commit();
             }
         });
@@ -114,6 +115,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                                                              } else {
                                                                  android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                                                                  ft.replace(R.id.container, checkFriendsFragment);
+                                                                 getActivity().setTitle(R.string.checkFrFrag);
                                                                  ft.commit();
                                                              }
                                                          } else
