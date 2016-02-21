@@ -2,56 +2,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.dpudov.answerphone.fragments.SettingsFragment">
 
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="246dp"
-        android:layout_gravity="center"
-        android:weightSum="1">
+        android:layout_height="match_parent">
 
-        <Switch
-            android:layout_width="fill_parent"
-            android:layout_height="55dp"
-            android:text="@string/enableMessages"
-            android:id="@+id/switchMessage"
-            android:textSize="18sp"
-            android:textOn="Вкл"
-            android:textOff="Выкл"
-            android:showText="true"
-            tools:ignore="UnusedAttribute" />
-
-        <EditText
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:id="@+id/editText"
-            android:clickable="false"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:hint="@string/editText"
-            android:editable="true" />
+            android:layout_height="246dp"
+            android:layout_gravity="center"
+            android:weightSum="1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/timePicker"
-            android:hint="@string/hint_for_time" />
+            <Switch
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:text="@string/enableMessages"
+                android:id="@+id/switchMessage"
+                android:textSize="18sp"
+                android:textOn="Вкл"
+                android:textOff="Выкл"
+                android:showText="true"
+                tools:ignore="UnusedAttribute" />
 
-        <Button
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/timePicker"
+                android:hint="@string/hint_for_time" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkFrFrag"
+                android:id="@+id/button2"
+                android:layout_gravity="center_horizontal"
+                android:visibility="visible"
+                android:clickable="true" />
+
+        </LinearLayout>
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/checkFrFrag"
-            android:id="@+id/button2"
-            android:layout_gravity="center_horizontal"
-            android:visibility="visible"
-            android:clickable="true" />
-
-    </LinearLayout>
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_in_settings">
+        </com.google.android.gms.ads.AdView>
+    </RelativeLayout>
 
 </FrameLayout>

@@ -1,7 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.dpudov.answerphone.fragments.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -12,6 +13,17 @@
         android:id="@+id/imageView2"
         android:layout_gravity="center"
         android:src="@drawable/ic_answerphone_full"
-        android:contentDescription="@string/icon_name" />
+        android:contentDescription="@string/icon_name"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_1"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+    </com.google.android.gms.ads.AdView>
 
-</FrameLayout>
+</RelativeLayout>

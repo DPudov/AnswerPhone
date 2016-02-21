@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -83,7 +82,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        @SuppressWarnings("UnusedAssignment") EditText editText = (EditText) v.findViewById(R.id.editText);
+
 
         Button goToM8Button = (Button) v.findViewById(R.id.button2);
         //OnClick и реализация выхода на новый фрагмент

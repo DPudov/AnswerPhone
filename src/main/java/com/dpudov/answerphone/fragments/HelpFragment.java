@@ -7,9 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,21 +69,28 @@ public class HelpFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_help, container, false);
+        AdView adView = (AdView)v.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
         TabHost tabHost = (TabHost)v.findViewById(R.id.tabHost);
         tabHost.setup();
         TabHost.TabSpec tabSpec;
-        tabSpec = tabHost.newTabSpec("tag 1");
+        tabSpec = tabHost.newTabSpec(getString(R.string.settingsHeadItem));
         tabSpec.setIndicator(getString(R.string.settFrag));
         tabSpec.setContent(R.id.linearLayout2);
         tabHost.addTab(tabSpec);
-        tabSpec = tabHost.newTabSpec("tag 2");
+        tabSpec = tabHost.newTabSpec(getString(R.string.sendToFriends));
         tabSpec.setIndicator(getString(R.string.sendToFriends));
         tabSpec.setContent(R.id.linearLayout3);
+        tabHost.addTab(tabSpec);
+        tabSpec = tabHost.newTabSpec("About");
+        tabSpec.setIndicator("About");
+        tabSpec.setContent(R.id.linearLayout4);
         tabHost.addTab(tabSpec);
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Toast.makeText(getActivity(), tabId, Toast.LENGTH_SHORT).show();
+
             }
         });
         // Inflate the layout for this fragment

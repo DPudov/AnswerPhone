@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.dpudov.answerphone.fragments.HelpFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -32,25 +33,69 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/linearLayout2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textAboutSettings1"
+                            android:text="@string/text_about_settings_1"
+                            android:textSize="18sp"
+                            android:textColor="#000000" />
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/linearLayout3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_about_friends_1"
+                            android:id="@+id/textAboutFriends1"
+                            android:textSize="18sp"
+                            android:textColor="#000000" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/linearLayout4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about"
+                            android:id="@+id/textAbout"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about_2"
+                            android:id="@+id/textAbout2" />
+                    </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id">
+        </com.google.android.gms.ads.AdView>
     </RelativeLayout>
 </FrameLayout>
