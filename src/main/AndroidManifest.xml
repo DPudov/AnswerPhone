@@ -7,11 +7,12 @@ xmlns:tools="http://schemas.android.com/tools" package="com.dpudov.answerphone">
     android:label="@string/app_name" android:supportsRtl="true" android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
     <activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity"
-        android:theme="@style/VK.Transparent" />
-    <activity android:name=".MainActivity" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/VK.Transparent"
+        android:screenOrientation="portrait"/>
+    <activity android:name=".MainActivity" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar"
+        android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
-
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>

@@ -4,17 +4,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_main"
+            android:icon="@drawable/ic_home_24dp"
             android:title="@string/mainFragment" />
         <item
             android:id="@+id/nav_sendToFriends"
-            android:title="@string/sendToFriends" />
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/sendFrag" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/settFrag" />
         <item
             android:id="@+id/nav_help"
-            android:title="@string/help_frag_head"/>
+            android:icon="@drawable/ic_help_24dp"
+            android:title="@string/help_frag_head" />
     </group>
 
     <item android:title="@string/extendDrawerItem">
@@ -25,8 +28,8 @@
                 android:title="@string/showHeadItem" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/sendFrag" />
+                android:icon="@drawable/ic_rate_review_24dp"
+                android:title="@string/leave_recall" />
         </menu>
     </item>
 

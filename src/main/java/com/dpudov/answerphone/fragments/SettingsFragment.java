@@ -86,13 +86,14 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         @SuppressWarnings("UnusedAssignment") EditText editText = (EditText) v.findViewById(R.id.editText);
 
         Button goToM8Button = (Button) v.findViewById(R.id.button2);
+        //OnClick и реализация выхода на новый фрагмент
         checkFriendsFragment = new CheckFriendsFragment();
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.container, checkFriendsFragment);
-                ft.commit();
+                //android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                //ft.replace(R.id.container, checkFriendsFragment);
+                //ft.commit();
             }
         });
         userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
@@ -105,6 +106,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                                                              Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
                                                              Intent intent = new Intent(getActivity(), MessagesService.class);
                                                              Bundle b = new Bundle();
+                                                             // если друзья заданы, включаем сервис, иначе включаем друзей
                                                              if (userIds != null) {
                                                                  b.putIntArray("userIds", userIds);
                                                                  intent.putExtras(b);

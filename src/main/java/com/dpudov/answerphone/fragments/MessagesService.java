@@ -80,7 +80,7 @@ public class MessagesService extends Service {
                     for (int i = 0; i < 10; i++) {
                         showNotification();
                         sentMsgToRecentSenders();
-                        Thread.sleep(30);
+                        Thread.sleep(30000);
                     }
 
                 } catch (Exception e) {

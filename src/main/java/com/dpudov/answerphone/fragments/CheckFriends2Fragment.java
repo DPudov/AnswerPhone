@@ -44,6 +44,7 @@ public class CheckFriends2Fragment extends Fragment {
     private ListView listView;
     private SendToFriendsFragment sendToFriendsFragment;
     private Button saveButton;
+    private Button cancelButton;
     private String msg;
     private int[] userIds;
     private OnFragmentInteractionListener mListener;
@@ -86,6 +87,7 @@ public class CheckFriends2Fragment extends Fragment {
         listView = (ListView) v.findViewById(R.id.listView2);
         sendToFriendsFragment = new SendToFriendsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton2);
+        cancelButton =(Button)v.findViewById(R.id.cancelButton);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -111,13 +113,21 @@ public class CheckFriends2Fragment extends Fragment {
                         }
                         ((MainActivity) getActivity()).setUsersToSendNow(userIds);
                         //Отправляем сообщения
-                        msg = ((MainActivity)getActivity()).getMsg()+getString(R.string.defaultMsg);
+                        msg = ((MainActivity) getActivity()).getMsg() + getString(R.string.defaultMsg);
                         sendTo(userIds);
                         //Возвращаемся на начальный фрагмент
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, sendToFriendsFragment);
                         ft.commit();
 
+                    }
+                });
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.container, sendToFriendsFragment);
+                        ft.commit();
                     }
                 });
 
@@ -164,8 +174,8 @@ public class CheckFriends2Fragment extends Fragment {
     private void sendTo(int[] userIds) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
-            for (int i=0; i<userIds.length; i++){
-                send(userIds[i]);
+            for (int userId : userIds) {
+                send(userId);
 
             }
         }
