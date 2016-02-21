@@ -118,6 +118,7 @@ public class CheckFriends2Fragment extends Fragment {
                         //Возвращаемся на начальный фрагмент
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, sendToFriendsFragment);
+                        getActivity().setTitle(R.string.sendToFriends);
                         ft.commit();
 
                     }
@@ -127,6 +128,7 @@ public class CheckFriends2Fragment extends Fragment {
                     public void onClick(View v) {
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, sendToFriendsFragment);
+                        getActivity().setTitle(R.string.sendToFriends);
                         ft.commit();
                     }
                 });

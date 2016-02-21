@@ -5,13 +5,6 @@
     tools:context="com.dpudov.answerphone.fragments.SettingsFragment">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/settFrag"
-        android:textColor="#000000"
-        android:textSize="25sp" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

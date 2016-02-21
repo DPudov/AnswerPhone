@@ -91,9 +91,9 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         goToM8Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                //ft.replace(R.id.container, checkFriendsFragment);
-                //ft.commit();
+                android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.container, checkFriendsFragment);
+                ft.commit();
             }
         });
         userIds = ((MainActivity) getActivity()).getUsersToSendAuto();

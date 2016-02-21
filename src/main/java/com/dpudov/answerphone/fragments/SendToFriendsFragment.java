@@ -82,6 +82,7 @@ public class SendToFriendsFragment extends android.support.v4.app.Fragment {
                 //После клика вызываем выбор друзей
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, checkFriends2Fragment);
+                getActivity().setTitle(R.string.checkFrFrag);
                 fragmentTransaction.commit();
             }
         });

@@ -2,9 +2,7 @@ package com.dpudov.answerphone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.HelpFragment;
@@ -61,18 +58,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(container, mainFragment);
+        setTitle(R.string.mainFragment);
         fragmentTransaction.commit();
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, R.string.sendUsMsg, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(container, sendFragment);
-                fragmentTransaction.commit();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -146,13 +133,16 @@ public class MainActivity extends AppCompatActivity
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_main) {
             fragmentTransaction.replace(container, mainFragment);
-            // Handle the camera action
+            setTitle(R.string.mainFragment);
         } else if (id == R.id.nav_sendToFriends) {
             fragmentTransaction.replace(container, sendToFriendsFragment);
+            setTitle(R.string.sendToFriends);
         } else if (id == R.id.nav_manage) {
             fragmentTransaction.replace(container, settingsFragment);
+            setTitle(R.string.settFrag);
         } else if (id == nav_help) {
             fragmentTransaction.replace(container, helpFragment);
+            setTitle(R.string.help_frag_head);
         } else if (id == R.id.nav_share)
 
         {
@@ -161,6 +151,7 @@ public class MainActivity extends AppCompatActivity
 
         {
             fragmentTransaction.replace(container, sendFragment);
+            setTitle(R.string.sendUsMsg);
         }
 
         fragmentTransaction.commit();

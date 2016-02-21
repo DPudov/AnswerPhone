@@ -117,6 +117,7 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                         ((MainActivity)getActivity()).setUsersToSendAuto(userIds);
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, settingsFragment);
+                        getActivity().setTitle(R.string.settFrag);
                         ft.commit();
 
                     }

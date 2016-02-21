@@ -14,12 +14,4 @@
         android:src="@drawable/ic_answerphone_full"
         android:contentDescription="@string/icon_name" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/mainFragment"
-        android:textSize="25sp"
-        android:textColor="#000000"
-        android:layout_gravity="left|top" />
-
 </FrameLayout>
