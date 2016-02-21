@@ -40,4 +40,7 @@
     <string name="head">Заголовок</string>
     <string name="sendToFriends">Отправить друзьям</string>
     <string name="title_activity_main">Автоответчик для ВК</string>
+    <string name="cancel">Отмена</string>
+    <string name="leave_recall">Оставить отзыв</string>
+    <string name="save_and_send">Сохранить и отправить</string>
 </resources>

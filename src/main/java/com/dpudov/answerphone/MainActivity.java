@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(container, settingsFragment);
+        setTitle(R.string.settFrag);
         fragmentTransaction.commit();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -143,15 +144,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == nav_help) {
             fragmentTransaction.replace(container, helpFragment);
             setTitle(R.string.help_frag_head);
-        } else if (id == R.id.nav_share)
-
-        {
+        } else if (id == R.id.nav_share){
             shareWithVK();
-        } else if (id == R.id.nav_send)
-
-        {
+        } else if (id == R.id.nav_send){
             fragmentTransaction.replace(container, sendFragment);
-            setTitle(R.string.sendUsMsg);
+            setTitle(R.string.leave_recall);
         }
 
         fragmentTransaction.commit();

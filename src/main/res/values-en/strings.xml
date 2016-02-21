@@ -40,4 +40,7 @@
     <string name="head">header</string>
     <string name="sendToFriends">Send to friends</string>
     <string name="title_activity_main">AnswerPhone</string>
+    <string name="cancel">Cancel</string>
+    <string name="leave_recall">Leave a recall</string>
+    <string name="save_and_send">Save and send</string>
 </resources>
