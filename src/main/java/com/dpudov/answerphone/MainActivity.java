@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(container, mainFragment);
         setTitle(R.string.mainFragment);
@@ -144,9 +147,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == nav_help) {
             fragmentTransaction.replace(container, helpFragment);
             setTitle(R.string.help_frag_head);
-        } else if (id == R.id.nav_share){
+        } else if (id == R.id.nav_share) {
             shareWithVK();
-        } else if (id == R.id.nav_send){
+        } else if (id == R.id.nav_send) {
             fragmentTransaction.replace(container, sendFragment);
             setTitle(R.string.leave_recall);
         }
