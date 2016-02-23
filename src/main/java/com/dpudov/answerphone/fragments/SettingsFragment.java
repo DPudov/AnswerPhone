@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -84,9 +82,9 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        AdView adView = (AdView) v.findViewById(R.id.adViewSettings);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+       // AdView adView = (AdView) v.findViewById(R.id.adViewSettings);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        //adView.loadAd(adRequest);
 
 
         Button goToM8Button = (Button) v.findViewById(R.id.button2);

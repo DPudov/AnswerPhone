@@ -50,4 +50,7 @@
     <string name="banner_in_settings">ca-app-pub-1187220468474207/6983142778</string>
     <string name="text_about_friends_1">Выбор друзей - функция, позволяющая приложению понять, кому отправить поздравление или автоответ.</string>
     <string name="about_2">Если Вы столкнулись с ошибкой, чем-то недовольны или хотите предложить изменение - пишите в соответсвующем разделе или на почту в меню.</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

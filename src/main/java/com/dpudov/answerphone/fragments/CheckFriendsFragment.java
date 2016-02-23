@@ -1,5 +1,7 @@
 package com.dpudov.answerphone.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,10 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKUsersArray;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -51,6 +57,8 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
     private Button saveButton;
     private SettingsFragment settingsFragment;
     private int[] userIds;
+    public Bitmap photo_50;
+  //  private ImageView imageView;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -91,6 +99,8 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
         listView = (ListView) v.findViewById(R.id.listView);
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
+
+        //imageView = (ImageView) v.findViewById(R.id.imageView3);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -100,6 +110,9 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                 //Заполнение массива друзьями
                 final VKUsersArray list;
                 list = (VKUsersArray) response.parsedModel;
+                //Попытки получить аватарку
+                //photo_50 = getBitmapFromUrl(list.get(0).photo_50);
+                //imageView.setImageBitmap(photo_50);
                 ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
                 listView.setAdapter(arrayAdapter);
 
@@ -114,7 +127,7 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                                 userIds[i] = list.get(key).getId();
                             }
                         }
-                        ((MainActivity)getActivity()).setUsersToSendAuto(userIds);
+                        ((MainActivity) getActivity()).setUsersToSendAuto(userIds);
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, settingsFragment);
                         getActivity().setTitle(R.string.settFrag);
@@ -156,5 +169,19 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public static Bitmap getBitmapFromUrl(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            return bitmap;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

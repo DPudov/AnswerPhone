@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.dpudov.answerphone.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,9 +67,9 @@ public class HelpFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_help, container, false);
-        AdView adView = (AdView)v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+       // AdView adView = (AdView)v.findViewById(R.id.adView);
+       // AdRequest adRequest = new AdRequest.Builder().build();
+       // adView.loadAd(adRequest);
         TabHost tabHost = (TabHost)v.findViewById(R.id.tabHost);
         tabHost.setup();
         TabHost.TabSpec tabSpec;

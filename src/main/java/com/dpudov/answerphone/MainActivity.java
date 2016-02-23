@@ -145,8 +145,10 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(container, settingsFragment);
             setTitle(R.string.settFrag);
         } else if (id == nav_help) {
-            fragmentTransaction.replace(container, helpFragment);
-            setTitle(R.string.help_frag_head);
+            //fragmentTransaction.replace(container, helpFragment);
+            //setTitle(R.string.help_frag_head);
+            Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
             shareWithVK();
         } else if (id == R.id.nav_send) {
