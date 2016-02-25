@@ -1,13 +1,22 @@
 package com.dpudov.answerphone.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.dpudov.answerphone.R;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +37,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     private String mParam1;
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
-
+    private ImageView imageView;
     private OnFragmentInteractionListener mListener;
 
     public MainFragment() {
@@ -66,9 +75,11 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-       // AdView adView = (AdView)v.findViewById(R.id.adView1);
-       // AdRequest adRequest = new AdRequest.Builder().build();
-       // adView.loadAd(adRequest);// Inflate the layout for this fragment
+        // AdView adView = (AdView)v.findViewById(R.id.adView1);
+        // AdRequest adRequest = new AdRequest.Builder().build();
+        // adView.loadAd(adRequest);// Inflate the layout for this fragment
+        imageView = (ImageView)v.findViewById(R.id.imageView2);
+
         return v;
     }
 
@@ -76,6 +87,19 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public static Bitmap getBitmapFromUrl(String src) {
+        try {
+            URL url = new URL(src);
+            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
+            httpsURLConnection.setDoInput(true);
+            httpsURLConnection.connect();
+            InputStream inputStream = httpsURLConnection.getInputStream();
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     /**
@@ -92,4 +116,5 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

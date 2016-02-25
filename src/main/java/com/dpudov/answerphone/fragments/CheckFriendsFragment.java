@@ -9,8 +9,9 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,14 +24,14 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKUsersArray;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,8 +58,7 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
     private Button saveButton;
     private SettingsFragment settingsFragment;
     private int[] userIds;
-    public Bitmap photo_50;
-  //  private ImageView imageView;
+    private ImageView imageView;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -99,7 +99,6 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
         listView = (ListView) v.findViewById(R.id.listView);
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
-
         //imageView = (ImageView) v.findViewById(R.id.imageView3);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
@@ -111,11 +110,13 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                 final VKUsersArray list;
                 list = (VKUsersArray) response.parsedModel;
                 //Попытки получить аватарку
-                //photo_50 = getBitmapFromUrl(list.get(0).photo_50);
-                //imageView.setImageBitmap(photo_50);
-                ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
-                listView.setAdapter(arrayAdapter);
-
+                // Bitmap bitmap = getBitmapFromUrl();
+                //imageView.setImageBitmap(bitmap);
+                // ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
+                // listView.setAdapter(arrayAdapter);
+                FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
+                listView.setAdapter(friendsListAdapter);
+                listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -174,14 +175,14 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
     public static Bitmap getBitmapFromUrl(String src) {
         try {
             URL url = new URL(src);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setDoInput(true);
-            httpURLConnection.connect();
-            InputStream inputStream = httpURLConnection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            return bitmap;
+            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
+            httpsURLConnection.setDoInput(true);
+            httpsURLConnection.connect();
+            InputStream inputStream = httpsURLConnection.getInputStream();
+            return BitmapFactory.decodeStream(inputStream);
         } catch (IOException e) {
             return null;
         }
     }
+
 }
