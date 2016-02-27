@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,13 +92,12 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_check_friends, container, false);
         listView = (ListView) v.findViewById(R.id.listView);
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
-        //imageView = (ImageView) v.findViewById(R.id.imageView3);
         VKSdk.wakeUpSession(getActivity());
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -114,19 +112,29 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                 //imageView.setImageBitmap(bitmap);
                 // ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
                 // listView.setAdapter(arrayAdapter);
-                FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
+                final FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
                 listView.setAdapter(friendsListAdapter);
                 listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                        userIds = new int[sbArray.size()];
-                        for (int i = 0; i < sbArray.size(); i++) {
-                            int key = sbArray.keyAt(i);
-                            if (sbArray.get(key)) {
-                                userIds[i] = list.get(key).getId();
+                        //SparseBooleanArray sbArray = listView.getCheckedItemPositions();
+                        userIds = new int[friendsListAdapter.getUserFulls().size()];
+                        //for (int i = 0; i < sbArray.size(); i++) {
+                        //    int key = sbArray.keyAt(i);
+                        //  if (sbArray.get(key)) {
+                        //      userIds[i] = list.get(key).getId();
+                        //         Toast.makeText(getActivity(), Integer.toString(userIds[i]), Toast.LENGTH_SHORT).show();
+                        //     }
+                        //  }
+
+                        for (int i = 0; i < list.size(); i++) {
+                            if (list.get(i).checked) {
+                                userIds[i] = list.get(i).getId();
+                                Toast.makeText(getActivity(), Integer.toString(userIds[i]), Toast.LENGTH_SHORT).show();
                             }
+
                         }
                         ((MainActivity) getActivity()).setUsersToSendAuto(userIds);
                         android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
