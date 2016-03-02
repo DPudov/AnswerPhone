@@ -43,4 +43,5 @@
     <string name="cancel">Отмена</string>
     <string name="leave_recall">Оставить отзыв</string>
     <string name="save_and_send">Сохранить и отправить</string>
+    <string name="online">Онлайн</string>
 </resources>

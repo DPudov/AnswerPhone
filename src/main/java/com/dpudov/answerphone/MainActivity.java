@@ -50,10 +50,9 @@ public class MainActivity extends AppCompatActivity
         helpFragment = new HelpFragment();
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
-        else {
-            while (!VKSdk.isLoggedIn())
-                VKSdk.login(this, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
-        }
+        else
+            VKSdk.login(this, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

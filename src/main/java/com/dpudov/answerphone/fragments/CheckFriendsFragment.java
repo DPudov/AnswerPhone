@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -99,7 +98,7 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
         settingsFragment = new SettingsFragment();
         saveButton = (Button) v.findViewById(R.id.saveButton);
         VKSdk.wakeUpSession(getActivity());
-        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50", "order", "hints"));//
+        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50, online", "order", "hints"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -107,20 +106,15 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                 //Заполнение массива друзьями
                 final VKUsersArray list;
                 list = (VKUsersArray) response.parsedModel;
-                //Попытки получить аватарку
-                // Bitmap bitmap = getBitmapFromUrl();
-                //imageView.setImageBitmap(bitmap);
                 // ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
                 // listView.setAdapter(arrayAdapter);
                 final FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
                 listView.setAdapter(friendsListAdapter);
-                listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                        userIds = new int[friendsListAdapter.getUserFulls().size()];
+                        userIds = new int[list.size()];
                         //for (int i = 0; i < sbArray.size(); i++) {
                         //    int key = sbArray.keyAt(i);
                         //  if (sbArray.get(key)) {
@@ -128,11 +122,13 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
                         //         Toast.makeText(getActivity(), Integer.toString(userIds[i]), Toast.LENGTH_SHORT).show();
                         //     }
                         //  }
-
+                        int c = 0;
                         for (int i = 0; i < list.size(); i++) {
                             if (list.get(i).checked) {
-                                userIds[i] = list.get(i).getId();
-                                Toast.makeText(getActivity(), Integer.toString(userIds[i]), Toast.LENGTH_SHORT).show();
+
+                                userIds[c] = list.get(i).getId();
+                                c++;
+                                Toast.makeText(getActivity(), Integer.toString(userIds[c]), Toast.LENGTH_SHORT).show();
                             }
 
                         }

@@ -43,4 +43,5 @@
     <string name="cancel">Cancel</string>
     <string name="leave_recall">Leave a recall</string>
     <string name="save_and_send">Save and send</string>
+    <string name="online">Online</string>
 </resources>
