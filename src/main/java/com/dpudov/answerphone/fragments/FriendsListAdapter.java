@@ -3,15 +3,20 @@ package com.dpudov.answerphone.fragments;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dpudov.answerphone.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.vk.sdk.api.model.VKUsersArray;
 
 import java.io.InputStream;
@@ -25,11 +30,17 @@ public class FriendsListAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater inflater;
     VKUsersArray userFulls;
+    DisplayImageOptions options;
+
 
     FriendsListAdapter(Context context, VKUsersArray userFullArrayList) {
         ctx = context;
         userFulls = userFullArrayList;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        options = new DisplayImageOptions.Builder()
+                .cacheOnDisk(true)
+                .displayer(new CircleBitmapDisplayer(Color.WHITE, 5))
+                .build();
     }
 
 
@@ -49,18 +60,25 @@ public class FriendsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         View view = convertView;
         if (view == null) {
             view = inflater.inflate(R.layout.friends_item, parent, false);
         }
         String text = "   " + userFulls.get(position).first_name + " " + userFulls.get(position).last_name;
+        String online = "   " + parent.getResources().getString(R.string.online);
         TextView textView = (TextView) view.findViewById(R.id.textName);
-        textView.setText(text);
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageFriendAva);
         TextView textOnline = (TextView) view.findViewById(R.id.textOnline);
-
-        String online = "   " + R.string.online;
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                userFulls.get(position).setChecked(isChecked);
+            }
+        });
+        textView.setText(text);
         if (userFulls.get(position).online)
             textOnline.setText(online);
         else
@@ -68,10 +86,8 @@ public class FriendsListAdapter extends BaseAdapter {
         //checkBox.setTag(position);
         //checkBox.setChecked(userFulls.get(position).checked)
 
-
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageFriendAva);
         new DownloadImageTask(imageView).execute(userFulls.get(position).photo_50);
-
+        //ImageLoader.getInstance().displayImage(userFulls.get(position).photo_50, imageView, options);
         return view;
     }
 
@@ -101,4 +117,6 @@ public class FriendsListAdapter extends BaseAdapter {
             bmImage.setImageBitmap(result);
         }
     }
+
+
 }
