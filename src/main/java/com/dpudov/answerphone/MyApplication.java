@@ -25,6 +25,7 @@ public class MyApplication extends android.app.Application {
         super.onCreate();
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
+        AnalyticsTrackers.initialize(this);
     }
 
 }

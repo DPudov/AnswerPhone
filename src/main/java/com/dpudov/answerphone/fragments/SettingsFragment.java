@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.AccountPicker;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -82,10 +85,18 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-       // AdView adView = (AdView) v.findViewById(R.id.adViewSettings);
-        //AdRequest adRequest = new AdRequest.Builder().build();
-        //adView.loadAd(adRequest);
-
+        AdView adView = (AdView) v.findViewById(R.id.adViewSettings);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        View btn = v.findViewById(R.id.sign_in_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                        false, null, null, null, null);
+                startActivityForResult(intent, 123);
+            }
+        });
 
         Button goToM8Button = (Button) v.findViewById(R.id.button2);
         //OnClick и реализация выхода на новый фрагмент

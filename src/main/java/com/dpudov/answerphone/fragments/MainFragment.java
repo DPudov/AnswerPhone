@@ -1,7 +1,5 @@
 package com.dpudov.answerphone.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,12 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.dpudov.answerphone.R;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,18 +81,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         mListener = null;
     }
 
-    public static Bitmap getBitmapFromUrl(String src) {
-        try {
-            URL url = new URL(src);
-            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
-            httpsURLConnection.setDoInput(true);
-            httpsURLConnection.connect();
-            InputStream inputStream = httpsURLConnection.getInputStream();
-            return BitmapFactory.decodeStream(inputStream);
-        } catch (IOException e) {
-            return null;
-        }
-    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -58,6 +58,10 @@
             ads:adSize="BANNER"
             ads:adUnitId="@string/banner_in_settings">
         </com.google.android.gms.ads.AdView>
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
 </FrameLayout>
