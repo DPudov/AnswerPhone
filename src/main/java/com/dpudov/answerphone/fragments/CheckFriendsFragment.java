@@ -120,10 +120,8 @@ public class CheckFriendsFragment extends android.app.Fragment {
                         int c = 0;
                         for (int i = 0; i < list.size(); i++) {
                             if (list.get(i).checked) {
-
                                 userIds[c] = list.get(i).getId();
                                 c++;
-                                Toast.makeText(getActivity(), Integer.toString(userIds[c]), Toast.LENGTH_SHORT).show();
                             }
 
                         }

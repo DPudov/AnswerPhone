@@ -8,6 +8,7 @@ import android.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
 
 import static com.vk.sdk.VKSdk.wakeUpSession;
@@ -68,7 +69,6 @@ public class SettingsFragment extends PreferenceFragment {
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
                 android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, checkFriendsFragment);
                 ft.commit();
@@ -77,23 +77,23 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
         SwitchPreference switchPreference = (SwitchPreference) findPreference("swSrv");
-        switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        switchPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            public boolean onPreferenceClick(Preference preference) {
                 if (((SwitchPreference) preference).isChecked()) {
                     wakeUpSession(getActivity());
                     Intent intent = new Intent(getActivity(), MessagesService.class);
                     Bundle b = new Bundle();
+                    userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
+                    Toast.makeText(getActivity(), Integer.toString(userIds[0]), Toast.LENGTH_SHORT).show();
                     // если друзья заданы, включаем сервис, иначе включаем друзей
                     if (userIds != null) {
                         b.putIntArray("userIds", userIds);
                         intent.putExtras(b);
                         getActivity().startService(intent);
                     } else {
-                        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.container, checkFriendsFragment);
-                        getActivity().setTitle(R.string.checkFrFrag);
-                        ft.commit();
+                        Toast.makeText(getActivity(), "Друзья не выбраны!", Toast.LENGTH_SHORT).show();
+                        ((SwitchPreference) preference).setChecked(false);
                     }
                 } else {
                     getActivity().stopService(new Intent(getActivity(), MessagesService.class));
@@ -139,7 +139,7 @@ public class SettingsFragment extends PreferenceFragment {
     //       ft.commit();
     //    }
     //});
-    //userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
+
     //Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
     //switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
     // @Override

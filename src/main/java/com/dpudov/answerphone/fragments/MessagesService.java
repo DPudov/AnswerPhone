@@ -1,11 +1,9 @@
 package com.dpudov.answerphone.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 
@@ -18,6 +16,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiGetMessagesResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKUsersArray;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -28,6 +27,7 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
+    private VKUsersArray us;
 
     public MessagesService() {
     }
@@ -35,7 +35,7 @@ public class MessagesService extends Service {
     @Override
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
+        showNotification();
     }
 
     @Override
@@ -44,29 +44,33 @@ public class MessagesService extends Service {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showNotification() {
         CharSequence text = getString(R.string.serviceStarted);
-        Notification notification = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            notification = new Notification.Builder(this)
-                    .setSmallIcon(R.drawable.ic_answerphone_64px)
-                    .setTicker(text)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentTitle(getText(R.string.app_name))
-                    .setContentText(text)
-                    .build();
-        }
+        Notification notification;
+        notification = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_answerphone_64px)
+                .setTicker(text)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(getText(R.string.app_name))
+                .setContentText(text)
+                .build();
         nM.notify(NOTIFICATION, notification);
     }
 
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name", "order", "hints"));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                us = (VKUsersArray) response.parsedModel;
+            }
+        });
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        showNotification();
+
         getAndSendMessages();
         stopSelf();
 
@@ -139,16 +143,22 @@ public class MessagesService extends Service {
 
     private void send(int userId) {
 //метод для отправки сообщения user.
-        String message = getString(R.string.hi) + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
+        String message = getString(R.string.hi)
+                + us.getById(userId).first_name
+                + " "
+                +us.getById(userId).last_name
+                + "! "
+                + getString(R.string.user_is_busy)
+                + getString(R.string.defaultMsg);
         if (!(userId == 0)) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
             //noinspection EmptyMethod
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-               @Override
-               public void onComplete(VKResponse response) {
-                   super.onComplete(response);
-               }
-           });
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                }
+            });
         }
     }
 
