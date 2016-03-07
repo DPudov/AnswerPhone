@@ -1,7 +1,5 @@
 package com.dpudov.answerphone.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +13,7 @@ import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.fragments.Lists.FriendsListAdapter;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -24,12 +23,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKUsersArray;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -176,17 +170,6 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public static Bitmap getBitmapFromUrl(String src) {
-        try {
-            URL url = new URL(src);
-            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
-            httpsURLConnection.setDoInput(true);
-            httpsURLConnection.connect();
-            InputStream inputStream = httpsURLConnection.getInputStream();
-            return BitmapFactory.decodeStream(inputStream);
-        } catch (IOException e) {
-            return null;
-        }
-    }
+
 
 }

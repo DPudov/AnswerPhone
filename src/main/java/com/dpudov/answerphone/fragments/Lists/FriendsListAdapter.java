@@ -1,10 +1,6 @@
-package com.dpudov.answerphone.fragments;
+package com.dpudov.answerphone.fragments.Lists;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +12,7 @@ import android.widget.TextView;
 
 import com.dpudov.answerphone.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.vk.sdk.api.model.VKUsersArray;
-
-import java.io.InputStream;
 
 
 /**
@@ -31,16 +24,13 @@ public class FriendsListAdapter extends BaseAdapter {
     LayoutInflater inflater;
     VKUsersArray userFulls;
     DisplayImageOptions options;
+    ImageLoader imageLoader;
 
-
-    FriendsListAdapter(Context context, VKUsersArray userFullArrayList) {
+    public FriendsListAdapter(Context context, VKUsersArray userFullArrayList) {
         ctx = context;
         userFulls = userFullArrayList;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true)
-                .displayer(new CircleBitmapDisplayer(Color.WHITE, 5))
-                .build();
+        imageLoader = new ImageLoader(context);
     }
 
 
@@ -83,39 +73,13 @@ public class FriendsListAdapter extends BaseAdapter {
             textOnline.setText(online);
         else
             textOnline.setText("");
+        imageLoader.DisplayImage(userFulls.get(position).photo_50, imageView);
         //checkBox.setTag(position);
         //checkBox.setChecked(userFulls.get(position).checked)
 
-        new DownloadImageTask(imageView).execute(userFulls.get(position).photo_50);
+        // new DownloadImageTask(imageView).execute(userFulls.get(position).photo_50);
         //ImageLoader.getInstance().displayImage(userFulls.get(position).photo_50, imageView, options);
         return view;
-    }
-
-    /**
-     * this class is for downloading and setting up images
-     */
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 
 

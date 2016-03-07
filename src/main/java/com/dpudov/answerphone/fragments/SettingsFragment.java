@@ -17,10 +17,6 @@ import com.dpudov.answerphone.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.AccountPicker;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
@@ -150,31 +146,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    private void send(int userId) {
-        String message = "Привет, " + Integer.toString(userId) + "! " + getString(R.string.user_is_busy) + getString(R.string.defaultMsg);
-        if (!(userId == 0)) {
-            VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-            requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-                @SuppressWarnings("EmptyMethod")
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                }
-
-            });
-        }
-    }
-
-    public void sendTo(int[] userIds) {
-        if (!(userIds == null)) {
-            //метод для отправки сообщений нескольким юзерам
-            for (int userId : userIds) {
-                send(userId);
-
-            }
         }
     }
 
