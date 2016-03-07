@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:clickable="false"
+        android:icon="@drawable/ic_email_24dp"
+        android:key="swSrv"
+        android:title="@string/enableMessages" />
+    <EditTextPreference
+        android:icon="@drawable/ic_alarm_24dp"
+        android:inputType="number"
+        android:key="time"
+        android:title="@string/hint_for_time" />
+    <Preference
+        android:icon="@drawable/ic_people_24dp"
+        android:key="checkFr"
+        android:title="@string/checkFrFrag"
+
+        />
+</PreferenceScreen>

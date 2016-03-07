@@ -10,58 +10,58 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="246dp"
-            android:layout_gravity="center"
-            android:weightSum="1"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-
-            <Switch
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:text="@string/enableMessages"
-                android:id="@+id/switchMessage"
-                android:textSize="18sp"
-                android:textOn="Вкл"
-                android:textOff="Выкл"
-                android:showText="true"
-                tools:ignore="UnusedAttribute" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/timePicker"
-                android:hint="@string/hint_for_time" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/checkFrFrag"
-                android:id="@+id/button2"
-                android:layout_gravity="center_horizontal"
-                android:visibility="visible"
-                android:clickable="true" />
-
-        </LinearLayout>
         <com.google.android.gms.ads.AdView
             android:id="@+id/adViewSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_in_settings">
+            ads:adUnitId="@string/banner_in_settings"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
         </com.google.android.gms.ads.AdView>
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/adViewSettings"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkFrFrag"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            android:clickable="true"
+            android:layout_above="@+id/adViewSettings"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="59dp" />
+
+        <Switch
+            android:layout_width="fill_parent"
+            android:layout_height="55dp"
+            android:text="@string/enableMessages"
+            android:id="@+id/switchMessage"
+            android:textSize="18sp"
+            android:textOn="Вкл"
+            android:textOff="Выкл"
+            android:showText="true"
+            tools:ignore="UnusedAttribute"
+            android:layout_alignBaseline="@+id/button2"
+            android:layout_alignBottom="@+id/button2"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/timePicker"
+            android:hint="@string/hint_for_time"
+            android:layout_below="@+id/switchMessage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
 </FrameLayout>

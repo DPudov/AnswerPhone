@@ -1,5 +1,6 @@
 package com.dpudov.answerphone.fragments;
 
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 
-public class CheckFriendsFragment extends android.support.v4.app.Fragment {
+public class CheckFriendsFragment extends android.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -127,7 +128,7 @@ public class CheckFriendsFragment extends android.support.v4.app.Fragment {
 
                         }
                         ((MainActivity) getActivity()).setUsersToSendAuto(userIds);
-                        android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, settingsFragment);
                         getActivity().setTitle(R.string.settFrag);
                         ft.commit();

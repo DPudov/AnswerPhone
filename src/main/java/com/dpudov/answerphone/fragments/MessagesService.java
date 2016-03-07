@@ -41,6 +41,7 @@ public class MessagesService extends Service {
     @Override
     public void onDestroy() {
         nM.cancel(NOTIFICATION);
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -65,8 +66,9 @@ public class MessagesService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
+        showNotification();
         getAndSendMessages();
-
+        stopSelf();
 
         return START_NOT_STICKY;
     }
@@ -77,11 +79,12 @@ public class MessagesService extends Service {
             @Override
             public void run() {
                 try {
-                    for (int i = 0; i < 10; i++) {
-                        showNotification();
+
+                    for (int i = 0; i < 1000; i++) {
                         sentMsgToRecentSenders();
                         Thread.sleep(30000);
                     }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
