@@ -73,7 +73,7 @@ public class FriendsListAdapter extends BaseAdapter {
             textOnline.setText(online);
         else
             textOnline.setText("");
-        imageLoader.DisplayImage(userFulls.get(position).photo_50, imageView);
+        imageLoader.DisplayImage(userFulls.get(position).photo_50, imageView, 25);
         //checkBox.setTag(position);
         //checkBox.setChecked(userFulls.get(position).checked)
 

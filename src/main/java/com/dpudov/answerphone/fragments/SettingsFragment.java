@@ -35,8 +35,6 @@ public class SettingsFragment extends PreferenceFragment {
     //private OnFragmentInteractionListener mListener;
     private int[] userIds;
     private CheckFriendsFragment checkFriendsFragment;
-    public final static String CHECKED = "checked";
-
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -84,7 +82,7 @@ public class SettingsFragment extends PreferenceFragment {
                     wakeUpSession(getActivity());
                     Intent intent = new Intent(getActivity(), MessagesService.class);
                     Bundle b = new Bundle();
-                    userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
+                    userIds = ((MainActivity)getActivity()).getUsersToSendAuto();
                     Toast.makeText(getActivity(), Integer.toString(userIds[0]), Toast.LENGTH_SHORT).show();
                     // если друзья заданы, включаем сервис, иначе включаем друзей
                     if (userIds != null) {

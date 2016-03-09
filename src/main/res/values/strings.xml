@@ -115,4 +115,6 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="commons">Общие</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

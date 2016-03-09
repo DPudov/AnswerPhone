@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
-        android:clickable="false"
-        android:icon="@drawable/ic_email_24dp"
-        android:key="swSrv"
-        android:title="@string/enableMessages" />
-    <EditTextPreference
-        android:icon="@drawable/ic_alarm_24dp"
-        android:inputType="number"
-        android:key="time"
-        android:title="@string/hint_for_time" />
-    <Preference
-        android:icon="@drawable/ic_people_24dp"
-        android:key="checkFr"
-        android:title="@string/checkFrFrag"
-
-        />
+    <PreferenceCategory android:title="@string/commons">
+        <SwitchPreference
+            android:clickable="false"
+            android:icon="@drawable/ic_email_24dp"
+            android:key="swSrv"
+            android:title="@string/enableMessages" />
+        <EditTextPreference
+            android:icon="@drawable/ic_alarm_24dp"
+            android:inputType="number"
+            android:key="time"
+            android:title="@string/hint_for_time" />
+        <Preference
+            android:icon="@drawable/ic_people_24dp"
+            android:key="checkFr"
+            android:title="@string/checkFrFrag" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="О приложении">
+        <Preference
+            android:icon ="@drawable/ic_assignment_24dp"
+            android:key="about"
+            android:title="Информация о приложении">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.dimapudov99.hol.es/">
+            </intent>
+        </Preference>
+    </PreferenceCategory>
 </PreferenceScreen>

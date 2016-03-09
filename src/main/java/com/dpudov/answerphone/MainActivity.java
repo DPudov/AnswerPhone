@@ -11,9 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.fragments.HelpFragment;
+import com.dpudov.answerphone.fragments.Lists.ImageLoader;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
@@ -25,7 +29,13 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.dialogs.VKShareDialog;
 
 import static com.dpudov.answerphone.R.id.container;
@@ -41,6 +51,9 @@ public class MainActivity extends AppCompatActivity
     private SettingsFragment settingsFragment;
     private HelpFragment helpFragment;
     private String msg;
+    private ImageView imageView;
+    private VKApiUserFull userFull;
+    private TextView name;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -59,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
         else
-            VKSdk.login(this, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
+            VKSdk.login(this, VKScope.OFFLINE, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -70,15 +83,33 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(container, mainFragment);
         setTitle(R.string.mainFragment);
         fragmentTransaction.commit();
-
+        // Get the drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //Then set user's avatar
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        imageView = (ImageView) headerView.findViewById(R.id.imageMyAva);
+        name = (TextView)headerView.findViewById(R.id.name);
+        VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_400_orig"));
+        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKList list = (VKList) response.parsedModel;
+                userFull = (VKApiUserFull) list.get(0);
+                ImageLoader imageLoader = new ImageLoader(getApplicationContext());
+                imageLoader.DisplayImage(userFull.photo_400_orig, imageView, 50);
+                String mName = userFull.first_name + " " +userFull.last_name;
+                name.setText(mName);
+
+            }
+        });
+
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.

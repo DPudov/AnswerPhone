@@ -32,6 +32,7 @@ public class MainFragment extends android.app.Fragment {
     private ImageView imageView;
     private OnFragmentInteractionListener mListener;
 
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -67,10 +68,12 @@ public class MainFragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
+
         // AdView adView = (AdView)v.findViewById(R.id.adView1);
         // AdRequest adRequest = new AdRequest.Builder().build();
         // adView.loadAd(adRequest);// Inflate the layout for this fragment
-        imageView = (ImageView)v.findViewById(R.id.imageView2);
+        imageView = (ImageView) v.findViewById(R.id.imageView2);
+
 
         return v;
     }

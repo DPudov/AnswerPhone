@@ -16,7 +16,6 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiGetMessagesResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
-import com.vk.sdk.api.model.VKUsersArray;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -27,7 +26,7 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
-    private VKUsersArray us;
+
 
     public MessagesService() {
     }
@@ -35,7 +34,7 @@ public class MessagesService extends Service {
     @Override
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        showNotification();
+
     }
 
     @Override
@@ -48,7 +47,7 @@ public class MessagesService extends Service {
         CharSequence text = getString(R.string.serviceStarted);
         Notification notification;
         notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_answerphone_64px)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
@@ -60,48 +59,37 @@ public class MessagesService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name", "order", "hints"));
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                us = (VKUsersArray) response.parsedModel;
-            }
-        });
+
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
+        showNotification();
 
-        getAndSendMessages();
-        stopSelf();
-
-        return START_NOT_STICKY;
-    }
-
-    private void getAndSendMessages() {
-        //Запускаем поток, который проверяет новые сообщения. Если прилетает новое, читаем id отправителя. Затем шлём ему ответ.
         new Thread(new Runnable() {
+            int time = 0;
             @Override
             public void run() {
                 try {
-
                     for (int i = 0; i < 1000; i++) {
-                        sentMsgToRecentSenders();
+                        if (i == 0)
+                            time = 60;
+                        else
+                            time = 30;
+                        sentMsgToRecentSenders(time);
                         Thread.sleep(30000);
                     }
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
             }
         }).start();
 
+
+        return startId;
     }
 
-    private void sentMsgToRecentSenders() {
+    private void sentMsgToRecentSenders(int time) {
 //Получаем сообщения за последние 30 секунд
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, 30));
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, time));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -144,9 +132,7 @@ public class MessagesService extends Service {
     private void send(int userId) {
 //метод для отправки сообщения user.
         String message = getString(R.string.hi)
-                + us.getById(userId).first_name
                 + " "
-                +us.getById(userId).last_name
                 + "! "
                 + getString(R.string.user_is_busy)
                 + getString(R.string.defaultMsg);

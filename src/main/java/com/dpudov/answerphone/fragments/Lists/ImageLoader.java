@@ -43,12 +43,12 @@ public class ImageLoader {
 
     final int stub_id = R.drawable.stub;
 
-    public void DisplayImage(String url, ImageView imageView) {
+    public void DisplayImage(String url, ImageView imageView, int radius) {
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         Bitmap resultBitmap;
         if (bitmap != null) {
-            resultBitmap = getCircleMaskedBitmapUsingPorterDuff(bitmap, 25);
+            resultBitmap = getCircleMaskedBitmapUsingPorterDuff(bitmap, radius);
             imageView.setImageBitmap(resultBitmap);
         } else {
             queuePhoto(url, imageView);
