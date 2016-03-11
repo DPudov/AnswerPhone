@@ -16,12 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dpudov.answerphone.fragments.HelpFragment;
-import com.dpudov.answerphone.fragments.Lists.ImageLoader;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
+import com.dpudov.answerphone.fragments.data.Lists.ImageLoader;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity
     private MainFragment mainFragment;
     private SendToFriendsFragment sendToFriendsFragment;
     private SettingsFragment settingsFragment;
-    private HelpFragment helpFragment;
     private String msg;
     private ImageView imageView;
     private VKApiUserFull userFull;
@@ -68,7 +66,6 @@ public class MainActivity extends AppCompatActivity
         settingsFragment = new SettingsFragment();
         sendFragment = new SendFragment();
         sendToFriendsFragment = new SendToFriendsFragment();
-        helpFragment = new HelpFragment();
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
         else
@@ -76,8 +73,8 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
         android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(container, mainFragment);
@@ -95,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         imageView = (ImageView) headerView.findViewById(R.id.imageMyAva);
         name = (TextView)headerView.findViewById(R.id.name);
-        VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_400_orig"));
+        VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_200"));
         vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -103,7 +100,7 @@ public class MainActivity extends AppCompatActivity
                 VKList list = (VKList) response.parsedModel;
                 userFull = (VKApiUserFull) list.get(0);
                 ImageLoader imageLoader = new ImageLoader(getApplicationContext());
-                imageLoader.DisplayImage(userFull.photo_400_orig, imageView, 50);
+                imageLoader.DisplayImage(userFull.photo_200, imageView, 50);
                 String mName = userFull.first_name + " " +userFull.last_name;
                 name.setText(mName);
 
