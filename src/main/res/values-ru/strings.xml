@@ -44,4 +44,13 @@
     <string name="leave_recall">Оставить отзыв</string>
     <string name="save_and_send">Сохранить и отправить</string>
     <string name="online">Онлайн</string>
+    <string name="avatar">Аватар</string>
+    <string name="about_2">Если Вы столкнулись с ошибкой, чем-то недовольны или хотите предложить изменение - пишите в соответсвующем разделе.</string>
+    <string name="about">Автоответчик Android для ВКонтакте. Приложение создано для пользователей, которые часто находятся в сети, но занимаются другими делами. AnswerPhone за вас отправит сообщение, если вы заняты. Много друзей, а необходимо срочно поздравить всех с наступающим праздником? Теперь это не пролема, так как с помощью нашего приложения Вы можете мгновенно поздравить всех своих друзей:)</string>
+    <string name="commons">Общие</string>
+    <string name="text_about_friends_1">Выбор друзей - функция, позволяющая приложению понять, кому отправить поздравление или автоответ.</string>
+    <string name="title_activity_help">Помощь</string>
+    <string name="text_about_settings_1">Включение рассылки. Этот пункт позволяет включить фоновую рассылку сообщений, типа \"Пользователь занят\"</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="action_settings">Настройки</string>
 </resources>
