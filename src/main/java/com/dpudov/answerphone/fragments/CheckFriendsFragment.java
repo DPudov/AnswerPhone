@@ -8,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
-import com.dpudov.answerphone.fragments.Lists.FriendsListAdapter;
+import com.dpudov.answerphone.fragments.data.Lists.FriendsListAdapter;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -23,8 +22,6 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKUsersArray;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +37,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ArrayList<String> users;
     // TODO: Rename and change types of parameters
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
@@ -51,7 +47,6 @@ public class CheckFriendsFragment extends android.app.Fragment {
     private Button saveButton;
     private SettingsFragment settingsFragment;
     private int[] userIds;
-    private ImageView imageView;
 
     public CheckFriendsFragment() {
         // Required empty public constructor
@@ -101,36 +96,24 @@ public class CheckFriendsFragment extends android.app.Fragment {
                 //Заполнение массива друзьями
                 final VKUsersArray list;
                 list = (VKUsersArray) response.parsedModel;
-                // ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
-                // listView.setAdapter(arrayAdapter);
                 final FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
                 listView.setAdapter(friendsListAdapter);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //SparseBooleanArray sbArray = listView.getCheckedItemPositions();
                         userIds = new int[list.size()];
-                        //for (int i = 0; i < sbArray.size(); i++) {
-                        //    int key = sbArray.keyAt(i);
-                        //  if (sbArray.get(key)) {
-                        //      userIds[i] = list.get(key).getId();
-                        //         Toast.makeText(getActivity(), Integer.toString(userIds[i]), Toast.LENGTH_SHORT).show();
-                        //     }
-                        //  }
                         int c = 0;
                         for (int i = 0; i < list.size(); i++) {
                             if (list.get(i).checked) {
                                 userIds[c] = list.get(i).getId();
                                 c++;
                             }
-
                         }
                         ((MainActivity) getActivity()).setUsersToSendAuto(userIds);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.container, settingsFragment);
                         getActivity().setTitle(R.string.settFrag);
                         ft.commit();
-
                     }
                 });
 

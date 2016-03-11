@@ -1,4 +1,4 @@
-package com.dpudov.answerphone.fragments.Lists;
+package com.dpudov.answerphone.fragments.data.Lists;
 
 /**
  * Created by DPudov on 07.03.2016.
@@ -19,7 +19,7 @@ public class Utils {
                     break;
                 os.write(bytes, 0, count);
             }
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
     }
 }

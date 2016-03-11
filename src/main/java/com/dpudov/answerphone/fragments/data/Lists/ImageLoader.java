@@ -1,4 +1,4 @@
-package com.dpudov.answerphone.fragments.Lists;
+package com.dpudov.answerphone.fragments.data.Lists;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,18 +30,18 @@ import java.util.concurrent.Executors;
 
 public class ImageLoader {
 
-    MemoryCache memoryCache = new MemoryCache();
-    FileCache fileCache;
+    private MemoryCache memoryCache = new MemoryCache();
+    private FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-    ExecutorService executorService;
-    Handler handler = new Handler();//handler to display images in UI thread
+    private ExecutorService executorService;
+    private Handler handler = new Handler();//handler to display images in UI thread
 
     public ImageLoader(Context context) {
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    final int stub_id = R.drawable.stub;
+    private final int stub_id = R.drawable.stub;
 
     public void DisplayImage(String url, ImageView imageView, int radius) {
         imageViews.put(imageView, url);
@@ -165,7 +165,7 @@ public class ImageLoader {
         }
     }
 
-    boolean imageViewReused(PhotoToLoad photoToLoad) {
+    private boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
         if (tag == null || !tag.equals(photoToLoad.url))
             return true;
@@ -197,7 +197,7 @@ public class ImageLoader {
         fileCache.clear();
     }
 
-    public Bitmap getCircleMaskedBitmapUsingPorterDuff(Bitmap source, int radius) {
+    private Bitmap getCircleMaskedBitmapUsingPorterDuff(Bitmap source, int radius) {
         if (source == null) {
             return null;
         }
@@ -222,7 +222,7 @@ public class ImageLoader {
         return targetBitmap;
     }
 
-    public Bitmap scaleTo(Bitmap source, int size) {
+    private Bitmap scaleTo(Bitmap source, int size) {
         int destWidth = source.getWidth();
 
         int destHeight = source.getHeight();

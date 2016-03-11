@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
-import com.dpudov.answerphone.fragments.Lists.FriendsListAdapter;
+import com.dpudov.answerphone.fragments.data.Lists.FriendsListAdapter;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
