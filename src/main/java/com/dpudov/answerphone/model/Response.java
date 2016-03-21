@@ -1,4 +1,4 @@
-package com.dpudov.answerphone.fragments.data.Lists.model;
+package com.dpudov.answerphone.model;
 
 import java.util.ArrayList;
 import java.util.List;

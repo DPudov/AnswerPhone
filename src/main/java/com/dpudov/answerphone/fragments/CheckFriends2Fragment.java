@@ -9,15 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dpudov.answerphone.MainActivity;
+import com.dpudov.answerphone.MyApplication;
 import com.dpudov.answerphone.R;
-import com.dpudov.answerphone.fragments.data.Lists.FriendsListAdapter;
+import com.dpudov.answerphone.lists.FriendsListAdapter;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -37,16 +35,11 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private ListView listView;
     private SendToFriendsFragment sendToFriendsFragment;
-    private Button saveButton;
-    private Button cancelButton;
     private String msg;
     private int[] userIds;
     private OnFragmentInteractionListener mListener;
+    private MyApplication myApplication;
 
     public CheckFriends2Fragment() {
         // Required empty public constructor
@@ -74,8 +67,8 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -83,71 +76,51 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_check_friends2, container, false);
-        listView = (ListView) v.findViewById(R.id.listView2);
+        ListView listView = (ListView) v.findViewById(R.id.listView2);
         sendToFriendsFragment = new SendToFriendsFragment();
-        saveButton = (Button) v.findViewById(R.id.saveButton2);
-        cancelButton =(Button)v.findViewById(R.id.cancelButton);
+        Button saveButton = (Button) v.findViewById(R.id.saveButton2);
+        Button cancelButton = (Button) v.findViewById(R.id.cancelButton);
+        myApplication = (MyApplication) getActivity().getApplication();
         VKSdk.wakeUpSession(getActivity());
-        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50, online", "order", "hints"));//
-        request.executeWithListener(new VKRequest.VKRequestListener() {
+        //Заполнение массива друзьями
+        final VKUsersArray list;
+        list = myApplication.getFriendList();
+        FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
+        listView.setAdapter(friendsListAdapter);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                //Заполнение массива друзьями
-                final VKUsersArray list;
-                list = (VKUsersArray) response.parsedModel;
-                //ArrayAdapter<VKApiUserFull> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.my_multiple_choice, list);
-                FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
-                listView.setAdapter(friendsListAdapter);
+            public void onClick(View v) {
+                // SparseBooleanArray sbArray = listView.getCheckedItemPositions();
+                userIds = new int[list.size()];
+                int c = 0;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).checked) {
 
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                       // SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                        userIds = new int[list.size()];
-                        int c = 0;
-                        for (int i = 0; i < list.size(); i++) {
-                            if (list.get(i).checked) {
-
-                                userIds[c] = list.get(i).getId();
-                                c++;
-                            }
-
-                        }
-                       // for (int i = 0; i < sbArray.size(); i++) {
-                         //   int key = sbArray.keyAt(i);
-                          //  if (sbArray.get(key)) {
-                         //       userIds[i] = list.get(key).getId();
-                        //    }
-                       // }
-                        ((MainActivity) getActivity()).setUsersToSendNow(userIds);
-                        //Отправляем сообщения
-                        msg = ((MainActivity) getActivity()).getMsg() + getString(R.string.defaultMsg);
-                        sendTo(userIds);
-                        //Возвращаемся на начальный фрагмент
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.container, sendToFriendsFragment);
-                        getActivity().setTitle(R.string.sendToFriends);
-                        ft.commit();
-
+                        userIds[c] = list.get(i).getId();
+                        c++;
                     }
-                });
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.container, sendToFriendsFragment);
-                        getActivity().setTitle(R.string.sendToFriends);
-                        ft.commit();
-                    }
-                });
+
+                }
+                ((MainActivity) getActivity()).setUsersToSendNow(userIds);
+                //Отправляем сообщения
+                msg = ((MainActivity) getActivity()).getMsg() + getString(R.string.defaultMsg);
+                sendTo(userIds);
+                //Возвращаемся на начальный фрагмент
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.container, sendToFriendsFragment);
+                getActivity().setTitle(R.string.sendToFriends);
+                ft.commit();
 
             }
-
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onError(VKError error) {
-                super.onError(error);
-                Toast.makeText(getActivity(), R.string.try_again_internet, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.container, sendToFriendsFragment);
+                getActivity().setTitle(R.string.sendToFriends);
+                ft.commit();
             }
         });
         // Inflate the layout for this fragment
@@ -170,7 +143,7 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     private void send(int userId) {
 //метод для отправки сообщения user.
 
-        if (!(userId == 0)) {
+        if (userId != 0) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, msg));
             //noinspection EmptyMethod
             requestSend.executeWithListener(new VKRequest.VKRequestListener() {
@@ -183,7 +156,7 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     }
 
     private void sendTo(int[] userIds) {
-        if (!(userIds == null)) {
+        if (userIds != null) {
             //метод для отправки сообщений нескольким юзерам
             for (int userId : userIds) {
                 send(userId);

@@ -25,11 +25,8 @@ public class SendToFriendsFragment extends android.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Button sendFrButton;
     private EditText editText;
     private CheckFriends2Fragment checkFriends2Fragment;
     private OnFragmentInteractionListener mListener;
@@ -60,9 +57,9 @@ public class SendToFriendsFragment extends android.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+
     }
 
     @Override
@@ -71,17 +68,18 @@ public class SendToFriendsFragment extends android.app.Fragment {
         View v = inflater.inflate(R.layout.fragment_send_to_friends, container, false);
         checkFriends2Fragment = new CheckFriends2Fragment();
         editText = (EditText)v.findViewById(R.id.editMsgToFr);
-        sendFrButton = (Button) v.findViewById(R.id.sendFrButton);
+        Button sendFrButton = (Button) v.findViewById(R.id.sendFrButton);
         sendFrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Смотрим сообщение и отправляем на главную
-                ((MainActivity)getActivity()).setMsg(editText.getText().toString());
+                ((MainActivity) getActivity()).setMsg(editText.getText().toString());
 
                 //После клика вызываем выбор друзей
                 android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, checkFriends2Fragment);
                 getActivity().setTitle(R.string.checkFrFrag);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });

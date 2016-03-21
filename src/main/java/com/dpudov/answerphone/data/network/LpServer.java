@@ -1,4 +1,4 @@
-package com.dpudov.answerphone.fragments.data.Lists.network;
+package com.dpudov.answerphone.data.network;
 
 /**
  * Created by DPudov on 10.03.2016.

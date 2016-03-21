@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.dpudov.answerphone.R;
 
@@ -29,8 +28,6 @@ public class MainFragment extends android.app.Fragment {
     private String mParam1;
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
-    private ImageView imageView;
-    private OnFragmentInteractionListener mListener;
 
 
     public MainFragment() {
@@ -62,6 +59,7 @@ public class MainFragment extends android.app.Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -72,7 +70,6 @@ public class MainFragment extends android.app.Fragment {
         // AdView adView = (AdView)v.findViewById(R.id.adView1);
         // AdRequest adRequest = new AdRequest.Builder().build();
         // adView.loadAd(adRequest);// Inflate the layout for this fragment
-        imageView = (ImageView) v.findViewById(R.id.imageView2);
 
 
         return v;
@@ -81,7 +78,7 @@ public class MainFragment extends android.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        OnFragmentInteractionListener mListener = null;
     }
 
 

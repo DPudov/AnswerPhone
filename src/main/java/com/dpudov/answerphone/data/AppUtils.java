@@ -1,10 +1,10 @@
-package com.dpudov.answerphone.fragments.data.Lists;
+package com.dpudov.answerphone.data;
 
 import android.content.Context;
 import android.text.format.DateUtils;
 
-import com.dpudov.answerphone.fragments.data.Lists.model.Message;
-import com.dpudov.answerphone.fragments.data.Lists.network.LpServerResponse;
+import com.dpudov.answerphone.data.network.LpServerResponse;
+import com.dpudov.answerphone.model.Message;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

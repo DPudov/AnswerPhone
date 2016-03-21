@@ -1,7 +1,7 @@
-package com.dpudov.answerphone.fragments.data.Lists;
+package com.dpudov.answerphone.data;
 
-import com.dpudov.answerphone.fragments.data.Lists.model.Response;
-import com.dpudov.answerphone.fragments.data.Lists.network.LpServer;
+import com.dpudov.answerphone.data.network.LpServer;
+import com.dpudov.answerphone.model.Response;
 import com.google.gson.Gson;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;

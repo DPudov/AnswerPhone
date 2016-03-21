@@ -1,14 +1,17 @@
 package com.dpudov.answerphone.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
+import android.support.v7.app.AlertDialog;
 
 import com.dpudov.answerphone.MainActivity;
+import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
 
 import static com.vk.sdk.VKSdk.wakeUpSession;
@@ -26,7 +29,8 @@ public class SettingsFragment extends PreferenceFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final int TIME = 1;
+    private static final int FRIENDS = 2;
     // TODO: Rename and change types of parameters
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
@@ -35,6 +39,7 @@ public class SettingsFragment extends PreferenceFragment {
     //private OnFragmentInteractionListener mListener;
     private int[] userIds;
     private CheckFriendsFragment checkFriendsFragment;
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -69,30 +74,31 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, checkFriendsFragment);
-                ft.commit();
+                ft.addToBackStack(null);
                 getActivity().setTitle(R.string.checkFrFrag);
+                ft.commit();
                 return false;
             }
         });
+        final EditTextPreference editTextPreference = (EditTextPreference) findPreference("time");
+
         SwitchPreference switchPreference = (SwitchPreference) findPreference("swSrv");
         switchPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                int time;
+                try {
+                    time = Integer.parseInt(editTextPreference.getText());
+                } catch (Exception e) {
+                    time = 10;
+                }
                 if (((SwitchPreference) preference).isChecked()) {
                     wakeUpSession(getActivity());
                     Intent intent = new Intent(getActivity(), MessagesService.class);
                     Bundle b = new Bundle();
-                    userIds = ((MainActivity)getActivity()).getUsersToSendAuto();
-                    Toast.makeText(getActivity(), Integer.toString(userIds[0]), Toast.LENGTH_SHORT).show();
-                    // если друзья заданы, включаем сервис, иначе включаем друзей
-                    if (userIds != null) {
-                        b.putIntArray("userIds", userIds);
-                        intent.putExtras(b);
-                        getActivity().startService(intent);
-                    } else {
-                        Toast.makeText(getActivity(), "Друзья не выбраны!", Toast.LENGTH_SHORT).show();
-                        ((SwitchPreference) preference).setChecked(false);
-                    }
+                    userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
+                    // если друзья заданы, включаем сервис
+                    putAndCheck(intent, b, userIds, time, (SwitchPreference) preference);
                 } else {
                     getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                 }
@@ -201,4 +207,47 @@ public class SettingsFragment extends PreferenceFragment {
     //   // TODO: Update argument type and name
     //    void onFragmentInteraction(Uri uri);
     // }
+    private void showAlert(int which) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+        switch (which) {
+            case (FRIENDS):
+                adb.setTitle(getActivity().getString(R.string.friends_unchecked));
+                break;
+            case (TIME):
+                adb.setTitle(getActivity().getString(R.string.time_unchecked));
+                break;
+        }
+        adb.setIcon(R.drawable.ic_warning_24dp);
+        adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = adb.create();
+        alertDialog.show();
+    }
+
+    private void putAndCheck(Intent intent, Bundle b, int[] userIds, int time, SwitchPreference preference) {
+        if ((userIds != null)) {
+            if (userIds[0] != 0) {
+                b.putIntArray("userIds", userIds);
+                if (time != 0) {
+                    b.putInt("time", time);
+                    intent.putExtras(b);
+                    getActivity().startService(intent);
+                } else {
+                    showAlert(TIME);
+                    preference.setChecked(false);
+                }
+            }else {
+                preference.setChecked(false);
+                showAlert(FRIENDS);
+            }
+        } else {
+            preference.setChecked(false);
+            showAlert(FRIENDS);
+        }
+
+    }
 }

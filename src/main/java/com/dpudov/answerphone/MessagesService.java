@@ -1,22 +1,20 @@
-package com.dpudov.answerphone.fragments;
+package com.dpudov.answerphone;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.dpudov.answerphone.R;
-import com.dpudov.answerphone.fragments.data.Lists.AppUtils;
-import com.dpudov.answerphone.fragments.data.Lists.DataManager;
-import com.dpudov.answerphone.fragments.data.Lists.EventBus;
-import com.dpudov.answerphone.fragments.data.Lists.network.LpServer;
-import com.dpudov.answerphone.fragments.data.Lists.network.LpServerResponse;
-import com.google.gson.Gson;
+import com.dpudov.answerphone.data.AppUtils;
+import com.dpudov.answerphone.data.DataManager;
+import com.dpudov.answerphone.data.EventBus;
+import com.dpudov.answerphone.data.network.LpServer;
+import com.dpudov.answerphone.data.network.LpServerResponse;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -24,6 +22,7 @@ import com.vk.sdk.api.model.VKApiGetMessagesResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKUsersArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,11 +41,12 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
-    DataManager dataManager;
-    LpServer mLongPollServer;
-    OkHttpClient mClient;
-    EventBus mEventBus;
-    Gson gson;
+    private VKUsersArray users;
+    private MyApplication myApplication;
+    private DataManager dataManager;
+    private LpServer mLongPollServer;
+    private OkHttpClient mClient;
+    private EventBus mEventBus;
 
     public MessagesService() {
     }
@@ -107,7 +107,8 @@ public class MessagesService extends Service {
     @Override
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
+        myApplication = (MyApplication) getApplication();
+        users = myApplication.getFriendList();
     }
 
     @Override
@@ -117,14 +118,20 @@ public class MessagesService extends Service {
     }
 
     private void showNotification() {
-        String text = getString(R.string.loginSuccess);
+        Intent notifyIntent = new Intent(this, MainActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("from", MyApplication.FROM_NOTIFICATION);
+        notifyIntent.putExtras(b);
+        String text = getString(R.string.serviceStarted);
         Notification notification;
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notification = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.app_name))
                 .setContentText(text)
+                .setContentIntent(pendingIntent)
                 .build();
         nM.notify(NOTIFICATION, notification);
 
@@ -133,23 +140,27 @@ public class MessagesService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
-        showNotification();
-       // startLongPoll();
-        new Thread(new Runnable() {
-            int time = 0;
+        int time = bundle.getInt("time");
 
+        showNotification();
+        //startLongPoll();
+        doInThread(time);
+        return startId;
+    }
+
+    private void doInThread(final int timeIn) {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    for (int i = 0; i < 1000; i++) {
+                    for (int i = 0; i < timeIn * 2; i++) {
                         if (i == 0)
-                            time = 60;
-                        else
-                            time = 30;
-                        sentMsgToRecentSenders(time);
+                            sentMsgToRecentSenders(timeIn + 2);
+                        else {
+                            sentMsgToRecentSenders(timeIn);
+                        }
                         Thread.sleep(30000);
                     }
                 } catch (Exception e) {
@@ -157,14 +168,11 @@ public class MessagesService extends Service {
                 }
             }
         }).start();
-
-
-        return startId;
     }
 
     private void sentMsgToRecentSenders(int time) {
-//Получаем сообщения за последние 30 секунд
-        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, time));
+//Получаем сообщения за последние time секунд
+        VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, time * 60));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -172,90 +180,63 @@ public class MessagesService extends Service {
                 VKApiGetMessagesResponse getMessagesResponse = (VKApiGetMessagesResponse) response.parsedModel;
                 VKList<VKApiMessage> list = getMessagesResponse.items;
                 // Формируем лист с id авторов сообщений без повторений
-                LinkedHashSet<Integer> authors = new LinkedHashSet<>();
-                for (VKApiMessage msg : list) {
-                    // проверка. Если не прочитано и не из чата, добавляем
-                    if ((!msg.read_state))
-                        authors.add(msg.user_id);
-                }
-                // конвертируем в массив
-                userId = new int[authors.size()];
-                Iterator<Integer> iterator = authors.iterator();
-                for (int i = 0; i < authors.size(); i++) {
-                    userId[i] = iterator.next();
-                }
+                if (list.size() != 0) {
+                    LinkedHashSet<Integer> authors = new LinkedHashSet<>();
+                    for (VKApiMessage msg : list) {
+                        // проверка. Если не прочитано и не из чата, добавляем
+                        if ((!msg.read_state)&&(msg.chat_id==0))
+                            authors.add(msg.user_id);
+                    }
+                    // конвертируем в массив
+                    userId = new int[authors.size()];
+                    Iterator<Integer> iterator = authors.iterator();
+                    for (int i = 0; i < authors.size(); i++) {
+                        userId[i] = iterator.next();
+                    }
 
-                //сравниваем с выбранными друзьями
-                userIdCopy = new int[checkedUsers.length];
-                int c = 0;
-                for (int anUserId : userId) {
-                    for (int checkedUser : checkedUsers) {
-                        if (anUserId == checkedUser) {
-                            userIdCopy[c] = anUserId;
-                            c++;
+                    //сравниваем с выбранными друзьями
+                    userIdCopy = new int[checkedUsers.length];
+                    int c = 0;
+                    for (int anUserId : userId) {
+                        for (int checkedUser : checkedUsers) {
+                            if (anUserId == checkedUser) {
+                                userIdCopy[c] = anUserId;
+                                c++;
+                            }
                         }
                     }
+                    if (c == 1)
+                        send(userIdCopy[0]);
+                    else
+                        // Отправляем сообщение
+                        sendTo(userIdCopy);
                 }
-                // Отправляем сообщение
-                sendTo(userIdCopy);
             }
 
         });
     }
 
-
     private void send(final int userId) {
-
-
 //метод для отправки сообщения user.
-        VKRequest requestGetUser = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, userId));
-        requestGetUser.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                VKList list = (VKList) response.parsedModel;
-                VKApiUserFull userFull = (VKApiUserFull) list.get(0);
-                String name = userFull.first_name + " " + userFull.last_name;
-                String message = getString(R.string.hi)
-                        + name
-                        + " "
-                        + "! "
-                        + getString(R.string.user_is_busy)
-                        + getString(R.string.defaultMsg);
-                if (!(userId == 0)) {
-                    VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-                    //noinspection EmptyMethod
-                    requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                        }
-                    });
+        if (userId != 0) {
+            VKApiUserFull userFull = users.getById(userId);
+            String name = userFull.first_name + " " + userFull.last_name;
+            String message = getString(R.string.hi)
+                    + name
+                    + " "
+                    + "! "
+                    + getString(R.string.user_is_busy)
+                    + getString(R.string.defaultMsg);
+            VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
+            //noinspection EmptyMethod
+            requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+
                 }
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-                String message = getString(R.string.hi)
-                        + " "
-                        + "! "
-                        + getString(R.string.user_is_busy)
-                        + getString(R.string.defaultMsg);
-                if (!(userId == 0)) {
-                    VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-                    //noinspection EmptyMethod
-                    requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                        }
-                    });
-                }
-            }
-        });
-
-
+            });
+        }
     }
 
     private void sendTo(int[] userIds) {

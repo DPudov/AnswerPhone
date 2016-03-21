@@ -1,46 +1,48 @@
 package com.dpudov.answerphone.fragments;
 
-import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.MyApplication;
 import com.dpudov.answerphone.R;
-import com.dpudov.answerphone.lists.FriendsListAdapter;
+import com.dpudov.answerphone.lists.DialogsListAdapter;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiDialog;
+import com.vk.sdk.api.model.VKApiGetDialogResponse;
+import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKUsersArray;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CheckFriendsFragment.OnFragmentInteractionListener} interface
+ * {@link DialogsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CheckFriendsFragment#newInstance} factory method to
+ * Use the {@link DialogsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-
-public class CheckFriendsFragment extends android.app.Fragment {
+public class DialogsFragment extends android.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private ListView dialogsView;
     // TODO: Rename and change types of parameters
-    @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
-    @SuppressWarnings("FieldCanBeLocal")
     private String mParam2;
-    private SettingsFragment settingsFragment;
-    private int[] userIds;
     MyApplication myApplication;
+    private OnFragmentInteractionListener mListener;
 
-    public CheckFriendsFragment() {
+    public DialogsFragment() {
         // Required empty public constructor
     }
 
@@ -50,18 +52,17 @@ public class CheckFriendsFragment extends android.app.Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment CheckFriendsFragment.
+     * @return A new instance of fragment DialogsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CheckFriendsFragment newInstance(String param1, String param2) {
-        CheckFriendsFragment fragment = new CheckFriendsFragment();
+    public static DialogsFragment newInstance(String param1, String param2) {
+        DialogsFragment fragment = new DialogsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,50 +71,40 @@ public class CheckFriendsFragment extends android.app.Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        myApplication = (MyApplication) getActivity().getApplication();
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_check_friends, container, false);
-        ListView listView = (ListView) v.findViewById(R.id.listView);
-        settingsFragment = new SettingsFragment();
-        MyApplication myApplication = (MyApplication) getActivity().getApplication();
-        Button saveButton = (Button) v.findViewById(R.id.saveButton);
+        View v = inflater.inflate(R.layout.fragment_dialogs, container, false);
+
+        dialogsView = (ListView) v.findViewById(R.id.listDialogs);
         VKSdk.wakeUpSession(getActivity());
-        //Заполнение массива друзьями
-        final VKUsersArray list = myApplication.getFriendList();
-        FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
-        listView.setAdapter(friendsListAdapter);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        VKRequest getDialogs = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 200));
+        getDialogs.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
-            public void onClick(View v) {
-                userIds = new int[list.size()];
-                int c = 0;
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).checked) {
-                        userIds[c] = list.get(i).getId();
-                        c++;
-                    }
-                }
-                ((MainActivity) getActivity()).setUsersToSendAuto(userIds);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.container, settingsFragment);
-                getActivity().setTitle(R.string.settFrag);
-                ft.commit();
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKApiGetDialogResponse getDialogResponse = (VKApiGetDialogResponse) response.parsedModel;
+                VKList<VKApiDialog> vkApiDialogs = getDialogResponse.items;
+                VKUsersArray vkUsersArray = myApplication.getFriendList();
+                DialogsListAdapter dialogsListAdapter = new DialogsListAdapter(getActivity(), vkApiDialogs, vkUsersArray);
+                dialogsView.setAdapter(dialogsListAdapter);
             }
         });
-
 
         // Inflate the layout for this fragment
         return v;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        OnFragmentInteractionListener mListener = null;
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -129,6 +120,4 @@ public class CheckFriendsFragment extends android.app.Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-
 }

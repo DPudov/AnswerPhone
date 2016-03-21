@@ -16,11 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dpudov.answerphone.fragments.DialogsFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
-import com.dpudov.answerphone.fragments.data.Lists.ImageLoader;
+import com.dpudov.answerphone.lists.ImageLoader;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,11 +53,13 @@ public class MainActivity extends AppCompatActivity
     private ImageView imageView;
     private VKApiUserFull userFull;
     private TextView name;
+    private DialogsFragment dialogsFragment;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +69,29 @@ public class MainActivity extends AppCompatActivity
         settingsFragment = new SettingsFragment();
         sendFragment = new SendFragment();
         sendToFriendsFragment = new SendToFriendsFragment();
+        dialogsFragment = new DialogsFragment();
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
         else
             VKSdk.login(this, VKScope.OFFLINE, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
+        //Go to main fragment or if from notification go to settings
         android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(container, mainFragment);
-        setTitle(R.string.mainFragment);
+        fragmentTransaction.replace(container, settingsFragment);
+        setTitle(R.string.settFrag);
         fragmentTransaction.commit();
+
         // Get the drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //noinspection deprecation
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -91,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         //Then set user's avatar
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         imageView = (ImageView) headerView.findViewById(R.id.imageMyAva);
-        name = (TextView)headerView.findViewById(R.id.name);
+        name = (TextView) headerView.findViewById(R.id.name);
         VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_200"));
         vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -101,11 +109,12 @@ public class MainActivity extends AppCompatActivity
                 userFull = (VKApiUserFull) list.get(0);
                 ImageLoader imageLoader = new ImageLoader(getApplicationContext());
                 imageLoader.DisplayImage(userFull.photo_200, imageView, 50);
-                String mName = userFull.first_name + " " +userFull.last_name;
+                String mName = userFull.first_name + " " + userFull.last_name;
                 name.setText(mName);
 
             }
         });
+
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -135,12 +144,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,6 +207,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
             fragmentTransaction.replace(container, sendFragment);
             setTitle(R.string.leave_recall);
+        }else if (id == R.id.nav_messenger){
+            //fragmentTransaction.replace(container, dialogsFragment);
+            //setTitle(R.string.dialogs_head);
+            Intent intent = new Intent(this, DialogsActivity.class);
+            startActivity(intent);
         }
 
         fragmentTransaction.commit();

@@ -7,9 +7,13 @@
             android:icon="@drawable/ic_home_24dp"
             android:title="@string/mainFragment" />
         <item
+            android:id="@+id/nav_messenger"
+            android:icon="@drawable/ic_forum_24dp"
+            android:title="@string/dialogs_head"/>
+        <item
             android:id="@+id/nav_sendToFriends"
             android:icon="@drawable/ic_menu_send"
-            android:title="@string/sendFrag" />
+            android:title="@string/msg_now" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

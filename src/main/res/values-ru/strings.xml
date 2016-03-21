@@ -53,4 +53,5 @@
     <string name="text_about_settings_1">Включение рассылки. Этот пункт позволяет включить фоновую рассылку сообщений, типа \"Пользователь занят\"</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="action_settings">Настройки</string>
+    <string name="about_heading">О приложении</string>
 </resources>

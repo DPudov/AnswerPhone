@@ -1,4 +1,4 @@
-package com.dpudov.answerphone.fragments.data.Lists;
+package com.dpudov.answerphone.data;
 
 import android.os.Handler;
 import android.os.Looper;

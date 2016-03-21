@@ -1,4 +1,4 @@
-package com.dpudov.answerphone.fragments.data.Lists.network;
+package com.dpudov.answerphone.data.network;
 
 import java.util.ArrayList;
 import java.util.List;

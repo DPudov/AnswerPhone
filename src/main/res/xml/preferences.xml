@@ -3,10 +3,12 @@
     <PreferenceCategory android:title="@string/commons">
         <SwitchPreference
             android:clickable="false"
+            android:defaultValue="false"
             android:icon="@drawable/ic_email_24dp"
             android:key="swSrv"
             android:title="@string/enableMessages" />
         <EditTextPreference
+            android:defaultValue="10"
             android:icon="@drawable/ic_alarm_24dp"
             android:inputType="number"
             android:key="time"
@@ -16,15 +18,23 @@
             android:key="checkFr"
             android:title="@string/checkFrFrag" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="О приложении">
+    <PreferenceCategory
+        android:title="@string/about_heading">
         <Preference
-            android:icon ="@drawable/ic_assignment_24dp"
+            android:icon="@drawable/ic_assignment_24dp"
             android:key="about"
-            android:title="Информация о приложении">
+            android:title="@string/my_site">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="http://www.dimapudov99.hol.es/">
-            </intent>
+                android:data="@string/my_site_url" />
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_group_add_24dp"
+            android:key="group"
+            android:title="@string/group_in_vk">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/group_link" />
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
