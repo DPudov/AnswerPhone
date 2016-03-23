@@ -54,4 +54,13 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="action_settings">Настройки</string>
     <string name="about_heading">О приложении</string>
+    <string name="dialogs_head">Диалоги</string>
+    <string name="title_activity_dialogs">Диалоги</string>
+    <string name="time_unchecked">Время не установлено!</string>
+    <string name="my_site">Мой сайт</string>
+    <string name="msg_now">Мгновенная рассылка</string>
+    <string name="group_in_vk">Группа ВКонтакте</string>
+    <string name="friends_unchecked">Друзья не выбраны!</string>
+    <string name="comma">,</string>
+    <string name="ava_from">Аватар собеседника</string>
 </resources>

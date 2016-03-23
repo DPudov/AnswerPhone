@@ -18,6 +18,18 @@
             android:key="checkFr"
             android:title="@string/checkFrFrag" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Изменение рассылки">
+        <CheckBoxPreference
+            android:icon="@drawable/ic_location_history_24dp"
+            android:title="Добавлять обращение"
+            android:key="addName"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:icon="@drawable/ic_chat_24dp"
+            android:title="Добавлять приставку"
+            android:key="addSpecial"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/about_heading">
         <Preference
