@@ -1,4 +1,4 @@
-package com.dpudov.answerphone;
+package com.dpudov.answerphone.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dpudov.answerphone.fragments.DialogsFragment;
+import com.dpudov.answerphone.R;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView imageView;
     private VKApiUserFull userFull;
     private TextView name;
-    private DialogsFragment dialogsFragment;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity
         settingsFragment = new SettingsFragment();
         sendFragment = new SendFragment();
         sendToFriendsFragment = new SendToFriendsFragment();
-        dialogsFragment = new DialogsFragment();
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
         else
@@ -208,8 +207,6 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(container, sendFragment);
             setTitle(R.string.leave_recall);
         }else if (id == R.id.nav_messenger){
-            //fragmentTransaction.replace(container, dialogsFragment);
-            //setTitle(R.string.dialogs_head);
             Intent intent = new Intent(this, DialogsActivity.class);
             startActivity(intent);
         }

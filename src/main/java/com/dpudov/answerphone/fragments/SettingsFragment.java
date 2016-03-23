@@ -10,9 +10,9 @@ import android.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
-import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.MessagesService;
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.activity.MainActivity;
 
 import static com.vk.sdk.VKSdk.wakeUpSession;
 

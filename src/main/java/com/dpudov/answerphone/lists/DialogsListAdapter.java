@@ -18,18 +18,18 @@ import com.vk.sdk.api.model.VKUsersArray;
  * This class is for the VKSdk library initialization
  */
 public class DialogsListAdapter extends BaseAdapter {
-    private final Context ctx;
+    private Context ctx;
     private final LayoutInflater inflater;
     private final VKList<VKApiDialog> vkApiDialogs;
     private final ImageLoader imageLoader;
     private VKUsersArray userFulls;
 
     public DialogsListAdapter(Context context, VKList<VKApiDialog> vkApiDialogs, VKUsersArray apiUserFulls) {
-        ctx = context;
+        this.ctx = context;
         this.vkApiDialogs = vkApiDialogs;
         this.userFulls = apiUserFulls;
-        inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        imageLoader = new ImageLoader(context);
+        this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.imageLoader = new ImageLoader(context);
     }
 
     @Override
@@ -57,26 +57,27 @@ public class DialogsListAdapter extends BaseAdapter {
             viewHolder.imgAvaOut = (ImageView) view.findViewById(R.id.ava_out);
             viewHolder.imgAvaTo = (ImageView) view.findViewById(R.id.avaFrom);
             viewHolder.textLastMsg = (TextView) view.findViewById(R.id.textLastMessage);
-            viewHolder.textUserto = (TextView) view.findViewById(R.id.textFrom);
+            viewHolder.textUsers = (TextView) view.findViewById(R.id.textFrom);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-
-        viewHolder.textLastMsg.setText(vkApiDialogs.get(position).message.body);
-        if (vkApiDialogs.get(position).message.chat_id != 0) {
-            imageLoader.DisplayImage(vkApiDialogs.get(position).message.photo_50, viewHolder.imgAvaTo, 25);
-            viewHolder.textUserto.setText(vkApiDialogs.get(position).message.title);
-            if (userFulls.getById(vkApiDialogs.get(position).message.user_id) != null) {
+        // Если от обычного пользователя
+        if (vkApiDialogs.get(position).message.chat_id == 0) {
+            String name = "   " + userFulls.getById(vkApiDialogs.get(position).message.user_id).first_name + " " + userFulls.getById(vkApiDialogs.get(position).message.user_id).last_name;
+            viewHolder.textUsers.setText(name);
+            imageLoader.DisplayImage(userFulls.getById(vkApiDialogs.get(position).message.user_id).photo_50, viewHolder.imgAvaTo, 25);
+            if (!vkApiDialogs.get(position).message.out) {
                 imageLoader.DisplayImage(userFulls.getById(vkApiDialogs.get(position).message.user_id).photo_50, viewHolder.imgAvaOut, 15);
             }
         } else {
-            if (userFulls.getById(vkApiDialogs.get(position).message.user_id) != null) {
-                imageLoader.DisplayImage(userFulls.getById(vkApiDialogs.get(position).message.user_id).photo_50, viewHolder.imgAvaTo, 25);
-                String name = userFulls.getById(vkApiDialogs.get(position).message.user_id).first_name + " " + userFulls.getById(vkApiDialogs.get(position).message.user_id).last_name;
-                viewHolder.textUserto.setText(name);
-            }
+            String name = "   " + vkApiDialogs.get(position).message.title;
+            viewHolder.textUsers.setText(name);
+            imageLoader.DisplayImage(vkApiDialogs.get(position).message.photo_50, viewHolder.imgAvaTo, 25);
+            imageLoader.DisplayImage(userFulls.getById(vkApiDialogs.get(position).message.user_id).photo_50, viewHolder.imgAvaOut, 15);
         }
+        String lastMsg = "   " + vkApiDialogs.get(position).message.body;
+        viewHolder.textLastMsg.setText(lastMsg);
         return view;
     }
 
@@ -84,7 +85,7 @@ public class DialogsListAdapter extends BaseAdapter {
         ImageView imgAvaTo;
         ImageView imgAvaOut;
         TextView textLastMsg;
-        TextView textUserto;
+        TextView textUsers;
     }
 
 

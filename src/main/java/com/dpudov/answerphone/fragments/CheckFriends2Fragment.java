@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.MyApplication;
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.activity.MainActivity;
 import com.dpudov.answerphone.lists.FriendsListAdapter;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApiConst;

@@ -1,4 +1,4 @@
-package com.dpudov.answerphone;
+package com.dpudov.answerphone.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.dpudov.answerphone.R;
 
 public class HelpActivity extends AppCompatActivity {
 

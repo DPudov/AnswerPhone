@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.dpudov.answerphone.MainActivity;
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
