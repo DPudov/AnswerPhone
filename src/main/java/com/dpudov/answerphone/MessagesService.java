@@ -24,9 +24,11 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiGetMessagesResponse;
 import com.vk.sdk.api.model.VKApiMessage;
-import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKUsersArray;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -247,20 +249,34 @@ public class MessagesService extends Service {
             switch (mode) {
                 //PREFIX AND NAME
                 case 1:
-                    VKApiUserFull userFull = users.getById(userId);
-                    String name = userFull.first_name + " " + userFull.last_name;
-                    String message = getString(R.string.hi)
-                            + name
-                            + " "
-                            + "! "
-                            + getString(R.string.user_is_busy)
-                            + getString(R.string.defaultMsg);
-                    VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-                    //noinspection EmptyMethod
-                    requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+                    VKRequest getUser = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, userId));
+                    getUser.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
+                            JSONObject object;
+                            try {
+                                object = response.json.getJSONArray("response").getJSONObject(0);
+                                String name2 = object.getString("first_name") + " " + object.getString("last_name");
+                                String message3 = getString(R.string.hi)
+                                        + ", "
+                                        + name2
+                                        + " "
+                                        + "! "
+                                        + getString(R.string.user_is_busy)
+                                        + getString(R.string.defaultMsg);
+                                VKRequest requestSend0 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message3));
+                                //noinspection EmptyMethod
+                                requestSend0.executeWithListener(new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(VKResponse response) {
+                                        super.onComplete(response);
+
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     });
@@ -284,23 +300,37 @@ public class MessagesService extends Service {
                     break;
                 //NAME_NO_PREFIX
                 case 3:
-                    VKApiUserFull userFull1 = users.getById(userId);
-                    String name2 = userFull1.first_name + " " + userFull1.last_name;
-                    String message3 = getString(R.string.hi)
-                            + name2
-                            + " "
-                            + "! "
-                            + getString(R.string.user_is_busy);
-
-                    VKRequest requestSend3 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message3));
-                    //noinspection EmptyMethod
-                    requestSend3.executeWithListener(new VKRequest.VKRequestListener() {
+                    VKRequest getUser1 = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, userId));
+                    getUser1.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
+                            JSONObject object1;
+                            try {
+                                object1 = response.json.getJSONArray("response").getJSONObject(0);
+                                String name22 = object1.getString("first_name") + " " + object1.getString("last_name");
+                                String message23 = getString(R.string.hi)
+                                        + ", "
+                                        + name22
+                                        + " "
+                                        + "! "
+                                        + getString(R.string.user_is_busy)
+                                        + getString(R.string.defaultMsg);
+                                VKRequest requestSend01 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message23));
+                                //noinspection EmptyMethod
+                                requestSend01.executeWithListener(new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(VKResponse response) {
+                                        super.onComplete(response);
 
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
+
                     break;
                 //NOTHING
                 case 4:

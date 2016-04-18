@@ -15,8 +15,6 @@
             android:icon="@drawable/ic_alarm_24dp"
             android:inputType="number"
             android:scrollHorizontally="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
             android:key="time"
             android:title="@string/hint_for_time" />
         <Preference
@@ -29,6 +27,7 @@
             android:icon="@drawable/ic_location_history_24dp"
             android:title="@string/add_name"
             android:scrollHorizontally="true"
+            android:summary="@string/decreaces_rapid"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:key="addName"

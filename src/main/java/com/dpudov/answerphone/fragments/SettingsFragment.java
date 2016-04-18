@@ -32,6 +32,8 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String ARG_PARAM2 = "param2";
     private static final int TIME = 1;
     private static final int FRIENDS = 2;
+    private boolean maddName;
+    private boolean maddPrefix;
     // TODO: Rename and change types of parameters
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
@@ -102,8 +104,10 @@ public class SettingsFragment extends PreferenceFragment {
                     Intent intent = new Intent(getActivity(), MessagesService.class);
                     Bundle b = new Bundle();
                     userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
+                    maddName = addName.isChecked();
+                    maddPrefix = addPrefix.isChecked();
                     // если друзья заданы, включаем сервис
-                    putAndCheck(intent, b, userIds, time, addName.isChecked(), addPrefix.isChecked(), (SwitchPreference) preference);
+                    putAndCheck(intent, b, userIds, time, maddPrefix, maddName, (SwitchPreference) preference);
                 } else {
                     getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                 }

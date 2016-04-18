@@ -38,7 +38,7 @@
     <string name="try_again_internet">Потеряно соединение. Попробуйте позже</string>
     <string name="default_post">ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016</string>
     <string name="group_link">https://vk.com/answerphone_dev</string>
-    <string name="hi">"Привет, "</string>
+    <string name="hi">Привет </string>
     <string name="head">header</string>
     <string name="title_activity_main">AnswerPhone</string>
     <string name="sendToFriends">Отправить друзьям</string>
@@ -80,5 +80,6 @@
     <string name="intro_messaging_desc_text">Мы отправим ваше сообщение любому набору друзей</string>
     <string name="add_prefix">Добавлять приставку</string>
     <string name="add_name">Добавлять обращение</string>
+    <string name="decreaces_rapid">Уменьшает скорость работы рассылки</string>
 
 </resources>

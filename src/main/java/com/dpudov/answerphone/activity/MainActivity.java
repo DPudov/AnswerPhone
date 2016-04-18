@@ -24,14 +24,21 @@ import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
+import com.dpudov.answerphone.lists.ImageLoader;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.dialogs.VKShareDialog;
 import com.vk.sdk.dialogs.VKShareDialogBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.nav_help;
@@ -48,9 +55,7 @@ public class MainActivity extends AppCompatActivity
     private SettingsFragment settingsFragment;
     private String msg;
     private ImageView imageView;
-    private VKApiUserFull userFull;
     private TextView name;
-    private static final int DIALOG_NOT_MATERIAL = 0;
     private static final int DIALOG_MATERIAL = 1;
 
     @Override
@@ -89,16 +94,16 @@ public class MainActivity extends AppCompatActivity
 
         //TODO put fragments to fragment manager
         /**Bundle bundleMain = new Bundle();
-        Bundle bundleSettings = new Bundle();
-        Bundle bundleSend = new Bundle();
-        Bundle bundleSentTo = new Bundle();
-        Bundle bundleCheck = new Bundle();
-        Bundle bundleCheck2 = new Bundle();
-        getFragmentManager().putFragment(bundleMain, "main", mainFragment);
-        getFragmentManager().putFragment(bundleSettings, "settings", settingsFragment);
-        getFragmentManager().putFragment(bundleSend, "send", sendFragment);
-        getFragmentManager().putFragment(bundleSentTo, "sendToFriends", sendToFriendsFragment);
-        getFragmentManager().putFragment(bundleCheck, "");**/
+         Bundle bundleSettings = new Bundle();
+         Bundle bundleSend = new Bundle();
+         Bundle bundleSentTo = new Bundle();
+         Bundle bundleCheck = new Bundle();
+         Bundle bundleCheck2 = new Bundle();
+         getFragmentManager().putFragment(bundleMain, "main", mainFragment);
+         getFragmentManager().putFragment(bundleSettings, "settings", settingsFragment);
+         getFragmentManager().putFragment(bundleSend, "send", sendFragment);
+         getFragmentManager().putFragment(bundleSentTo, "sendToFriends", sendToFriendsFragment);
+         getFragmentManager().putFragment(bundleCheck, "");**/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
@@ -123,19 +128,27 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         imageView = (ImageView) headerView.findViewById(R.id.imageMyAva);
         name = (TextView) headerView.findViewById(R.id.name);
-        /** VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_50"));
-         vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
-        @Override public void onComplete(VKResponse response) {
-        super.onComplete(response);
-        VKList list = (VKList) response.parsedModel;
-        userFull = (VKApiUserFull) list.get(0);
-        ImageLoader imageLoader = new ImageLoader(getApplicationContext());
-        imageLoader.DisplayImage(userFull.photo_50, imageView, 50);
-        String mName = userFull.first_name + " " + userFull.last_name;
-        name.setText(mName);
+        VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_50"));
+        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                try {
+                    JSONObject userJSON = response.json.getJSONArray("response").getJSONObject(0);
+                    String first_name = userJSON.get("first_name").toString();
+                    String last_name = userJSON.get("last_name").toString();
+                    String photo_50 = userJSON.get("photo_50").toString();
+                    ImageLoader imageLoader = new ImageLoader(getApplicationContext());
+                    imageLoader.DisplayImage(photo_50, imageView, 50);
+                    String mName = first_name + " " + last_name;
+                    name.setText(mName);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-        }
-        });**/
+
+            }
+        });
 
     }
 
