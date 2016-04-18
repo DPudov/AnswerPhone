@@ -63,4 +63,12 @@
     <string name="friends_unchecked">Друзья не выбраны!</string>
     <string name="comma">,</string>
     <string name="ava_from">Аватар собеседника</string>
+    <string name="get_started">Начать сейчас!</string>
+    <string name="intro_answerphone_desc">Мы ответим вашим собеседникам, даже если вы заняты</string>
+    <string name="intro_answerphone_head">Быстрый автоответ</string>
+    <string name="intro_messaging_desc_text">Мы отправим ваше сообщение любому набору друзей</string>
+    <string name="intro_messaging_head">Отправка сообщений</string>
+    <string name="no_connection">Нет подключения!</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="welcome">Добро пожаловать!</string>
 </resources>

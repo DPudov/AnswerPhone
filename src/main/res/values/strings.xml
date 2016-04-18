@@ -63,15 +63,22 @@
     <string name="friends_unchecked">Друзья не выбраны!</string>
     <string name="my_site">Мой сайт</string>
     <string name="group_in_vk">Группа ВКонтакте</string>
-    <string name="my_site_url" translatable="false">http://www.dimapudov99.hol.es/</string>
+    <string name="my_site_url" translatable="false">http://www.dpudov.simdif.ru/</string>
     <string name="about_heading">О приложении</string>
     <string name="dialogs_head">Диалоги</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="ava_from">Аватар собеседника</string>
     <string name="title_activity_dialogs">DialogsActivity</string>
     <string name="comma">,</string>
     <string name="send">send</string>
+    <string name="no_connection">Нет подключения!</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="get_started">Начать сейчас!</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="intro_answerphone_head">Быстрый автоответ</string>
+    <string name="intro_messaging_head">Отправка сообщений</string>
+    <string name="intro_answerphone_desc">Мы ответим вашим собеседникам, даже если вы заняты</string>
+    <string name="intro_messaging_desc_text">Мы отправим ваше сообщение любому набору друзей</string>
+    <string name="add_prefix">Добавлять приставку</string>
+    <string name="add_name">Добавлять обращение</string>
 
 </resources>

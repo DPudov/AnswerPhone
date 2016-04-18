@@ -5,12 +5,18 @@
             android:clickable="false"
             android:defaultValue="false"
             android:icon="@drawable/ic_email_24dp"
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:key="swSrv"
             android:title="@string/enableMessages" />
         <EditTextPreference
             android:defaultValue="10"
             android:icon="@drawable/ic_alarm_24dp"
             android:inputType="number"
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:key="time"
             android:title="@string/hint_for_time" />
         <Preference
@@ -21,12 +27,19 @@
     <PreferenceCategory android:title="Изменение рассылки">
         <CheckBoxPreference
             android:icon="@drawable/ic_location_history_24dp"
-            android:title="Добавлять обращение"
+            android:title="@string/add_name"
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:key="addName"
             android:defaultValue="false"/>
         <CheckBoxPreference
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:icon="@drawable/ic_chat_24dp"
-            android:title="Добавлять приставку"
+            android:title="@string/add_prefix"
+            android:summary="@string/defaultMsg"
             android:key="addSpecial"
             android:defaultValue="true"/>
     </PreferenceCategory>

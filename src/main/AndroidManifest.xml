@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.MyIntro"
+            android:theme="@style/FullScreenTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
@@ -56,6 +59,7 @@
         <activity
             android:name=".activity.DialogsActivity"
             android:label="@string/title_activity_dialogs"
+            android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme">
             <meta-data

@@ -1,6 +1,8 @@
 package com.dpudov.answerphone.lists;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,23 @@ public class ChatListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private ImageLoader imageLoader;
     private String[] photos;
+    private Bitmap[] photoArray;
+    private boolean chat;
 
-    public ChatListAdapter(Context context, VKList<VKApiMessage> vkApiMessages, String[] photos) {
+    //TODO передавай сразу скачанный объект
+
+    /**
+     * @param context       Current context for display
+     * @param vkApiMessages List of VKApiMessages in chat
+     * @param photos        Urls of photos chat participants
+     * @param photoArray    Array of Bitmap of users in chat
+     * @param chat          If true - it's multiple chat, else it's single
+     */
+    public ChatListAdapter(Context context, VKList<VKApiMessage> vkApiMessages, String[] photos, @Nullable Bitmap[] photoArray, boolean chat) {
         this.ctx = context;
         this.photos = photos;
+        this.chat = chat;
+        this.photoArray = photoArray;
         this.vkApiMessages = vkApiMessages;
         this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(ctx);
@@ -65,12 +80,13 @@ public class ChatListAdapter extends BaseAdapter {
         if (vkApiMessages.get(position).out) {
             viewHolder.textOut.setText(msg);
             viewHolder.textFrom.setText("");
-            imageLoader.DisplayImage(photos[0], viewHolder.imageFrom, 25);
-
         } else {
             viewHolder.textOut.setText("");
             viewHolder.textFrom.setText(msg);
-            viewHolder.imageFrom.setEnabled(false);
+            if (!chat)
+                imageLoader.DisplayImage(photoArray[0], viewHolder.imageFrom);
+            else
+                imageLoader.DisplayImage(photoArray[position], viewHolder.imageFrom);
         }
 
         return view;

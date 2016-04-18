@@ -18,8 +18,7 @@ public class AppUtils {
     public static Object parseResult(String result) throws Exception {
         if (result != null)
             try {
-                String jsonResponse = result;
-                JSONObject response = new JSONObject(jsonResponse);
+                JSONObject response = new JSONObject(result);
                 if (response.has("failed")) {
                     throw new Exception();
                 }

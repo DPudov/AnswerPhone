@@ -104,7 +104,8 @@ public class ChatFragment extends android.app.Fragment {
                             VKApiMessage mes = new VKApiMessage(jsonArray.getJSONObject(i));
                             mVKMsg.add(mes);
                         }
-                        ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), mVKMsg, mPhotos);
+
+                        ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), mVKMsg, mPhotos, null, false);
                         chatView.setAdapter(chatListAdapter);
                         final EditText editText = (EditText) v.findViewById(R.id.editedMessage);
                         ImageButton send = (ImageButton) v.findViewById(R.id.imageSend);
@@ -144,7 +145,8 @@ public class ChatFragment extends android.app.Fragment {
                             VKApiMessage mes = new VKApiMessage(jsonArray.getJSONObject(i));
                             mVKMsg.add(mes);
                         }
-                        ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), mVKMsg, mPhotos);
+
+                        ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), mVKMsg, mPhotos, null, true);
                         chatView.setAdapter(chatListAdapter);
                         final EditText editText = (EditText) v.findViewById(R.id.editedMessage);
                         ImageButton send = (ImageButton) v.findViewById(R.id.imageSend);
@@ -179,5 +181,7 @@ public class ChatFragment extends android.app.Fragment {
         return v;
     }
 
+private void setUpFragmentWithVK(){
 
+}
 }

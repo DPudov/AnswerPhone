@@ -14,8 +14,11 @@ import com.dpudov.answerphone.data.DataManager;
 import com.dpudov.answerphone.data.EventBus;
 import com.dpudov.answerphone.data.network.LpServer;
 import com.dpudov.answerphone.data.network.LpServerResponse;
+import com.dpudov.answerphone.util.RequestUtil;
+import com.google.gson.Gson;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -38,23 +41,33 @@ import okhttp3.Request;
 
 public class MessagesService extends Service {
     private final int NOTIFICATION = R.string.serviceStarted;
+    private static final int MODE_PREFIX_AND_NAME = 1;
+    private static final int MODE_PREFIX_NO_NAME = 2;
+    private static final int MODE_NO_PREFIX_NAME = 3;
+    private static final int MODE_NO_PREFIX_NO_NAME = 4;
     private NotificationManager nM;
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
     private VKUsersArray users;
-    private MyApplication myApplication;
-    private DataManager dataManager;
     private LpServer mLongPollServer;
-    private OkHttpClient mClient;
-    private EventBus mEventBus;
+
+    OkHttpClient mClient;
+    Gson mGson;
+    EventBus mEventBus;
+    DataManager mDataManager;
 
     public MessagesService() {
     }
 
     private void startLongPoll() {
-        dataManager.getLongPollServer(1);
-        dataManager.setLongPollListener(new DataManager.LongPollListener() {
+        mEventBus = new EventBus();
+        mClient = new OkHttpClient();
+        mLongPollServer = new LpServer();
+        mGson = new Gson();
+        mDataManager = new DataManager(mGson);
+        mDataManager.getLongPollServer(1);
+        mDataManager.setLongPollListener(new DataManager.LongPollListener() {
             @Override
             public void onResponseReceived(LpServer lpServer) {
                 mLongPollServer = lpServer;
@@ -108,8 +121,8 @@ public class MessagesService extends Service {
     @Override
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        myApplication = (MyApplication) getApplication();
-        users = myApplication.getFriendList();
+        RequestUtil util = new RequestUtil();
+        users = util.getUsersArray();
     }
 
     @Override
@@ -144,23 +157,34 @@ public class MessagesService extends Service {
         Bundle bundle = intent.getExtras();
         checkedUsers = bundle.getIntArray("userIds");
         int time = bundle.getInt("time");
-
+        boolean addName = bundle.getBoolean("addName");
+        boolean addPrefix = bundle.getBoolean("addPrefix");
+        int mode;
+        if (addPrefix && addName) {
+            mode = MODE_PREFIX_AND_NAME;
+        } else if (addPrefix) {
+            mode = MODE_PREFIX_NO_NAME;
+        } else if (addName) {
+            mode = MODE_NO_PREFIX_NAME;
+        } else {
+            mode = MODE_NO_PREFIX_NO_NAME;
+        }
         showNotification();
-        //startLongPoll();
-        doInThread(time);
+        startLongPoll();
+        doInThread(time, mode);
         return startId;
     }
 
-    private void doInThread(final int timeIn) {
+    private void doInThread(final int timeIn, final int mode) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     for (int i = 0; i < timeIn * 2; i++) {
                         if (i == 0)
-                            sentMsgToRecentSenders(timeIn + 2);
+                            sentMsgToRecentSenders(timeIn + 2, mode);
                         else {
-                            sentMsgToRecentSenders(timeIn);
+                            sentMsgToRecentSenders(timeIn, mode);
                         }
                         Thread.sleep(30000);
                     }
@@ -171,7 +195,7 @@ public class MessagesService extends Service {
         }).start();
     }
 
-    private void sentMsgToRecentSenders(int time) {
+    private void sentMsgToRecentSenders(int time, final int mode) {
 //Получаем сообщения за последние time секунд
         VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, time * 60));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
@@ -185,7 +209,7 @@ public class MessagesService extends Service {
                     LinkedHashSet<Integer> authors = new LinkedHashSet<>();
                     for (VKApiMessage msg : list) {
                         // проверка. Если не прочитано и не из чата, добавляем
-                        if ((!msg.read_state)&&(msg.chat_id==0))
+                        if ((!msg.read_state) && (msg.chat_id == 0))
                             authors.add(msg.user_id);
                     }
                     // конвертируем в массив
@@ -207,47 +231,121 @@ public class MessagesService extends Service {
                         }
                     }
                     if (c == 1)
-                        send(userIdCopy[0]);
+                        send(userIdCopy[0], mode);
                     else
                         // Отправляем сообщение
-                        sendTo(userIdCopy);
+                        sendTo(userIdCopy, mode);
                 }
             }
 
         });
     }
 
-    private void send(final int userId) {
+    private void send(final int userId, int mode) {
 //метод для отправки сообщения user.
         if (userId != 0) {
-            VKApiUserFull userFull = users.getById(userId);
-            String name = userFull.first_name + " " + userFull.last_name;
-            String message = getString(R.string.hi)
-                    + name
-                    + " "
-                    + "! "
-                    + getString(R.string.user_is_busy)
-                    + getString(R.string.defaultMsg);
-            VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
-            //noinspection EmptyMethod
-            requestSend.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
+            switch (mode) {
+                //PREFIX AND NAME
+                case 1:
+                    VKApiUserFull userFull = users.getById(userId);
+                    String name = userFull.first_name + " " + userFull.last_name;
+                    String message = getString(R.string.hi)
+                            + name
+                            + " "
+                            + "! "
+                            + getString(R.string.user_is_busy)
+                            + getString(R.string.defaultMsg);
+                    VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message));
+                    //noinspection EmptyMethod
+                    requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
 
-                }
-            });
+                        }
+                    });
+                    break;
+                //PREFIX_NO_NAME
+                case 2:
+                    String msd1 = getString(R.string.hi)
+                            + " "
+                            + "! "
+                            + getString(R.string.user_is_busy)
+                            + getString(R.string.defaultMsg);
+                    VKRequest requestSend2 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, msd1));
+                    //noinspection EmptyMethod
+                    requestSend2.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+
+                        }
+                    });
+                    break;
+                //NAME_NO_PREFIX
+                case 3:
+                    VKApiUserFull userFull1 = users.getById(userId);
+                    String name2 = userFull1.first_name + " " + userFull1.last_name;
+                    String message3 = getString(R.string.hi)
+                            + name2
+                            + " "
+                            + "! "
+                            + getString(R.string.user_is_busy);
+
+                    VKRequest requestSend3 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message3));
+                    //noinspection EmptyMethod
+                    requestSend3.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+
+                        }
+                    });
+                    break;
+                //NOTHING
+                case 4:
+                    String message4 = getString(R.string.hi)
+                            + " "
+                            + "! "
+                            + getString(R.string.user_is_busy);
+
+                    VKRequest requestSend4 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message4));
+                    //noinspection EmptyMethod
+                    requestSend4.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+
+                        }
+                    });
+                    break;
+            }
         }
     }
 
-    private void sendTo(int[] userIds) {
+    private void sendTo(int[] userIds, int mode) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
             for (int userId1 : userIds) {
-                send(userId1);
+                send(userId1, mode);
 
             }
         }
+    }
+
+    private void sendTo(String ids, String msg) {
+        VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_IDS, ids, VKApiConst.MESSAGE, msg));
+        requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+        });
     }
 
     @Override

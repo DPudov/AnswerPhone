@@ -56,7 +56,7 @@
     <string name="about_heading">About</string>
     <string name="dialogs_head">Dialogs</string>
     <string name="title_activity_dialogs">Dialogs</string>
-    <string name="my_site_url"></string>
+    <string name="my_site_url"/>
     <string name="time_unchecked">Time is unchecked!</string>
     <string name="my_site">My site</string>
     <string name="msg_now">Momentary distribution</string>
@@ -64,4 +64,12 @@
     <string name="friends_unchecked">Friends are unchecked!</string>
     <string name="comma">,</string>
     <string name="ava_from">Avatar</string>
+    <string name="get_started">Get started!</string>
+    <string name="intro_answerphone_desc">We will answer all of your friends even if you\'re busy</string>
+    <string name="intro_answerphone_head">Fast auto-answer</string>
+    <string name="intro_messaging_desc_text">We will send your message to any friends you need</string>
+    <string name="intro_messaging_head">Sending messages</string>
+    <string name="no_connection">No connection!</string>
+    <string name="try_again">Try again</string>
+    <string name="welcome">Welcome!</string>
 </resources>

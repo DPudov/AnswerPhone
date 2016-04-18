@@ -1,8 +1,9 @@
 package com.dpudov.answerphone.activity;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,26 +18,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.fragments.CheckFriends2Fragment;
+import com.dpudov.answerphone.fragments.CheckFriendsFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
-import com.dpudov.answerphone.lists.ImageLoader;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiUserFull;
-import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.dialogs.VKShareDialog;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import static com.dpudov.answerphone.R.id.container;
 import static com.dpudov.answerphone.R.id.nav_help;
@@ -47,33 +42,63 @@ public class MainActivity extends AppCompatActivity
     private int[] usersToSendAuto;
     private SendFragment sendFragment;
     private MainFragment mainFragment;
+    private CheckFriends2Fragment checkFriends2Fragment;
+    private CheckFriendsFragment checkFriendsFragment;
     private SendToFriendsFragment sendToFriendsFragment;
     private SettingsFragment settingsFragment;
     private String msg;
     private ImageView imageView;
     private VKApiUserFull userFull;
     private TextView name;
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
+    private static final int DIALOG_NOT_MATERIAL = 0;
+    private static final int DIALOG_MATERIAL = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainFragment = new MainFragment();
-        settingsFragment = new SettingsFragment();
-        sendFragment = new SendFragment();
-        sendToFriendsFragment = new SendToFriendsFragment();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences prefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+                if (prefs.getBoolean("firstrun", true)) {
+                    // Do first run stuff here then set 'firstrun' as false
+                    // using the following line to edit/commit prefs
+                    Intent i = new Intent(MainActivity.this, MyIntro.class);
+                    startActivity(i);
+                    prefs.edit().putBoolean("firstrun", false).apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
         if (VKSdk.isLoggedIn())
             VKSdk.wakeUpSession(this);
         else
             VKSdk.login(this, VKScope.OFFLINE, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
 
+        //create fragments
+        mainFragment = new MainFragment();
+        settingsFragment = new SettingsFragment();
+        sendFragment = new SendFragment();
+        sendToFriendsFragment = new SendToFriendsFragment();
+        //checkFriends2Fragment = new CheckFriends2Fragment();
+        //checkFriendsFragment = new CheckFriendsFragment();
+
+        //TODO put fragments to fragment manager
+        /**Bundle bundleMain = new Bundle();
+        Bundle bundleSettings = new Bundle();
+        Bundle bundleSend = new Bundle();
+        Bundle bundleSentTo = new Bundle();
+        Bundle bundleCheck = new Bundle();
+        Bundle bundleCheck2 = new Bundle();
+        getFragmentManager().putFragment(bundleMain, "main", mainFragment);
+        getFragmentManager().putFragment(bundleSettings, "settings", settingsFragment);
+        getFragmentManager().putFragment(bundleSend, "send", sendFragment);
+        getFragmentManager().putFragment(bundleSentTo, "sendToFriends", sendToFriendsFragment);
+        getFragmentManager().putFragment(bundleCheck, "");**/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
@@ -90,7 +115,6 @@ public class MainActivity extends AppCompatActivity
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //noinspection deprecation
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -99,27 +123,22 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         imageView = (ImageView) headerView.findViewById(R.id.imageMyAva);
         name = (TextView) headerView.findViewById(R.id.name);
-        VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_200"));
-        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                VKList list = (VKList) response.parsedModel;
-                userFull = (VKApiUserFull) list.get(0);
-                ImageLoader imageLoader = new ImageLoader(getApplicationContext());
-                imageLoader.DisplayImage(userFull.photo_200, imageView, 50);
-                String mName = userFull.first_name + " " + userFull.last_name;
-                name.setText(mName);
+        /** VKRequest vkRequest = VKApi.users().get(VKParameters.from("fields", "photo_50"));
+         vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+        @Override public void onComplete(VKResponse response) {
+        super.onComplete(response);
+        VKList list = (VKList) response.parsedModel;
+        userFull = (VKApiUserFull) list.get(0);
+        ImageLoader imageLoader = new ImageLoader(getApplicationContext());
+        imageLoader.DisplayImage(userFull.photo_50, imageView, 50);
+        String mName = userFull.first_name + " " + userFull.last_name;
+        name.setText(mName);
 
-            }
-        });
+        }
+        });**/
 
-
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,7 +146,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResult(VKAccessToken res) {
                 Toast.makeText(getApplicationContext(), R.string.loginSuccess, Toast.LENGTH_SHORT).show();
-// Пользователь успешно авторизовался
+                // Пользователь успешно авторизовался
             }
 
             @Override
@@ -202,28 +221,49 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, HelpActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
-            shareWithVK();
+            shareWithVK(DIALOG_MATERIAL);
         } else if (id == R.id.nav_send) {
             fragmentTransaction.replace(container, sendFragment);
             setTitle(R.string.leave_recall);
-        }else if (id == R.id.nav_messenger){
+        } else if (id == R.id.nav_messenger) {
             Intent intent = new Intent(this, DialogsActivity.class);
             startActivity(intent);
         }
 
         fragmentTransaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
-    private void shareWithVK() {
+    private void shareWithVK(int mode) {
         VKSdk.wakeUpSession(this);
-        //noinspection deprecation
-        new VKShareDialog()
-                .setText(getString(R.string.default_post))
-                .setAttachmentLink("DPudov", getString(R.string.group_link))
-                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+        switch (mode) {
+            case 0:
+                //noinspection deprecation
+                new VKShareDialog()
+                        .setText(getString(R.string.default_post))
+                        .setAttachmentLink("DPudov", getString(R.string.group_link))
+                        .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                            @Override
+                            public void onVkShareComplete(int postId) {
+                            }
+
+                            @Override
+                            public void onVkShareCancel() {
+                            }
+
+                            @Override
+                            public void onVkShareError(VKError error) {
+                            }
+                        }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+            case 1:
+                VKShareDialogBuilder vkShareDialogBuilder = new VKShareDialogBuilder();
+                vkShareDialogBuilder.setAttachmentLink("DPudov", getString(R.string.group_link));
+                vkShareDialogBuilder.setText(getString(R.string.default_post));
+                vkShareDialogBuilder.setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
                     @Override
                     public void onVkShareComplete(int postId) {
 
@@ -238,7 +278,10 @@ public class MainActivity extends AppCompatActivity
                     public void onVkShareError(VKError error) {
 
                     }
-                }).show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+                });
+                vkShareDialogBuilder.show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+        }
+
     }
 
     public int[] getUsersToSendAuto() {
@@ -265,43 +308,4 @@ public class MainActivity extends AppCompatActivity
         this.msg = msg;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.dpudov.answerphone/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.dpudov.answerphone/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
 }

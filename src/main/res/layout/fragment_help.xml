@@ -5,7 +5,6 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.dpudov.answerphone.fragments.HelpFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <RelativeLayout
         android:layout_width="match_parent"

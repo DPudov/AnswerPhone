@@ -3,6 +3,7 @@ package com.dpudov.answerphone.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -66,8 +67,13 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //initialize
         addPreferencesFromResource(R.xml.preferences);
         Preference preference = findPreference("checkFr");
+        final EditTextPreference editTextPreference = (EditTextPreference) findPreference("time");
+        final CheckBoxPreference addName = (CheckBoxPreference)findPreference("addName");
+        final CheckBoxPreference addPrefix = (CheckBoxPreference)findPreference("addSpecial");
+        SwitchPreference switchPreference = (SwitchPreference) findPreference("swSrv");
         checkFriendsFragment = new CheckFriendsFragment();
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -80,9 +86,8 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
-        final EditTextPreference editTextPreference = (EditTextPreference) findPreference("time");
 
-        SwitchPreference switchPreference = (SwitchPreference) findPreference("swSrv");
+
         switchPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -98,7 +103,7 @@ public class SettingsFragment extends PreferenceFragment {
                     Bundle b = new Bundle();
                     userIds = ((MainActivity) getActivity()).getUsersToSendAuto();
                     // если друзья заданы, включаем сервис
-                    putAndCheck(intent, b, userIds, time, (SwitchPreference) preference);
+                    putAndCheck(intent, b, userIds, time, addName.isChecked(), addPrefix.isChecked(), (SwitchPreference) preference);
                 } else {
                     getActivity().stopService(new Intent(getActivity(), MessagesService.class));
                 }
@@ -112,101 +117,6 @@ public class SettingsFragment extends PreferenceFragment {
 
     }
 
-    //@Override
-    //public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-    //                       Bundle savedInstanceState) {
-
-    //   View v = inflater.inflate(R.layout.fragment_settings, container, false);
-
-    //AdView adView = (AdView) v.findViewById(R.id.adViewSettings);
-    //AdRequest adRequest = new AdRequest.Builder().build();
-    //adView.loadAd(adRequest);
-    //View btn = v.findViewById(R.id.sign_in_button);
-    //btn.setOnClickListener(new View.OnClickListener() {
-    //    @Override
-    //    public void onClick(View v) {
-    //        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-    //                false, null, null, null, null);
-    //       startActivityForResult(intent, 123);
-    //    }
-    //});
-
-    //Button goToM8Button = (Button) v.findViewById(R.id.button2);
-    //OnClick и реализация выхода на новый фрагмент
-    //checkFriendsFragment = new CheckFriendsFragment();
-    //goToM8Button.setOnClickListener(new View.OnClickListener() {
-    //    @Override
-    //    public void onClick(View v) {
-    //        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-    //        ft.replace(R.id.container, checkFriendsFragment);
-    //       getActivity().setTitle(R.string.checkFrFrag);
-    //       ft.commit();
-    //    }
-    //});
-
-    //Switch switchMessage = (Switch) v.findViewById(R.id.switchMessage);
-    //switchMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-    // @Override
-    // public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    // if (isChecked) {
-    //   wakeUpSession(getActivity());
-    //   Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
-    //    Intent intent = new Intent(getActivity(), MessagesService.class);
-    //    Bundle b = new Bundle();
-    //     // если друзья заданы, включаем сервис, иначе включаем друзей
-    //   if (userIds != null) {
-    //        b.putIntArray("userIds", userIds);
-    //        intent.putExtras(b);
-    //        getActivity().startService(intent);
-    //    } else {
-    //        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-    //        ft.replace(R.id.container, checkFriendsFragment);
-    //        getActivity().setTitle(R.string.checkFrFrag);
-    //        ft.commit();
-    //    }
-    // } else
-
-    // {
-    //    Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
-    //     getActivity().stopService(new Intent(getActivity(), MessagesService.class));
-    //   }
-
-    // }
-
-    // }
-
-    //);// Inflate the layout for this fragment
-    //    return v;
-    // }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    // public void onButtonPressed(Uri uri) {
-    //     if (mListener != null) {
-    //        mListener.onFragmentInteraction(uri);
-    //     }
-    // }
-
-
-    // @Override
-    //  public void onDetach() {
-    //    super.onDetach();
-    //    mListener = null;
-    // }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    //public interface OnFragmentInteractionListener {
-    //   // TODO: Update argument type and name
-    //    void onFragmentInteraction(Uri uri);
-    // }
     private void showAlert(int which) {
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
         switch (which) {
@@ -228,12 +138,14 @@ public class SettingsFragment extends PreferenceFragment {
         alertDialog.show();
     }
 
-    private void putAndCheck(Intent intent, Bundle b, int[] userIds, int time, SwitchPreference preference) {
+    private void putAndCheck(Intent intent, Bundle b, int[] userIds, int time, boolean addPrefix, boolean addName, SwitchPreference preference) {
         if ((userIds != null)) {
             if (userIds[0] != 0) {
                 b.putIntArray("userIds", userIds);
                 if (time != 0) {
                     b.putInt("time", time);
+                    b.putBoolean("addName" ,addName);
+                    b.putBoolean("addPrefix", addPrefix);
                     intent.putExtras(b);
                     getActivity().startService(intent);
                 } else {

@@ -1,21 +1,26 @@
 package com.dpudov.answerphone.fragments;
 
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.dpudov.answerphone.MyApplication;
 import com.dpudov.answerphone.R;
 import com.dpudov.answerphone.activity.MainActivity;
 import com.dpudov.answerphone.lists.FriendsListAdapter;
-import com.vk.sdk.VKSdk;
+import com.dpudov.answerphone.util.UserIDS_Util;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -34,12 +39,16 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final int HAS_NO_CONNECTION_FROM_FRIENDS = 1;
+    private static final int HAS_NO_CONNECTION_FROM_MSG = 2;
     private SendToFriendsFragment sendToFriendsFragment;
     private String msg;
+    private String ids;
     private int[] userIds;
     private OnFragmentInteractionListener mListener;
-    private MyApplication myApplication;
+    private Button saveButton;
+    private Button cancelButton;
+    private ListView listView;
 
     public CheckFriends2Fragment() {
         // Required empty public constructor
@@ -76,44 +85,13 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_check_friends2, container, false);
-        ListView listView = (ListView) v.findViewById(R.id.listView2);
+        listView = (ListView) v.findViewById(R.id.listView2);
         sendToFriendsFragment = new SendToFriendsFragment();
-        Button saveButton = (Button) v.findViewById(R.id.saveButton2);
-        Button cancelButton = (Button) v.findViewById(R.id.cancelButton);
-        myApplication = (MyApplication) getActivity().getApplication();
-        VKSdk.wakeUpSession(getActivity());
-        //Заполнение массива друзьями
-        final VKUsersArray list;
-        list = myApplication.getFriendList();
-        FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
-        listView.setAdapter(friendsListAdapter);
+        saveButton = (Button) v.findViewById(R.id.saveButton2);
+        setUpFriendsList();
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // SparseBooleanArray sbArray = listView.getCheckedItemPositions();
-                userIds = new int[list.size()];
-                int c = 0;
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).checked) {
-
-                        userIds[c] = list.get(i).getId();
-                        c++;
-                    }
-
-                }
-                ((MainActivity) getActivity()).setUsersToSendNow(userIds);
-                //Отправляем сообщения
-                msg = ((MainActivity) getActivity()).getMsg() + getString(R.string.defaultMsg);
-                sendTo(userIds);
-                //Возвращаемся на начальный фрагмент
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.container, sendToFriendsFragment);
-                getActivity().setTitle(R.string.sendToFriends);
-                ft.commit();
-
-            }
-        });
+        cancelButton = (Button) v.findViewById(R.id.cancelButton);
+        //setupFriendsListView(saveButton, listView);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,9 +118,28 @@ public class CheckFriends2Fragment extends android.app.Fragment {
         mListener = null;
     }
 
+    private void sentTo(@NonNull String ids) {
+        msg = ((MainActivity) getActivity()).getMsg();
+        VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_IDS, ids, VKApiConst.MESSAGE, msg));
+        requestSend.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                showDialog(HAS_NO_CONNECTION_FROM_MSG);
+            }
+        });
+    }
+
+    @Deprecated
     private void send(int userId) {
 //метод для отправки сообщения user.
-
+        msg = ((MainActivity) getActivity()).getMsg();
         if (userId != 0) {
             VKRequest requestSend = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, msg));
             //noinspection EmptyMethod
@@ -155,6 +152,7 @@ public class CheckFriends2Fragment extends android.app.Fragment {
         }
     }
 
+    @Deprecated
     private void sendTo(int[] userIds) {
         if (userIds != null) {
             //метод для отправки сообщений нескольким юзерам
@@ -165,12 +163,103 @@ public class CheckFriends2Fragment extends android.app.Fragment {
         }
     }
 
+    private void setUpFriendsList() {
+        VKRequest vkRequest = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name, photo_50, online", "order", "hints"));
+        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+                                          @Override
+                                          public void onComplete(VKResponse response) {
+                                              super.onComplete(response);
+                                              final VKUsersArray list = (VKUsersArray) response.parsedModel;
+                                              saveButton.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      userIds = new int[list.size()];
+                                                      int c = 0;
+                                                      for (int i = 0; i < list.size(); i++) {
+                                                          if (list.get(i).checked) {
+                                                              userIds[c] = list.get(i).getId();
+                                                              c++;
+                                                          }
+                                                      }
+
+                                                      ids = UserIDS_Util.makeUserIdsFromIntArray(userIds);
+                                                      sentTo(ids);
+                                                      FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                      ft.replace(R.id.container, sendToFriendsFragment);
+                                                      getActivity().setTitle(R.string.sendToFriends);
+                                                      ft.commit();
+                                                  }
+                                              });
+                                              FriendsListAdapter friendsListAdapter = new FriendsListAdapter(getActivity(), list);
+                                              listView.setAdapter(friendsListAdapter);
+
+                                          }
+
+
+                                          @Override
+                                          public void onError(VKError error) {
+                                              super.onError(error);
+                                              showDialog(HAS_NO_CONNECTION_FROM_FRIENDS);
+                                          }
+                                      }
+
+        );
+
+    }
+
+    private void showDialog(int ID) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+        switch (ID) {
+            //FROM_FRIENDS
+            case 1:
+                adb.setTitle(R.string.no_connection);
+                adb.setIcon(R.drawable.ic_warning_24dp);
+                adb.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setUpFriendsList();
+                        dialog.dismiss();
+                    }
+                });
+                adb.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            //FROM_MSG
+            case 2:
+                adb.setTitle(R.string.no_connection);
+                adb.setIcon(R.drawable.ic_warning_24dp);
+                adb.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sentTo(ids);
+                        dialog.dismiss();
+                    }
+                });
+                adb.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.container, sendToFriendsFragment);
+                        getActivity().setTitle(R.string.sendToFriends);
+                        ft.commit();
+                        dialog.dismiss();
+                    }
+                });
+        }
+        AlertDialog alertDialog = adb.create();
+        alertDialog.show();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
