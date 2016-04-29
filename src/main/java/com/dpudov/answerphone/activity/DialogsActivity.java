@@ -43,12 +43,14 @@ public class DialogsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         dialogsView = (ListView) findViewById(R.id.listOfDialogs);
         VKSdk.wakeUpSession(this);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        if (toolbar != null) {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
         setUpDialogs();
         dialogsView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         dialogsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

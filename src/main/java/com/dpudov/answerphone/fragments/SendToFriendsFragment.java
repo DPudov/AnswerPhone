@@ -21,12 +21,7 @@ import com.dpudov.answerphone.activity.MainActivity;
  * create an instance of this fragment.
  */
 public class SendToFriendsFragment extends android.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
+    private static final String TITLE = "title";
     private EditText editText;
     private CheckFriends2Fragment checkFriends2Fragment;
     private OnFragmentInteractionListener mListener;
@@ -35,20 +30,10 @@ public class SendToFriendsFragment extends android.app.Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SendToFriendsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SendToFriendsFragment newInstance(String param1, String param2) {
+
+    public static SendToFriendsFragment newInstance() {
         SendToFriendsFragment fragment = new SendToFriendsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,10 +41,13 @@ public class SendToFriendsFragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
+        setRetainInstance(true);
+        if (savedInstanceState!=null){
+            String title = savedInstanceState.getString(TITLE);
+            getActivity().setTitle(title);
+        }else{
+            getActivity().setTitle(R.string.msg_now);
         }
-
     }
 
     @Override
@@ -67,7 +55,7 @@ public class SendToFriendsFragment extends android.app.Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_send_to_friends, container, false);
         checkFriends2Fragment = new CheckFriends2Fragment();
-        editText = (EditText)v.findViewById(R.id.editMsgToFr);
+        editText = (EditText) v.findViewById(R.id.editMsgToFr);
         Button sendFrButton = (Button) v.findViewById(R.id.sendFrButton);
         sendFrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +73,13 @@ public class SendToFriendsFragment extends android.app.Fragment {
         });
         // Inflate the layout for this fragment
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String title = (String) getActivity().getTitle();
+        outState.putString(TITLE, title);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

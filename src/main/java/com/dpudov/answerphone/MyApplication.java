@@ -1,5 +1,7 @@
 package com.dpudov.answerphone;
 
+import android.support.v7.app.AppCompatDelegate;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vk.sdk.VKAccessToken;
@@ -26,6 +28,9 @@ public class MyApplication extends android.app.Application {
             }
         }
     };
+    static {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+    }
 
     @Override
     public void onCreate() {

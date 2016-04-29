@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_orange_light"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/intro_messaging_head"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal"
+        android:textSize="28sp"
+        android:textColor="#ffffff"
+        android:focusableInTouchMode="false"
+        android:fontFamily="sans-serif"
+        android:textAlignment="center"
+        android:paddingTop="20dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_email_24dp_green"
+        android:layout_weight="0.52"
+        android:contentDescription="@string/src" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/intro_messaging_desc_text"
+        android:id="@+id/intro_messaging_desc"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:layout_weight="0.09" />
+</LinearLayout>

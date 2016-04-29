@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.RegistrationIntentService;
 import com.dpudov.answerphone.fragments.CheckFriends2Fragment;
 import com.dpudov.answerphone.fragments.CheckFriendsFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
@@ -25,6 +27,9 @@ import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
 import com.dpudov.answerphone.lists.ImageLoader;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
@@ -45,8 +50,13 @@ import static com.dpudov.answerphone.R.id.nav_help;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static MainActivity mainActivity;
+    public static Boolean isVisible = false;
+    private GoogleCloudMessaging gcm;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private int[] usersToSendNow;
     private int[] usersToSendAuto;
+    public static final String TAG = "MainActivity";
     private SendFragment sendFragment;
     private MainFragment mainFragment;
     private CheckFriends2Fragment checkFriends2Fragment;
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity
         settingsFragment = new SettingsFragment();
         sendFragment = new SendFragment();
         sendToFriendsFragment = new SendToFriendsFragment();
+
         //checkFriends2Fragment = new CheckFriends2Fragment();
         //checkFriendsFragment = new CheckFriendsFragment();
 
@@ -120,7 +131,9 @@ public class MainActivity extends AppCompatActivity
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        if (drawer != null) {
+            drawer.setDrawerListener(toggle);
+        }
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -145,11 +158,49 @@ public class MainActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isVisible = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isVisible = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isVisible = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isVisible = false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
+
+    public void ToastNotify(final String notificationMessage) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, notificationMessage, Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
 
@@ -292,9 +343,41 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 });
-                vkShareDialogBuilder.show(getSupportFragmentManager(), "VK_SHARE_DIALOG");
+                vkShareDialogBuilder.show(getSupportFragmentManager(), "VK_SHARE_ч  DIALOG");
         }
 
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported by Google Play Services.");
+                ToastNotify("This device is not supported by Google Play Services.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public void registerWithNotificationHubs() {
+        Log.i(TAG, " Registering with Notification Hubs");
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
     }
 
     public int[] getUsersToSendAuto() {

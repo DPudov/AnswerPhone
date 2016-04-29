@@ -4,46 +4,61 @@
         <SwitchPreference
             android:clickable="false"
             android:defaultValue="false"
-            android:icon="@drawable/ic_email_24dp"
-            android:scrollHorizontally="true"
             android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
+            android:icon="@drawable/ic_email_24dp"
             android:key="swSrv"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             android:title="@string/enableMessages" />
         <EditTextPreference
             android:defaultValue="10"
             android:icon="@drawable/ic_alarm_24dp"
             android:inputType="number"
-            android:scrollHorizontally="true"
             android:key="time"
+            android:scrollHorizontally="true"
             android:title="@string/hint_for_time" />
         <Preference
             android:icon="@drawable/ic_people_24dp"
             android:key="checkFr"
             android:title="@string/checkFrFrag" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Изменение рассылки">
+    <PreferenceCategory android:title="@string/change_messaging">
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:ellipsize="marquee"
             android:icon="@drawable/ic_location_history_24dp"
-            android:title="@string/add_name"
+            android:key="addName"
+            android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:summary="@string/decreaces_rapid"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:key="addName"
-            android:defaultValue="false"/>
+            android:title="@string/add_name" />
         <CheckBoxPreference
-            android:scrollHorizontally="true"
+            android:defaultValue="false"
             android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
             android:icon="@drawable/ic_chat_24dp"
-            android:title="@string/add_prefix"
-            android:summary="@string/defaultMsg"
             android:key="addSpecial"
-            android:defaultValue="true"/>
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:summary="@string/defaultMsg"
+            android:title="@string/add_prefix" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/about_heading">
+    <PreferenceCategory android:title="@string/special">
+        <SwitchPreference
+            android:clickable="false"
+            android:defaultValue="false"
+            android:ellipsize="marquee"
+            android:icon="@drawable/ic_notifications_black_24dp"
+            android:key="push"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:title="@string/enable_push" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/about_heading">
+        <Preference
+            android:icon="@drawable/ic_info_black_24dp"
+            android:key="version"
+            android:summary="@string/about_summary"
+            android:title="@string/info" />
         <Preference
             android:icon="@drawable/ic_assignment_24dp"
             android:key="about"

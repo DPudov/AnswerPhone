@@ -30,7 +30,7 @@ public class SendFragment extends android.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final int GROUP_ID = -112909555;
     // TODO: Rename and change types of parameters
     @SuppressWarnings("FieldCanBeLocal")
     private String mParam1;
@@ -65,6 +65,7 @@ public class SendFragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -80,8 +81,7 @@ public class SendFragment extends android.app.Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMe(134132102);
-                sendMe(238489071);
+                sendToGroup();
             }
         });
 
@@ -116,6 +116,24 @@ public class SendFragment extends android.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void sendToGroup(){
+        String message = editText.getText().toString().concat(getString(R.string.defaultMsg));
+        VKRequest request = new VKRequest("messages.send", VKParameters.from("peer_id", GROUP_ID, VKApiConst.MESSAGE, message));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                Toast.makeText(getActivity(), R.string.sentMsg, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                Toast.makeText(getActivity(), R.string.VK_Err, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void sendMe(int user) {

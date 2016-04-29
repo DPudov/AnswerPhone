@@ -28,6 +28,7 @@ public class CheckFriendsFragment extends android.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TITLE = "title";
     private static final int HAS_NO_CONNECTION = 1;
     private static final int NOTHING_CHOSEN = 2;
     private SettingsFragment settingsFragment;
@@ -61,6 +62,12 @@ public class CheckFriendsFragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        if (savedInstanceState != null) {
+            getActivity().setTitle(savedInstanceState.getString(TITLE));
+        } else {
+            getActivity().setTitle(R.string.checkFrFrag);
+        }
         //if (getArguments() != null) {
         //    mParam1 = getArguments().getString(ARG_PARAM1);
         //    mParam2 = getArguments().getString(ARG_PARAM2);
@@ -87,6 +94,13 @@ public class CheckFriendsFragment extends android.app.Fragment {
         setUpFriendsList();
         // Inflate the layout for this fragment
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String title = (String) getActivity().getTitle();
+        outState.putString(TITLE, title);
     }
 
     private void showDialog(int ID) {

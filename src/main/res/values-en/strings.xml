@@ -15,7 +15,7 @@
     <string name="group_link">https://vk.com/answerphone_dev</string>
     <string name="hello">I\'m glad to see you in this app</string>
     <string name="help_frag_head">Help</string>
-    <string name="hi">"Hi, "</string>
+    <string name="hi">Hi</string>
     <string name="hint_for_time">How many minutes send</string>
     <string name="icon_name">Icon of our app</string>
     <string name="loginSuccess">Success authorization</string>
@@ -72,4 +72,14 @@
     <string name="no_connection">No connection!</string>
     <string name="try_again">Try again</string>
     <string name="welcome">Welcome!</string>
+    <string name="add_name">Add name</string>
+    <string name="add_prefix">Add postfix</string>
+    <string name="decreaces_rapid">Decreases the speed of messaging</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
+    <string name="about_summary">Version, build, etc.</string>
+    <string name="change_messaging">Change messaging</string>
+    <string name="info">About app</string>
+    <string name="enable_push">Enable push notifications</string>
+    <string name="special">Special</string>
+    <string name="ok">OK</string>
 </resources>

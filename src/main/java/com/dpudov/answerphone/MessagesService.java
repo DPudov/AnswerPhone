@@ -14,7 +14,6 @@ import com.dpudov.answerphone.data.DataManager;
 import com.dpudov.answerphone.data.EventBus;
 import com.dpudov.answerphone.data.network.LpServer;
 import com.dpudov.answerphone.data.network.LpServerResponse;
-import com.dpudov.answerphone.util.RequestUtil;
 import com.google.gson.Gson;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -25,7 +24,6 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiGetMessagesResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
-import com.vk.sdk.api.model.VKUsersArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +31,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -51,9 +50,8 @@ public class MessagesService extends Service {
     private int[] checkedUsers;
     private int[] userId;
     private int[] userIdCopy;
-    private VKUsersArray users;
     private LpServer mLongPollServer;
-
+    private HashSet<Integer> forgottenUsers;
     OkHttpClient mClient;
     Gson mGson;
     EventBus mEventBus;
@@ -123,8 +121,7 @@ public class MessagesService extends Service {
     @Override
     public void onCreate() {
         nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        RequestUtil util = new RequestUtil();
-        users = util.getUsersArray();
+        forgottenUsers = new HashSet<>();
     }
 
     @Override
@@ -245,7 +242,7 @@ public class MessagesService extends Service {
 
     private void send(final int userId, int mode) {
 //метод для отправки сообщения user.
-        if (userId != 0) {
+        if (userId != 0 && isNotForgotten(userId)) {
             switch (mode) {
                 //PREFIX AND NAME
                 case 1:
@@ -272,6 +269,8 @@ public class MessagesService extends Service {
                                     public void onComplete(VKResponse response) {
                                         super.onComplete(response);
 
+//Forget user
+                                        forgetUser(userId);
                                     }
                                 });
                             } catch (JSONException e) {
@@ -294,7 +293,8 @@ public class MessagesService extends Service {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-
+//Forget user
+                            forgetUser(userId);
                         }
                     });
                     break;
@@ -322,7 +322,8 @@ public class MessagesService extends Service {
                                     @Override
                                     public void onComplete(VKResponse response) {
                                         super.onComplete(response);
-
+                                        forgetUser(userId);
+//Forget user
                                     }
                                 });
                             } catch (JSONException e) {
@@ -345,7 +346,8 @@ public class MessagesService extends Service {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-
+//Forget user
+                            forgetUser(userId);
                         }
                     });
                     break;
@@ -383,4 +385,11 @@ public class MessagesService extends Service {
         return null;
     }
 
+    private boolean isNotForgotten(int userId) {
+        return !forgottenUsers.contains(userId);
+    }
+
+    private void forgetUser(int userId) {
+        forgottenUsers.add(userId);
+    }
 }

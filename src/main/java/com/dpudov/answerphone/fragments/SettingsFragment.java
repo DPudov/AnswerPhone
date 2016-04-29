@@ -10,10 +10,17 @@ import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.dpudov.answerphone.MessagesService;
+import com.dpudov.answerphone.MyHandler;
+import com.dpudov.answerphone.NotificationSettings;
 import com.dpudov.answerphone.R;
+import com.dpudov.answerphone.RegistrationIntentService;
 import com.dpudov.answerphone.activity.MainActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.microsoft.windowsazure.notifications.NotificationsManager;
 
 import static com.vk.sdk.VKSdk.wakeUpSession;
 
@@ -30,9 +37,13 @@ public class SettingsFragment extends PreferenceFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TITLE = "title";
     private static final int TIME = 1;
     private static final int FRIENDS = 2;
+    public static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private boolean maddName;
+
     private boolean maddPrefix;
     // TODO: Rename and change types of parameters
     @SuppressWarnings("FieldCanBeLocal")
@@ -69,13 +80,49 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            String title = savedInstanceState.getString(TITLE);
+            getActivity().setTitle(title);
+        } else {
+            getActivity().setTitle(R.string.settFrag);
+        }
+        setRetainInstance(true);
         //initialize
         addPreferencesFromResource(R.xml.preferences);
         Preference preference = findPreference("checkFr");
         final EditTextPreference editTextPreference = (EditTextPreference) findPreference("time");
-        final CheckBoxPreference addName = (CheckBoxPreference)findPreference("addName");
-        final CheckBoxPreference addPrefix = (CheckBoxPreference)findPreference("addSpecial");
+        final CheckBoxPreference addName = (CheckBoxPreference) findPreference("addName");
+        final CheckBoxPreference addPrefix = (CheckBoxPreference) findPreference("addSpecial");
         SwitchPreference switchPreference = (SwitchPreference) findPreference("swSrv");
+        SwitchPreference enablePush = (SwitchPreference) findPreference("push");
+        Preference info = findPreference("version");
+        info.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.info);
+                builder.setIcon(R.drawable.ic_launcher_first);
+                builder.setMessage("Версия 1.0\nНомер сборки 123");
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                return false;
+            }
+        });
+        enablePush.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (((SwitchPreference) preference).isChecked()) {
+                    NotificationsManager.handleNotifications(getActivity(), NotificationSettings.SenderId, MyHandler.class);
+                    registerWithNotificationHubs();
+                }
+                return false;
+            }
+        });
         checkFriendsFragment = new CheckFriendsFragment();
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -121,6 +168,13 @@ public class SettingsFragment extends PreferenceFragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String title = (String) getActivity().getTitle();
+        outState.putString(TITLE, title);
+    }
+
     private void showAlert(int which) {
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
         switch (which) {
@@ -148,7 +202,7 @@ public class SettingsFragment extends PreferenceFragment {
                 b.putIntArray("userIds", userIds);
                 if (time != 0) {
                     b.putInt("time", time);
-                    b.putBoolean("addName" ,addName);
+                    b.putBoolean("addName", addName);
                     b.putBoolean("addPrefix", addPrefix);
                     intent.putExtras(b);
                     getActivity().startService(intent);
@@ -156,7 +210,7 @@ public class SettingsFragment extends PreferenceFragment {
                     showAlert(TIME);
                     preference.setChecked(false);
                 }
-            }else {
+            } else {
                 preference.setChecked(false);
                 showAlert(FRIENDS);
             }
@@ -165,5 +219,32 @@ public class SettingsFragment extends PreferenceFragment {
             showAlert(FRIENDS);
         }
 
+    }
+
+    public void registerWithNotificationHubs() {
+        Log.i(TAG, " Registering with Notification Hubs");
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(getActivity(), RegistrationIntentService.class);
+            getActivity().startService(intent);
+        }
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(getActivity());
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(getActivity(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported by Google Play Services.");
+                MainActivity.mainActivity.ToastNotify("This device is not supported by Google Play Services.");
+                getActivity().finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

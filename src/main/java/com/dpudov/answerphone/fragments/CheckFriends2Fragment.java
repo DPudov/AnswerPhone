@@ -39,6 +39,7 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TITLE = "title";
     private static final int HAS_NO_CONNECTION_FROM_FRIENDS = 1;
     private static final int HAS_NO_CONNECTION_FROM_MSG = 2;
     private SendToFriendsFragment sendToFriendsFragment;
@@ -75,9 +76,12 @@ public class CheckFriends2Fragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String mParam1 = getArguments().getString(ARG_PARAM1);
-            String mParam2 = getArguments().getString(ARG_PARAM2);
+        setRetainInstance(true);
+        if (savedInstanceState!=null){
+            String title = savedInstanceState.getString(TITLE);
+            getActivity().setTitle(title);
+        }else{
+            getActivity().setTitle(R.string.checkFrFrag);
         }
     }
 
@@ -103,6 +107,13 @@ public class CheckFriends2Fragment extends android.app.Fragment {
         });
         // Inflate the layout for this fragment
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String title = (String) getActivity().getTitle();
+        outState.putString(TITLE, title);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

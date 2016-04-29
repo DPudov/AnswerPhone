@@ -77,10 +77,7 @@ public class ChatFragment extends android.app.Fragment {
             mUserId = getArguments().getInt(ARG_USER_ID);
             mPhotos = getArguments().getStringArray(ARG_PHOTOS_URLS);
             String mFullName = getArguments().getString(ARG_FULL_NAME);
-
             getActivity().setTitle(mFullName);
-        } else {
-            getActivity().onBackPressed();
         }
     }
 

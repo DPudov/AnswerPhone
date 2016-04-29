@@ -54,7 +54,7 @@
     <string name="about_2">Если Вы столкнулись с ошибкой, чем-то недовольны или хотите предложить изменение - пишите в соответсвующем разделе.</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
+    <string name="section_format">Hello World from section: %1$d</string>
     <string name="online">Online</string>
     <string name="src" translatable="false">src</string>
     <string name="avatar">ava</string>
@@ -63,13 +63,14 @@
     <string name="friends_unchecked">Друзья не выбраны!</string>
     <string name="my_site">Мой сайт</string>
     <string name="group_in_vk">Группа ВКонтакте</string>
-    <string name="my_site_url" translatable="false">http://www.dpudov.simdif.ru/</string>
+    <string name="my_site_url" translatable="false">http://dpudov.simdif.ru/</string>
     <string name="about_heading">О приложении</string>
     <string name="dialogs_head">Диалоги</string>
     <string name="ava_from">Аватар собеседника</string>
+    <string name="ok">ОК</string>
     <string name="title_activity_dialogs">DialogsActivity</string>
     <string name="comma">,</string>
-    <string name="send">send</string>
+    <string name="send" translatable="false">send</string>
     <string name="no_connection">Нет подключения!</string>
     <string name="try_again">Попробовать снова</string>
     <string name="get_started">Начать сейчас!</string>
@@ -81,5 +82,10 @@
     <string name="add_prefix">Добавлять приставку</string>
     <string name="add_name">Добавлять обращение</string>
     <string name="decreaces_rapid">Уменьшает скорость работы рассылки</string>
+    <string name="change_messaging">Изменение рассылки</string>
+    <string name="special">Особые</string>
+    <string name="enable_push">Включить push-уведомления</string>
+    <string name="about_summary">Версия, номер сборки и т.д.</string>
+    <string name="info">О приложении</string>
 
 </resources>
