@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dpudov.answerphone.activity.MainActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.microsoft.windowsazure.messaging.NotificationHub;
@@ -59,8 +58,6 @@ public class RegistrationIntentService extends IntentService {
         }
 
         // Notify UI that registration has completed.
-        if (MainActivity.isVisible) {
-            MainActivity.mainActivity.ToastNotify(resultString);
-        }
+
     }
 }

@@ -120,7 +120,7 @@ public class SendFragment extends android.app.Fragment {
 
     private void sendToGroup(){
         String message = editText.getText().toString().concat(getString(R.string.defaultMsg));
-        VKRequest request = new VKRequest("messages.send", VKParameters.from("peer_id", GROUP_ID, VKApiConst.MESSAGE, message));
+        VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, GROUP_ID, VKApiConst.MESSAGE, message));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {

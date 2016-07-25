@@ -1,7 +1,11 @@
 package com.dpudov.answerphone.activity;
 
+import android.app.FragmentTransaction;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -20,13 +24,12 @@ import android.widget.Toast;
 
 import com.dpudov.answerphone.R;
 import com.dpudov.answerphone.RegistrationIntentService;
-import com.dpudov.answerphone.fragments.CheckFriends2Fragment;
-import com.dpudov.answerphone.fragments.CheckFriendsFragment;
 import com.dpudov.answerphone.fragments.MainFragment;
 import com.dpudov.answerphone.fragments.SendFragment;
 import com.dpudov.answerphone.fragments.SendToFriendsFragment;
 import com.dpudov.answerphone.fragments.SettingsFragment;
 import com.dpudov.answerphone.lists.ImageLoader;
+import com.dpudov.answerphone.model.CurrentUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -42,6 +45,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.dialogs.VKShareDialog;
 import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,15 +62,14 @@ public class MainActivity extends AppCompatActivity
     private int[] usersToSendAuto;
     public static final String TAG = "MainActivity";
     private SendFragment sendFragment;
-    private MainFragment mainFragment;
-    private CheckFriends2Fragment checkFriends2Fragment;
-    private CheckFriendsFragment checkFriendsFragment;
     private SendToFriendsFragment sendToFriendsFragment;
     private SettingsFragment settingsFragment;
+    private MainFragment mainFragment;
     private String msg;
     private ImageView imageView;
     private TextView name;
     private static final int DIALOG_MATERIAL = 1;
+    public static int currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,26 +98,10 @@ public class MainActivity extends AppCompatActivity
             VKSdk.login(this, VKScope.OFFLINE, VKScope.FRIENDS, VKScope.MESSAGES, VKScope.NOTIFICATIONS, VKScope.WALL, VKScope.PHOTOS);
 
         //create fragments
-        mainFragment = new MainFragment();
         settingsFragment = new SettingsFragment();
         sendFragment = new SendFragment();
         sendToFriendsFragment = new SendToFriendsFragment();
-
-        //checkFriends2Fragment = new CheckFriends2Fragment();
-        //checkFriendsFragment = new CheckFriendsFragment();
-
-        //TODO put fragments to fragment manager
-        /**Bundle bundleMain = new Bundle();
-         Bundle bundleSettings = new Bundle();
-         Bundle bundleSend = new Bundle();
-         Bundle bundleSentTo = new Bundle();
-         Bundle bundleCheck = new Bundle();
-         Bundle bundleCheck2 = new Bundle();
-         getFragmentManager().putFragment(bundleMain, "main", mainFragment);
-         getFragmentManager().putFragment(bundleSettings, "settings", settingsFragment);
-         getFragmentManager().putFragment(bundleSend, "send", sendFragment);
-         getFragmentManager().putFragment(bundleSentTo, "sendToFriends", sendToFriendsFragment);
-         getFragmentManager().putFragment(bundleCheck, "");**/
+        mainFragment = new MainFragment();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
@@ -148,10 +135,12 @@ public class MainActivity extends AppCompatActivity
                 super.onComplete(response);
                 try {
                     JSONObject userJSON = response.json.getJSONArray("response").getJSONObject(0);
-                    String first_name = userJSON.get("first_name").toString();
-                    String last_name = userJSON.get("last_name").toString();
-                    String photo_50 = userJSON.get("photo_50").toString();
+                    currentUserId = userJSON.getInt("id");
+                    String first_name = userJSON.getString("first_name");
+                    String last_name = userJSON.getString("last_name");
+                    String photo_50 = userJSON.getString("photo_50");
                     ImageLoader imageLoader = new ImageLoader(getApplicationContext());
+                    EventBus.getDefault().post(new CurrentUser(currentUserId, first_name, last_name, photo_50));
                     imageLoader.DisplayImage(photo_50, imageView, 50);
                     String mName = first_name + " " + last_name;
                     name.setText(mName);
@@ -230,11 +219,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getFragmentManager().getBackStackEntryCount() > 0) {
-                getFragmentManager().popBackStack();
-            } else {
-                super.onBackPressed();
-            }
+            super.onBackPressed();
         }
     }
 
@@ -269,10 +254,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         if (id == R.id.nav_main) {
             fragmentTransaction.replace(container, mainFragment);
-            setTitle(R.string.mainFragment);
+            setTitle(R.string.main_page_answer);
         } else if (id == R.id.nav_sendToFriends) {
             fragmentTransaction.replace(container, sendToFriendsFragment);
             setTitle(R.string.sendToFriends);
@@ -292,6 +277,22 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_messenger) {
             Intent intent = new Intent(this, DialogsActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_rate) {
+            Uri uri = Uri.parse("market://details?id=" + this.getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            }
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + this.getPackageName())));
+            }
         }
 
         fragmentTransaction.commit();
@@ -404,4 +405,7 @@ public class MainActivity extends AppCompatActivity
         this.msg = msg;
     }
 
+    public int getCurrentUserId() {
+        return currentUserId;
+    }
 }

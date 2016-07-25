@@ -6,7 +6,6 @@
     <string name="answerHead">AnswerPhone</string>
     <string name="checkFrFrag">Choose friends</string>
     <string name="defaultMsg">$ send with AnswerPhone for VK by DPudov</string>
-    <string name="default_post">It\'s incredible! Alpha-version AnswerPhone is ready for work. All rights reserved by DPudov 2016</string>
     <string name="e_mail">dimapudov99@gmail.com</string>
     <string name="editText">Edit your message…</string>
     <string name="edt1_text_hint">Edit your message…</string>
@@ -36,7 +35,7 @@
     <string name="showHeadItem">Share</string>
     <string name="switch1Text">Enable mail service</string>
     <string name="try_again_internet">Connection failed. Try again later</string>
-    <string name="user_is_busy">User is busy</string>
+    <string name="user_is_busy">User is busy.</string>
     <string name="head">header</string>
     <string name="sendToFriends">Send to friends</string>
     <string name="title_activity_main">AnswerPhone</string>
@@ -56,7 +55,6 @@
     <string name="about_heading">About</string>
     <string name="dialogs_head">Dialogs</string>
     <string name="title_activity_dialogs">Dialogs</string>
-    <string name="my_site_url"/>
     <string name="time_unchecked">Time is unchecked!</string>
     <string name="my_site">My site</string>
     <string name="msg_now">Momentary distribution</string>
@@ -75,11 +73,22 @@
     <string name="add_name">Add name</string>
     <string name="add_prefix">Add postfix</string>
     <string name="decreaces_rapid">Decreases the speed of messaging</string>
-    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
+    <string name="section_format">Hello World from section: %1$d</string>
     <string name="about_summary">Version, build, etc.</string>
     <string name="change_messaging">Change messaging</string>
     <string name="info">About app</string>
     <string name="enable_push">Enable push notifications</string>
     <string name="special">Special</string>
     <string name="ok">OK</string>
+    <string name="azure_unavailable">Server is unavailable now. Try again later.</string>
+    <string name="in_work">Function in works!</string>
+    <string name="version_description">Version code 1.0\nBuild number 123</string>
+    <string name="warning">Warning!</string>
+    <string name="default_post">How to send messages to multiple friends? It\'s easy with AnswerPhone</string>
+    <string name="add_time_summary">Adds time of messaging to messages</string>
+    <string name="add_time">Add time</string>
+    <string name="rate">Rate</string>
+    <string name="minutes_end">" minutes. "</string>
+    <string name="when_user_returns">"User returns at "</string>
+    <string name="main_page_answer">AnswerPhone</string>
 </resources>

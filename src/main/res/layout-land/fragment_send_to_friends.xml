@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="456dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center">
 
         <Button
@@ -14,7 +14,6 @@
             android:layout_height="wrap_content"
             android:text="@string/sendFrag"
             android:id="@+id/sendFrButton"
-            android:layout_marginBottom="47dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 

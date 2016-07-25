@@ -4,7 +4,7 @@ package com.dpudov.answerphone;
  * Created by DPudov on 01.05.2016.
  */
 public class NotificationSettings {
-    public static String SenderId = "answerphone-1298";
-    public static String HubName = "AnswerPhoneNotify";
-    public static String HubListenConnectionString = "Endpoint=sb://answerphonenotifyspace.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=3bTsniOO1jnSKLlKI+g/VSbV8Yte7jJIuXn0GOYcsmg=";
+    public static String SenderId = "465385260989";
+    public static String HubName = "answerphonenotify";
+    public static String HubListenConnectionString = "Endpoint=sb://answerphonenotifyspace.servicebus.windows.net/;SharedAccessKeyName=DefaultListenAccessSignature;SharedAccessKey=UP3FhneKObk+RRMd1/KcY4NsYB1QFTKGX/jvbrrwA30=";
 }

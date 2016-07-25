@@ -40,6 +40,7 @@ public class MyApplication extends android.app.Application {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
         .build();
         ImageLoader.getInstance().init(config);
+
     }
 
 

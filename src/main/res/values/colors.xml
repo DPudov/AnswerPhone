@@ -7,4 +7,6 @@
     <color name="list_background_pressed">#ccc</color>
     <color name="drawer_item_color">#fff</color>
     <color name="list_divider">#5e5e5e</color>
+    <color name="chat_message_background_outcoming">#e4d507</color>
+    <color name="chat_message_background_incoming">#8cd3f7</color>
 </resources>

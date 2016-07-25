@@ -34,5 +34,6 @@
         android:transcriptMode="normal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/imageSend" />
+        android:layout_above="@+id/imageSend"
+        android:divider="@null"/>
 </RelativeLayout>

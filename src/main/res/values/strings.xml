@@ -36,7 +36,6 @@
     <string name="hint_for_time">Сколько минут отправлять</string>
     <string name="answerHead">Автоответчик для ВК</string>
     <string name="try_again_internet">Потеряно соединение. Попробуйте позже</string>
-    <string name="default_post">ЭТО НЕВЕРОЯТНО!!! Alpha-version AnswerPhone рабочая!!!!! @ отправлено с помощью AnswerPhone for VK. All rights reserved by DPudov 2016</string>
     <string name="group_link">https://vk.com/answerphone_dev</string>
     <string name="hi">Привет </string>
     <string name="head">header</string>
@@ -63,7 +62,7 @@
     <string name="friends_unchecked">Друзья не выбраны!</string>
     <string name="my_site">Мой сайт</string>
     <string name="group_in_vk">Группа ВКонтакте</string>
-    <string name="my_site_url" translatable="false">http://dpudov.simdif.ru/</string>
+    <string name="my_site_url" translatable="false">http://dpudov.simdif.com/</string>
     <string name="about_heading">О приложении</string>
     <string name="dialogs_head">Диалоги</string>
     <string name="ava_from">Аватар собеседника</string>
@@ -87,5 +86,16 @@
     <string name="enable_push">Включить push-уведомления</string>
     <string name="about_summary">Версия, номер сборки и т.д.</string>
     <string name="info">О приложении</string>
+    <string name="warning">Внимание!</string>
+    <string name="in_work">Функция в разработке!</string>
+    <string name="azure_unavailable">Сервер временно недоступен. Попробуйте позже.</string>
+    <string name="version_description">Версия 1.0\nНомер сборки 123</string>
+    <string name="default_post">How to send messages to multiple friends? How to answer when you\'re busy? It\'s easy with AnswerPhone. </string>
+    <string name="add_time">Добавлять время</string>
+    <string name="add_time_summary">Добавляет оставшееся время рассылки к сообщению</string>
+    <string name="rate">Оценить</string>
+    <string name="when_user_returns">"Пользователь вернётся через "</string>
+    <string name="minutes_end">" минут. "</string>
+    <string name="main_page_answer">Автоответчик</string>
 
 </resources>

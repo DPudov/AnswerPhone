@@ -31,8 +31,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/chatList"
         android:stackFromBottom="true"
-        android:transcriptMode="normal"
+        android:transcriptMode="alwaysScroll"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/imageSend" />
+        android:layout_above="@+id/imageSend"
+        android:divider="@null" />
 </RelativeLayout>

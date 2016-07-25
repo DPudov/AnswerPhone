@@ -5,19 +5,19 @@
         <item
             android:id="@+id/nav_main"
             android:icon="@drawable/ic_home_24dp"
-            android:title="@string/mainFragment" />
+            android:title="@string/main_page_answer"/>
         <item
-            android:id="@+id/nav_messenger"
-            android:icon="@drawable/ic_forum_24dp"
-            android:title="@string/dialogs_head"/>
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/settFrag" />
         <item
             android:id="@+id/nav_sendToFriends"
             android:icon="@drawable/ic_menu_send"
             android:title="@string/msg_now" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/settFrag" />
+            android:id="@+id/nav_messenger"
+            android:icon="@drawable/ic_forum_24dp"
+            android:title="@string/dialogs_head" />
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_24dp"
@@ -34,6 +34,10 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_rate_review_24dp"
                 android:title="@string/leave_recall" />
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@drawable/ic_grade_black_24dp"
+                android:title="@string/rate" />
         </menu>
     </item>
 

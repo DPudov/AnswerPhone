@@ -1,47 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/commons">
-        <SwitchPreference
-            android:clickable="false"
-            android:defaultValue="false"
-            android:ellipsize="marquee"
-            android:icon="@drawable/ic_email_24dp"
-            android:key="swSrv"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:title="@string/enableMessages" />
-        <EditTextPreference
-            android:defaultValue="10"
-            android:icon="@drawable/ic_alarm_24dp"
-            android:inputType="number"
-            android:key="time"
-            android:scrollHorizontally="true"
-            android:title="@string/hint_for_time" />
-        <Preference
-            android:icon="@drawable/ic_people_24dp"
-            android:key="checkFr"
-            android:title="@string/checkFrFrag" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/change_messaging">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:ellipsize="marquee"
-            android:icon="@drawable/ic_location_history_24dp"
-            android:key="addName"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:summary="@string/decreaces_rapid"
-            android:title="@string/add_name" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:ellipsize="marquee"
-            android:icon="@drawable/ic_chat_24dp"
-            android:key="addSpecial"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:summary="@string/defaultMsg"
-            android:title="@string/add_prefix" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/special">
         <SwitchPreference
             android:clickable="false"
