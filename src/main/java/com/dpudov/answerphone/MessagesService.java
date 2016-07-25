@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import com.dpudov.answerphone.activity.MainActivity;
-import com.dpudov.answerphone.data.AppUtils;
 import com.dpudov.answerphone.data.DataManager;
 import com.dpudov.answerphone.data.EventBus;
+import com.dpudov.answerphone.data.network.LongPollServer;
 import com.dpudov.answerphone.data.network.LpServer;
 import com.dpudov.answerphone.data.network.LpServerResponse;
 import com.google.gson.Gson;
@@ -69,10 +69,11 @@ public class MessagesService extends Service {
         mDataManager.getLongPollServer(1);
         mDataManager.setLongPollListener(new DataManager.LongPollListener() {
             @Override
-            public void onResponseReceived(LpServer lpServer) {
-                mLongPollServer = lpServer;
-                connect(mLongPollServer);
+            public void onResponseReceived(LongPollServer lpServer) {
+
             }
+
+
         });
     }
 
@@ -103,7 +104,7 @@ public class MessagesService extends Service {
                     builder.append(line);
                 }
                 try {
-                    Object object = AppUtils.parseResult(builder.toString());
+                    Object object = new Object();
                     if (object instanceof LpServerResponse) {
                         mLongPollServer.setTs(((LpServerResponse) object).getTs());
                         for (Object upd : ((LpServerResponse) object).getUpdates()) {
@@ -158,6 +159,7 @@ public class MessagesService extends Service {
         int time = bundle.getInt("time");
         boolean addName = bundle.getBoolean("addName");
         boolean addPrefix = bundle.getBoolean("addPrefix");
+        boolean addTime = bundle.getBoolean("addTime");
         int mode;
         if (addPrefix && addName) {
             mode = MODE_PREFIX_AND_NAME;
@@ -170,20 +172,20 @@ public class MessagesService extends Service {
         }
         showNotification();
         startLongPoll();
-        doInThread(time, mode);
+        doInThread(time, mode, addTime);
         return startId;
     }
 
-    private void doInThread(final int timeIn, final int mode) {
+    private void doInThread(final int timeIn, final int mode, final boolean addTime) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     for (int i = 0; i < timeIn * 2; i++) {
                         if (i == 0)
-                            sentMsgToRecentSenders(timeIn + 2, mode);
+                            sentMsgToRecentSenders(timeIn + 2, mode, addTime);
                         else {
-                            sentMsgToRecentSenders(timeIn, mode);
+                            sentMsgToRecentSenders(timeIn, mode, addTime);
                         }
                         Thread.sleep(30000);
                     }
@@ -194,7 +196,7 @@ public class MessagesService extends Service {
         }).start();
     }
 
-    private void sentMsgToRecentSenders(int time, final int mode) {
+    private void sentMsgToRecentSenders(final int time, final int mode, final boolean addTime) {
 //Получаем сообщения за последние time секунд
         VKRequest getMsg = VKApi.messages().get(VKParameters.from(VKApiConst.TIME_OFFSET, time * 60));
         getMsg.executeWithListener(new VKRequest.VKRequestListener() {
@@ -230,18 +232,19 @@ public class MessagesService extends Service {
                         }
                     }
                     if (c == 1)
-                        send(userIdCopy[0], mode);
+                        send(userIdCopy[0], mode, addTime, time);
                     else
                         // Отправляем сообщение
-                        sendTo(userIdCopy, mode);
+                        sendTo(userIdCopy, mode, addTime, time);
                 }
             }
 
         });
     }
 
-    private void send(final int userId, int mode) {
+    private void send(final int userId, int mode, final boolean addTime, final int time) {
 //метод для отправки сообщения user.
+
         if (userId != 0 && isNotForgotten(userId)) {
             switch (mode) {
                 //PREFIX AND NAME
@@ -253,15 +256,13 @@ public class MessagesService extends Service {
                             super.onComplete(response);
                             JSONObject object;
                             try {
+                                String timer = null;
+                                if (addTime) {
+                                    timer = String.format(" в течение %s минут .", String.valueOf(time));
+                                }
                                 object = response.json.getJSONArray("response").getJSONObject(0);
-                                String name2 = object.getString("first_name") + " " + object.getString("last_name");
-                                String message3 = getString(R.string.hi)
-                                        + ", "
-                                        + name2
-                                        + " "
-                                        + "! "
-                                        + getString(R.string.user_is_busy)
-                                        + getString(R.string.defaultMsg);
+                                String name2 = String.format("%s %s", object.getString("first_name"), object.getString("last_name"));
+                                String message3 = String.format("%s, %s ! %s%s%s", getString(R.string.hi), name2, getString(R.string.user_is_busy), timer, getString(R.string.defaultMsg));
                                 VKRequest requestSend0 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message3));
                                 //noinspection EmptyMethod
                                 requestSend0.executeWithListener(new VKRequest.VKRequestListener() {
@@ -282,11 +283,11 @@ public class MessagesService extends Service {
                     break;
                 //PREFIX_NO_NAME
                 case 2:
-                    String msd1 = getString(R.string.hi)
-                            + " "
-                            + "! "
-                            + getString(R.string.user_is_busy)
-                            + getString(R.string.defaultMsg);
+                    String timer = null;
+                    if (addTime) {
+                        timer = String.format(" в течение %s минут .", String.valueOf(time));
+                    }
+                    String msd1 = String.format("%s ! %s%s%s", getString(R.string.hi), getString(R.string.user_is_busy), timer, getString(R.string.defaultMsg));
                     VKRequest requestSend2 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, msd1));
                     //noinspection EmptyMethod
                     requestSend2.executeWithListener(new VKRequest.VKRequestListener() {
@@ -301,21 +302,20 @@ public class MessagesService extends Service {
                 //NAME_NO_PREFIX
                 case 3:
                     VKRequest getUser1 = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, userId));
+
                     getUser1.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
                             JSONObject object1;
                             try {
+                                String timer = null;
+                                if (addTime) {
+                                    timer = String.format(" в течение %s минут .", String.valueOf(time));
+                                }
                                 object1 = response.json.getJSONArray("response").getJSONObject(0);
-                                String name22 = object1.getString("first_name") + " " + object1.getString("last_name");
-                                String message23 = getString(R.string.hi)
-                                        + ", "
-                                        + name22
-                                        + " "
-                                        + "! "
-                                        + getString(R.string.user_is_busy)
-                                        + getString(R.string.defaultMsg);
+                                String name22 = String.format("%s %s", object1.getString("first_name"), object1.getString("last_name"));
+                                String message23 = String.format("%s, %s ! %s%s%s", getString(R.string.hi), name22, getString(R.string.user_is_busy), timer, getString(R.string.defaultMsg));
                                 VKRequest requestSend01 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message23));
                                 //noinspection EmptyMethod
                                 requestSend01.executeWithListener(new VKRequest.VKRequestListener() {
@@ -335,10 +335,11 @@ public class MessagesService extends Service {
                     break;
                 //NOTHING
                 case 4:
-                    String message4 = getString(R.string.hi)
-                            + " "
-                            + "! "
-                            + getString(R.string.user_is_busy);
+                    timer = null;
+                    if (addTime) {
+                        timer = String.format(" в течение %s минут .", String.valueOf(time));
+                    }
+                    String message4 = String.format("%s ! %s%s", getString(R.string.hi), getString(R.string.user_is_busy), timer);
 
                     VKRequest requestSend4 = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, userId, VKApiConst.MESSAGE, message4));
                     //noinspection EmptyMethod
@@ -355,11 +356,11 @@ public class MessagesService extends Service {
         }
     }
 
-    private void sendTo(int[] userIds, int mode) {
+    private void sendTo(int[] userIds, int mode, boolean addTime, int time) {
         if (!(userIds == null)) {
             //метод для отправки сообщений нескольким юзерам
             for (int userId1 : userIds) {
-                send(userId1, mode);
+                send(userId1, mode, addTime, time);
 
             }
         }
